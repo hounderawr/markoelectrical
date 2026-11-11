@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MAATEK_THEME_VERSION', '2.2.0' );
+define( 'MAATEK_THEME_VERSION', '2.1' );
 
 require_once get_template_directory() . '/inc/page-blocks.php';
 
@@ -353,13 +353,20 @@ function maatek_fallback_resolve_slug_pages() {
 add_action( 'template_redirect', 'maatek_fallback_resolve_slug_pages', 1 );
 
 /**
- * Seed or update the 7 Maatek pages with native Gutenberg block content and set Static Front Page.
+ * Seed the 7 Maatek pages with native Gutenberg block content and set Static Front Page.
  *
- * @param bool $force Whether to force-update existing pages even if already seeded.
+ * By default ($force = false), if a page already exists in WordPress with content,
+ * its existing content is NEVER overwritten—preserving all client edits across
+ * theme updates or re-uploads. Only missing/empty pages are populated unless
+ * an administrator explicitly clicks "Reset Default Page Content" ($force = true).
+ *
+ * @param bool $force Whether to force-reset existing pages back to default Figma content.
  */
 function maatek_seed_pages( $force = false ) {
-	$seeded_version = get_option( 'maatek_block_pages_version', '' );
-	if ( ! $force && MAATEK_THEME_VERSION === $seeded_version ) {
+	$already_installed = (bool) get_option( 'maatek_theme_installed', false );
+	$seeded_version    = get_option( 'maatek_block_pages_version', '' );
+
+	if ( ! $force && $already_installed && MAATEK_THEME_VERSION === $seeded_version ) {
 		return;
 	}
 
@@ -376,11 +383,27 @@ function maatek_seed_pages( $force = false ) {
 
 	$initial_pages = maatek_get_seeded_pages();
 	$page_ids      = array();
+	$created_new   = array();
 	$home_id       = 0;
 
-	// Pass 1: Ensure all 7 pages exist in the database so get_permalink() resolves every page ID.
+	// Pass 1: Check if each page already exists (by slug or title) so we never create duplicates.
 	foreach ( $initial_pages as $slug => $page_data ) {
 		$existing = get_page_by_path( $slug, OBJECT, 'page' );
+
+		if ( ! ( $existing instanceof WP_Post ) ) {
+			// Also check if a trashed or draft page with the same slug exists.
+			$by_slug = get_posts(
+				array(
+					'name'           => $slug,
+					'post_type'      => 'page',
+					'post_status'    => array( 'publish', 'draft', 'private', 'pending' ),
+					'posts_per_page' => 1,
+				)
+			);
+			if ( ! empty( $by_slug[0] ) && $by_slug[0] instanceof WP_Post ) {
+				$existing = $by_slug[0];
+			}
+		}
 
 		if ( $existing instanceof WP_Post ) {
 			$page_id = (int) $existing->ID;
@@ -403,6 +426,9 @@ function maatek_seed_pages( $force = false ) {
 					'post_status'  => 'publish',
 				)
 			);
+			if ( $page_id > 0 ) {
+				$created_new[ $slug ] = true;
+			}
 		}
 
 		if ( $page_id > 0 ) {
@@ -413,22 +439,24 @@ function maatek_seed_pages( $force = false ) {
 		}
 	}
 
-	if ( $home_id > 0 ) {
+	if ( $home_id > 0 && 'page' !== get_option( 'show_on_front' ) ) {
 		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', $home_id );
+	} elseif ( $home_id > 0 && ! get_option( 'page_on_front' ) ) {
 		update_option( 'page_on_front', $home_id );
 	}
 
-	// Pass 2: Build block content now that all 7 pages exist and have valid permalinks.
+	// Pass 2: Populate block content ONLY for newly created or empty pages (unless $force is true).
 	$pages = maatek_get_seeded_pages();
 	foreach ( $pages as $slug => $page_data ) {
 		if ( empty( $page_ids[ $slug ] ) ) {
 			continue;
 		}
-		$page_id         = $page_ids[ $slug ];
-		$existing        = get_post( $page_id );
-		$page_seeded_ver = get_post_meta( $page_id, '_maatek_seeded_version', true );
+		$page_id  = $page_ids[ $slug ];
+		$existing = get_post( $page_id );
+		$is_empty = ! ( $existing instanceof WP_Post ) || '' === trim( $existing->post_content );
 
-		if ( $force || MAATEK_THEME_VERSION !== $page_seeded_ver || ! ( $existing instanceof WP_Post ) || empty( trim( $existing->post_content ) ) ) {
+		if ( $force || ! empty( $created_new[ $slug ] ) || $is_empty ) {
 			wp_update_post(
 				array(
 					'ID'           => $page_id,
@@ -442,7 +470,7 @@ function maatek_seed_pages( $force = false ) {
 		}
 	}
 
-	// Ensure a saved wp_navigation menu exists and stays synced with the 7 page IDs.
+	// Ensure a saved wp_navigation menu exists without overwriting custom menu edits unless forced.
 	$nav_items = array(
 		'home'               => __( 'Home', 'maatek' ),
 		'control-automation' => __( 'Control & Automation', 'maatek' ),
@@ -463,7 +491,7 @@ function maatek_seed_pages( $force = false ) {
 				'post_status'  => 'publish',
 			)
 		);
-	} else {
+	} elseif ( $force || '' === trim( $nav_post->post_content ) ) {
 		wp_update_post(
 			array(
 				'ID'           => (int) $nav_post->ID,
@@ -477,6 +505,7 @@ function maatek_seed_pages( $force = false ) {
 		kses_init_filters();
 	}
 
+	update_option( 'maatek_theme_installed', '1' );
 	update_option( 'maatek_block_pages_version', MAATEK_THEME_VERSION );
 	if ( did_action( 'init' ) ) {
 		flush_rewrite_rules( true );
@@ -627,9 +656,6 @@ function maatek_register_block_patterns() {
 <section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/af7b40fe4ce443f7.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-breadcrumb"} -->
-		<p class="mtk-breadcrumb"><a href="{$home}">Home</a> <span>/</span> <span>Service Title</span></p>
-		<!-- /wp:paragraph -->
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
 		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / INDUSTRIAL SERVICES</p>
 		<!-- /wp:paragraph -->

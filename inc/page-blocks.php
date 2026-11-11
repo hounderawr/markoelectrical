@@ -738,9 +738,6 @@ HTML;
 <section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/af7b40fe4ce443f7.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-breadcrumb"} -->
-		<p class="mtk-breadcrumb"><a href="{$home}">Home</a> <span>/</span> <span>Control &amp; Automation</span></p>
-		<!-- /wp:paragraph -->
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
 		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / CONTROL &amp; AUTOMATION</p>
 		<!-- /wp:paragraph -->
@@ -1048,9 +1045,6 @@ HTML;
 <section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/0836812bfcbdcff3.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-breadcrumb"} -->
-		<p class="mtk-breadcrumb"><a href="{$home}">Home</a> <span>/</span> <span>Maintenance</span></p>
-		<!-- /wp:paragraph -->
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
 		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / INDUSTRIAL MAINTENANCE</p>
 		<!-- /wp:paragraph -->
@@ -1264,9 +1258,6 @@ HTML;
 <section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/8c0777edd3ad9583.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-breadcrumb"} -->
-		<p class="mtk-breadcrumb"><a href="{$home}">Home</a> <span>/</span> <span>Fabrication</span></p>
-		<!-- /wp:paragraph -->
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
 		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / INDUSTRIAL FABRICATION</p>
 		<!-- /wp:paragraph -->
@@ -1486,9 +1477,6 @@ HTML;
 <section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/55e5d9a70651bf11.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-breadcrumb"} -->
-		<p class="mtk-breadcrumb"><a href="{$home}">Home</a> <span>/</span> <span>Installations</span></p>
-		<!-- /wp:paragraph -->
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
 		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / INDUSTRIAL INSTALLATIONS</p>
 		<!-- /wp:paragraph -->

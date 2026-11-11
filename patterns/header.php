@@ -32,7 +32,14 @@ $maatek_nav_items = array(
 		<!-- /wp:image -->
 		<?php endif; ?>
 
-		<!-- wp:navigation {"overlayMenu":"mobile","hasIcon":false,"overlayBackgroundColor":"surface","overlayTextColor":"heading-dark","className":"mtk-nav","layout":{"type":"flex","justifyContent":"right","flexWrap":"nowrap"}} -->
+		<?php
+		$nav_ref_attr = '';
+		$nav_post     = get_page_by_path( 'maatek-primary-navigation', OBJECT, 'wp_navigation' );
+		if ( $nav_post instanceof WP_Post ) {
+			$nav_ref_attr = ' "ref":' . (int) $nav_post->ID . ',';
+		}
+		?>
+		<!-- wp:navigation {<?php echo $nav_ref_attr; ?>"overlayMenu":"mobile","hasIcon":false,"overlayBackgroundColor":"surface","overlayTextColor":"heading-dark","className":"mtk-nav","layout":{"type":"flex","justifyContent":"right","flexWrap":"nowrap"}} -->
 		<?php echo maatek_navigation_links_markup( $maatek_nav_items ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Block markup built with wp_json_encode. ?>
 		<!-- /wp:navigation -->
 	</div>

@@ -44,7 +44,17 @@ $maatek_footer_items = array(
 				<h2 class="wp-block-heading mtk-footer-heading"><?php esc_html_e( 'EXPLORE', 'maatek' ); ?></h2>
 				<!-- /wp:heading -->
 
-				<!-- wp:navigation {"overlayMenu":"never","className":"mtk-footer-nav","layout":{"type":"flex","orientation":"vertical"}} -->
+				<?php
+				$footer_ref_attr = '';
+				$footer_nav_post = get_page_by_path( 'maatek-footer-navigation', OBJECT, 'wp_navigation' );
+				if ( ! ( $footer_nav_post instanceof WP_Post ) ) {
+					$footer_nav_post = get_page_by_path( 'maatek-primary-navigation', OBJECT, 'wp_navigation' );
+				}
+				if ( $footer_nav_post instanceof WP_Post ) {
+					$footer_ref_attr = ' "ref":' . (int) $footer_nav_post->ID . ',';
+				}
+				?>
+				<!-- wp:navigation {<?php echo $footer_ref_attr; ?>"overlayMenu":"never","className":"mtk-footer-nav","layout":{"type":"flex","orientation":"vertical"}} -->
 				<?php echo maatek_navigation_links_markup( $maatek_footer_items ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Block markup built with wp_json_encode. ?>
 				<!-- /wp:navigation -->
 			</div>

@@ -439,8 +439,8 @@ function maatek_seed_pages( $force = false ) {
 		kses_remove_filters();
 	}
 
-	// Ensure pretty permalinks (/%postname%/) are enabled before computing page permalinks.
-	if ( '' === get_option( 'permalink_structure', '' ) ) {
+	// Ensure pretty permalinks (/%postname%/) are enabled on first theme installation only (not forced on existing sites).
+	if ( ! $already_installed && '' === get_option( 'permalink_structure', '' ) ) {
 		update_option( 'permalink_structure', '/%postname%/' );
 	}
 
@@ -470,14 +470,7 @@ function maatek_seed_pages( $force = false ) {
 
 		if ( $existing instanceof WP_Post ) {
 			$page_id = (int) $existing->ID;
-			if ( 'publish' !== $existing->post_status ) {
-				wp_update_post(
-					array(
-						'ID'          => $page_id,
-						'post_status' => 'publish',
-					)
-				);
-			}
+			// Preserve existing post_status (do not force draft/private to publish).
 			// Only reset a page's chosen template on a forced reset — never on routine theme updates.
 			if ( $force ) {
 				delete_post_meta( $page_id, '_wp_page_template' );
@@ -524,15 +517,17 @@ function maatek_seed_pages( $force = false ) {
 		$is_empty = ! ( $existing instanceof WP_Post ) || '' === trim( $existing->post_content );
 
 		if ( $force || ! empty( $created_new[ $slug ] ) || $is_empty ) {
-			wp_update_post(
-				array(
-					'ID'           => $page_id,
-					'post_title'   => $page_data['title'],
-					'post_name'    => $slug,
-					'post_content' => wp_slash( $page_data['content'] ),
-					'post_status'  => 'publish',
-				)
+			$update_args = array(
+				'ID'           => $page_id,
+				'post_title'   => $page_data['title'],
+				'post_name'    => $slug,
+				'post_content' => wp_slash( $page_data['content'] ),
 			);
+			// Only specify post_status as 'publish' if creating new or if the page was previously draft/empty from theme creation.
+			if ( ! empty( $created_new[ $slug ] ) ) {
+				$update_args['post_status'] = 'publish';
+			}
+			wp_update_post( $update_args );
 			update_post_meta( $page_id, '_maatek_seeded_version', MAATEK_THEME_VERSION );
 		}
 	}
@@ -575,18 +570,30 @@ function maatek_seed_pages( $force = false ) {
 	update_option( 'maatek_theme_installed', '1' );
 	update_option( 'maatek_block_pages_version', MAATEK_THEME_VERSION );
 	if ( did_action( 'init' ) ) {
-		flush_rewrite_rules( true );
+		flush_rewrite_rules( false );
 	} else {
 		add_action(
 			'init',
 			function () {
-				flush_rewrite_rules( true );
+				flush_rewrite_rules( false );
 			},
 			20
 		);
 	}
 }
-add_action( 'after_switch_theme', 'maatek_seed_pages' );
+
+/**
+ * Handle after_switch_theme safely.
+ * WordPress passes the old theme name string to after_switch_theme callbacks,
+ * which would evaluate to truthy if passed directly to $force. We explicitly pass false.
+ *
+ * @param string   $old_name  Old theme name.
+ * @param WP_Theme $old_theme Old theme object.
+ */
+function maatek_on_after_switch_theme( $old_name = '', $old_theme = null ) {
+	maatek_seed_pages( false );
+}
+add_action( 'after_switch_theme', 'maatek_on_after_switch_theme', 10, 2 );
 
 /**
  * Ensure pages are seeded on first load and allow admins to re-seed or toggle Lightbox.

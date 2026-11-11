@@ -137,26 +137,38 @@
 		};
 
 		allCards.forEach(function (card) {
-			if (!card.hasAttribute('tabindex')) {
-				card.setAttribute('tabindex', '0');
-				card.setAttribute('role', 'button');
+			// Remove legacy whole-card button semantics from older markup/versions.
+			if (card.getAttribute('role') === 'button') {
+				card.removeAttribute('role');
+				card.removeAttribute('tabindex');
 			}
 
+			// Inject one real, clearly named <button> over the photo. Keyboard users Tab to it and
+			// press Enter/Space natively; nested links in the card keep their own behaviour.
+			var media = card.querySelector('.mtk-photo-card-media') || card;
+			if (!media.querySelector('.mtk-photo-card-open')) {
+				var titleNode = card.querySelector('.mtk-card-title');
+				var cardImg = card.querySelector('img');
+				var label = (titleNode && titleNode.textContent.trim()) || (cardImg && cardImg.alt) || 'project photograph';
+				var openBtn = document.createElement('button');
+				openBtn.type = 'button';
+				openBtn.className = 'mtk-photo-card-open';
+				openBtn.setAttribute('aria-haspopup', 'dialog');
+				openBtn.setAttribute('aria-label', 'View larger photo: ' + label);
+				media.appendChild(openBtn);
+			}
+
+			// Mouse/touch convenience: clicking anywhere on the card opens the viewer,
+			// except when the click came from a link or another control inside the card.
 			card.addEventListener('click', function (e) {
-				if (e.target.closest('a') || isCardLightboxDisabled(card)) {
+				var interactive = e.target.closest('a, button, input, select, textarea, [role="button"]');
+				if (interactive && !interactive.classList.contains('mtk-photo-card-open')) {
 					return;
 				}
-				openCard(card);
-			});
-
-			card.addEventListener('keydown', function (e) {
 				if (isCardLightboxDisabled(card)) {
 					return;
 				}
-				if (e.key === 'Enter' || e.key === ' ') {
-					e.preventDefault();
-					openCard(card);
-				}
+				openCard(card);
 			});
 		});
 

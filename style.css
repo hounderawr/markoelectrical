@@ -493,50 +493,27 @@ button.mtk-btn,
 	text-decoration: none !important;
 	cursor: pointer;
 	position: relative;
-	isolation: isolate;
-	overflow: hidden;
+	/* Contrast-safe hover: the whole button tints evenly and the label colour never changes,
+	   so text keeps full contrast at every moment of the transition (no sweeping fill). */
 	transition:
-		border-color 420ms var(--mtk-ease),
-		color 420ms var(--mtk-ease),
+		background-color var(--mtk-duration) var(--mtk-ease),
+		border-color var(--mtk-duration) var(--mtk-ease),
 		box-shadow var(--mtk-duration) var(--mtk-ease);
 }
 
-/* Hover fill sweeps in from the left. Painted above the resting background and behind the label. */
-a.mtk-btn::before,
-button.mtk-btn::before,
-.wp-block-button.mtk-btn .wp-block-button__link::before,
-.mtk-btn .wp-block-button__link::before,
-.wp-block-button.is-style-mtk-primary .wp-block-button__link::before,
-.wp-block-button.is-style-mtk-secondary .wp-block-button__link::before,
-.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	z-index: -1;
-	pointer-events: none;
-	transform: scaleX(0);
-	transform-origin: left center;
-	transition: transform 420ms var(--mtk-ease);
+/* Keyboard focus ring for every Maatek button (always shown, independent of hover support) */
+a.mtk-btn:focus-visible,
+button.mtk-btn:focus-visible,
+.wp-block-button.mtk-btn .wp-block-button__link:focus-visible,
+.mtk-btn .wp-block-button__link:focus-visible,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:focus-visible,
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link:focus-visible,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:focus-visible {
+	outline: 2px solid var(--maatek-accent-bright);
+	outline-offset: 3px;
 }
 
-a.mtk-btn:hover::before,
-a.mtk-btn:focus-visible::before,
-button.mtk-btn:hover::before,
-button.mtk-btn:focus-visible::before,
-.wp-block-button.mtk-btn .wp-block-button__link:hover::before,
-.wp-block-button.mtk-btn .wp-block-button__link:focus-visible::before,
-.mtk-btn .wp-block-button__link:hover::before,
-.mtk-btn .wp-block-button__link:focus-visible::before,
-.wp-block-button.is-style-mtk-primary .wp-block-button__link:hover::before,
-.wp-block-button.is-style-mtk-primary .wp-block-button__link:focus-visible::before,
-.wp-block-button.is-style-mtk-secondary .wp-block-button__link:hover::before,
-.wp-block-button.is-style-mtk-secondary .wp-block-button__link:focus-visible::before,
-.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:hover::before,
-.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:focus-visible::before {
-	transform: scaleX(1);
-}
-
-/* Primary Filled Button (#0063A4 / #006DA7) */
+/* Primary Filled Button (#0063A4) — white label on blue → white label on darker blue */
 a.mtk-btn-primary,
 button.mtk-btn-primary,
 .wp-block-button.mtk-btn-primary .wp-block-button__link:not(.has-background),
@@ -547,27 +524,7 @@ button.mtk-btn-primary,
 	box-shadow: 0 1px 2px rgba(7, 15, 22, 0.14);
 }
 
-a.mtk-btn-primary::before,
-button.mtk-btn-primary::before,
-.wp-block-button.mtk-btn-primary .wp-block-button__link:not(.has-background)::before,
-.wp-block-button.is-style-mtk-primary .wp-block-button__link:not(.has-background)::before {
-	background-color: var(--maatek-blue-hover);
-}
-
-a.mtk-btn-primary:hover,
-a.mtk-btn-primary:focus-visible,
-button.mtk-btn-primary:hover,
-button.mtk-btn-primary:focus-visible,
-.wp-block-button.mtk-btn-primary .wp-block-button__link:hover,
-.wp-block-button.mtk-btn-primary .wp-block-button__link:focus-visible,
-.wp-block-button.is-style-mtk-primary .wp-block-button__link:hover,
-.wp-block-button.is-style-mtk-primary .wp-block-button__link:focus-visible {
-	border-color: var(--maatek-blue-hover);
-	color: #FFFFFF;
-	box-shadow: 0 4px 12px rgba(0, 99, 164, 0.24);
-}
-
-/* Secondary Light Outlined Button (White bg, #0063A4 border & text) */
+/* Secondary Light Outlined Button — blue label on white → blue label on pale blue tint */
 a.mtk-btn-secondary,
 button.mtk-btn-secondary,
 .wp-block-button.mtk-btn-secondary .wp-block-button__link:not(.has-background),
@@ -585,34 +542,7 @@ button.mtk-btn-secondary--blue-border,
 	border: 1.5px solid var(--maatek-blue) !important;
 }
 
-a.mtk-btn-secondary::before,
-button.mtk-btn-secondary::before,
-.wp-block-button.mtk-btn-secondary .wp-block-button__link:not(.has-background)::before,
-.wp-block-button.is-style-mtk-secondary .wp-block-button__link:not(.has-background)::before,
-a.mtk-btn-secondary--blue-border::before,
-button.mtk-btn-secondary--blue-border::before,
-.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link::before {
-	background-color: var(--maatek-blue);
-}
-
-a.mtk-btn-secondary:hover,
-a.mtk-btn-secondary:focus-visible,
-button.mtk-btn-secondary:hover,
-button.mtk-btn-secondary:focus-visible,
-.wp-block-button.mtk-btn-secondary .wp-block-button__link:hover,
-.wp-block-button.mtk-btn-secondary .wp-block-button__link:focus-visible,
-a.mtk-btn-secondary--blue-border:hover,
-a.mtk-btn-secondary--blue-border:focus-visible,
-button.mtk-btn-secondary--blue-border:hover,
-button.mtk-btn-secondary--blue-border:focus-visible,
-.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:hover,
-.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:focus-visible {
-	border-color: var(--maatek-blue) !important;
-	color: #FFFFFF;
-	box-shadow: 0 4px 12px rgba(0, 99, 164, 0.18);
-}
-
-/* Dark Hero Ghost/Outline Button (Translucent dark bg with border) */
+/* Dark Hero Ghost/Outline Button — white label on translucent dark → white label on slightly lighter translucent */
 a.mtk-btn-hero-outline,
 button.mtk-btn-hero-outline,
 .wp-block-button.mtk-btn-hero-outline .wp-block-button__link,
@@ -623,24 +553,70 @@ button.mtk-btn-hero-outline,
 	backdrop-filter: blur(4px);
 }
 
-a.mtk-btn-hero-outline::before,
-button.mtk-btn-hero-outline::before,
-.wp-block-button.mtk-btn-hero-outline .wp-block-button__link::before,
-.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link::before {
-	background-color: #FFFFFF;
+/* Active state styles: shared by mouse hover (only on devices that truly hover) and keyboard focus */
+a.mtk-btn-primary:focus-visible,
+button.mtk-btn-primary:focus-visible,
+.wp-block-button.mtk-btn-primary .wp-block-button__link:not(.has-background):focus-visible,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:not(.has-background):focus-visible {
+	background-color: var(--maatek-blue-hover);
+	border-color: var(--maatek-blue-hover);
+	color: #FFFFFF;
 }
 
-a.mtk-btn-hero-outline:hover,
+a.mtk-btn-secondary:focus-visible,
+button.mtk-btn-secondary:focus-visible,
+.wp-block-button.mtk-btn-secondary .wp-block-button__link:not(.has-background):focus-visible,
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link:not(.has-background):focus-visible,
+a.mtk-btn-secondary--blue-border:focus-visible,
+button.mtk-btn-secondary--blue-border:focus-visible,
+.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:focus-visible {
+	background-color: #E8F2FA;
+	border-color: var(--maatek-blue) !important;
+	color: var(--maatek-blue-hover);
+}
+
 a.mtk-btn-hero-outline:focus-visible,
-button.mtk-btn-hero-outline:hover,
 button.mtk-btn-hero-outline:focus-visible,
-.wp-block-button.mtk-btn-hero-outline .wp-block-button__link:hover,
 .wp-block-button.mtk-btn-hero-outline .wp-block-button__link:focus-visible,
-.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:hover,
 .wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:focus-visible {
+	background-color: rgba(255, 255, 255, 0.16);
 	border-color: #FFFFFF !important;
-	color: var(--maatek-ink-deep);
-	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+	color: #FFFFFF;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	a.mtk-btn-primary:hover,
+	button.mtk-btn-primary:hover,
+	.wp-block-button.mtk-btn-primary .wp-block-button__link:not(.has-background):hover,
+	.wp-block-button.is-style-mtk-primary .wp-block-button__link:not(.has-background):hover {
+		background-color: var(--maatek-blue-hover);
+		border-color: var(--maatek-blue-hover);
+		color: #FFFFFF;
+		box-shadow: 0 4px 12px rgba(0, 99, 164, 0.24);
+	}
+
+	a.mtk-btn-secondary:hover,
+	button.mtk-btn-secondary:hover,
+	.wp-block-button.mtk-btn-secondary .wp-block-button__link:not(.has-background):hover,
+	.wp-block-button.is-style-mtk-secondary .wp-block-button__link:not(.has-background):hover,
+	a.mtk-btn-secondary--blue-border:hover,
+	button.mtk-btn-secondary--blue-border:hover,
+	.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:hover {
+		background-color: #E8F2FA;
+		border-color: var(--maatek-blue) !important;
+		color: var(--maatek-blue-hover);
+		box-shadow: 0 4px 12px rgba(0, 99, 164, 0.12);
+	}
+
+	a.mtk-btn-hero-outline:hover,
+	button.mtk-btn-hero-outline:hover,
+	.wp-block-button.mtk-btn-hero-outline .wp-block-button__link:hover,
+	.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:hover {
+		background-color: rgba(255, 255, 255, 0.16);
+		border-color: #FFFFFF !important;
+		color: #FFFFFF;
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+	}
 }
 
 /* Compact Button Sizing (Used in Support & Gallery cards) */
@@ -674,22 +650,34 @@ button.mtk-btn-block,
 	line-height: 1;
 }
 
-.mtk-btn:hover .mtk-arrow,
 .mtk-btn:focus-visible .mtk-arrow,
-.wp-block-button__link:hover .mtk-arrow,
 .wp-block-button__link:focus-visible .mtk-arrow,
-.mtk-link-arrow:hover .mtk-arrow,
 .mtk-link-arrow:focus-visible .mtk-arrow,
-.mtk-shortcut:hover .mtk-arrow,
 .mtk-shortcut:focus-visible .mtk-arrow {
 	transform: translateX(4px);
 }
 
-.mtk-btn:hover .mtk-arrow-up,
 .mtk-btn:focus-visible .mtk-arrow-up,
-.wp-block-button__link:hover .mtk-arrow-up,
 .wp-block-button__link:focus-visible .mtk-arrow-up {
 	transform: translate(3px, -3px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.mtk-btn:hover .mtk-arrow,
+	.wp-block-button__link:hover .mtk-arrow,
+	.mtk-link-arrow:hover .mtk-arrow,
+	.mtk-shortcut:hover .mtk-arrow {
+		transform: translateX(4px);
+	}
+
+	.mtk-btn:hover .mtk-arrow-up,
+	.wp-block-button__link:hover .mtk-arrow-up {
+		transform: translate(3px, -3px);
+	}
+
+	.mtk-link-arrow:hover {
+		color: var(--maatek-blue-hover);
+	}
 }
 
 /* Inline Action Link with Arrow ("Explore Control & Automation  →") */
@@ -706,7 +694,6 @@ button.mtk-btn-block,
 	transition: color var(--mtk-duration) var(--mtk-ease);
 }
 
-.mtk-link-arrow:hover,
 .mtk-link-arrow:focus-visible {
 	color: var(--maatek-blue-hover);
 }
@@ -805,17 +792,26 @@ figure.mtk-brand-block {
 	transition: transform var(--mtk-duration) var(--mtk-ease);
 }
 
-.mtk-nav .wp-block-navigation-item__content:hover,
 .mtk-nav .wp-block-navigation-item__content:focus-visible {
 	color: #FFFFFF;
 }
 
-.mtk-nav .wp-block-navigation-item__content:hover::after,
 .mtk-nav .wp-block-navigation-item__content:focus-visible::after,
 .mtk-nav .current-menu-item > .wp-block-navigation-item__content::after,
 .mtk-nav .wp-block-navigation-item__content[aria-current="page"]::after,
 .mtk-nav .wp-block-navigation-item__content.is-active::after {
 	transform: scaleX(1);
+}
+
+/* Hover underline only on devices with a real hover pointer, so taps never leave a "stuck" underline */
+@media (hover: hover) and (pointer: fine) {
+	.mtk-nav .wp-block-navigation-item__content:hover {
+		color: #FFFFFF;
+	}
+
+	.mtk-nav .wp-block-navigation-item__content:hover::after {
+		transform: scaleX(1);
+	}
 }
 
 .mtk-nav .current-menu-item > .wp-block-navigation-item__content,
@@ -846,10 +842,16 @@ figure.mtk-brand-block {
 	color: #FFFFFF;
 }
 
-.mtk-nav .wp-block-navigation__responsive-container-open:hover,
 .mtk-nav .wp-block-navigation__responsive-container-open:focus-visible {
 	background-color: var(--maatek-blue);
 	border-color: var(--maatek-nav-active);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.mtk-nav .wp-block-navigation__responsive-container-open:hover {
+		background-color: var(--maatek-blue);
+		border-color: var(--maatek-nav-active);
+	}
 }
 
 .mtk-nav .wp-block-navigation__responsive-container-close {
@@ -1195,11 +1197,18 @@ p.mtk-eyebrow-with-bar--short::before {
 	font-weight: 700;
 }
 
-.mtk-shortcut:hover,
 .mtk-shortcut:focus-visible {
 	background-color: #FFFFFF;
 	border-color: var(--maatek-blue);
 	box-shadow: 0 4px 12px rgba(9, 19, 33, 0.06);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.mtk-shortcut:hover {
+		background-color: #FFFFFF;
+		border-color: var(--maatek-blue);
+		box-shadow: 0 4px 12px rgba(9, 19, 33, 0.06);
+	}
 }
 
 /* Hide "HOW CAN WE HELP? / Find the right support" box on Homepage even if already seeded in DB */
@@ -1236,10 +1245,16 @@ p.mtk-eyebrow-with-bar--short::before {
 	transition: color var(--mtk-duration) var(--mtk-ease), text-decoration-color var(--mtk-duration) var(--mtk-ease);
 }
 
-.mtk-subnav-links a:hover,
 .mtk-subnav-links a:focus-visible {
 	color: var(--maatek-blue);
 	text-decoration-color: var(--maatek-blue);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.mtk-subnav-links a:hover {
+		color: var(--maatek-blue);
+		text-decoration-color: var(--maatek-blue);
+	}
 }
 
 .mtk-subnav-sep {
@@ -1271,28 +1286,28 @@ p.mtk-eyebrow-with-bar--short::before {
 	gap: 32px;
 }
 
+/* Rows have a design MINIMUM height but always grow with their copy, so longer editor text,
+   larger browser font sizes or narrow desktops never clip content. The image column fills
+   whatever height the row ends up (absolute-positioned cover image). */
 .mtk-service-row,
 .wp-block-columns.mtk-service-row {
 	display: grid !important;
 	grid-template-columns: 576px 1fr;
-	grid-template-rows: 440px;
+	grid-template-rows: minmax(440px, auto);
 	gap: 0 !important;
 	background-color: #FFFFFF;
 	border: 1px solid var(--maatek-line-card);
-	overflow: hidden;
 	align-items: stretch;
-	height: 440px !important;
-	min-height: 440px !important;
-	max-height: 440px !important;
+	height: auto !important;
+	min-height: 440px;
+	max-height: none !important;
 }
 
 .mtk-service-row--service-page,
 .wp-block-columns.mtk-service-row--service-page {
 	grid-template-columns: 624px 1fr;
-	grid-template-rows: 520px;
-	height: 520px !important;
-	min-height: 520px !important;
-	max-height: 520px !important;
+	grid-template-rows: minmax(520px, auto);
+	min-height: 520px;
 }
 
 .mtk-service-row--reverse,
@@ -1307,18 +1322,19 @@ p.mtk-eyebrow-with-bar--short::before {
 
 .mtk-service-row > .wp-block-column,
 .wp-block-columns.mtk-service-row > .wp-block-column {
-	min-height: 0 !important;
-	max-height: 100%;
-	height: 100%;
-	overflow: hidden;
+	min-width: 0;
+	height: auto;
+	max-height: none;
+	overflow: visible;
 }
 
+/* Only the image column clips (to crop the cover image) — never the copy column */
 .mtk-service-media {
 	position: relative;
 	min-height: 0;
-	height: 100%;
+	height: auto;
 	margin: 0 !important;
-	overflow: hidden;
+	overflow: hidden !important;
 	background-color: #E5ECF2;
 }
 
@@ -1344,8 +1360,10 @@ p.mtk-eyebrow-with-bar--short::before {
 	transition: transform 420ms var(--mtk-ease);
 }
 
-.mtk-service-row:hover .mtk-service-media img {
-	transform: scale(1.02);
+@media (hover: hover) and (pointer: fine) {
+	.mtk-service-row:hover .mtk-service-media img {
+		transform: scale(1.02);
+	}
 }
 
 /* Optional dark bottom caption overlay on service media (e.g. SCADA & HMI 11:327) */
@@ -1492,10 +1510,44 @@ p.is-style-mtk-check-item::before {
 		box-shadow var(--mtk-duration) var(--mtk-ease);
 }
 
-.mtk-photo-card:hover,
 .mtk-photo-card:focus-within {
 	border-color: var(--maatek-blue);
 	box-shadow: 0 8px 20px rgba(9, 19, 33, 0.07);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.mtk-photo-card:hover {
+		border-color: var(--maatek-blue);
+		box-shadow: 0 8px 20px rgba(9, 19, 33, 0.07);
+	}
+
+	.mtk-photo-card:hover .mtk-photo-card-media img {
+		transform: scale(1.03);
+	}
+
+	.mtk-photo-card:hover .mtk-photo-card-media::after {
+		background-color: #FFFFFF;
+	}
+}
+
+/* Accessible "View larger" button injected by maatek.js over each photo (real <button>, clearly named) */
+.mtk-photo-card-open {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: zoom-in;
+	appearance: none;
+}
+
+.mtk-photo-card-open:focus-visible {
+	outline: 3px solid var(--maatek-accent-bright);
+	outline-offset: -3px;
 }
 
 /* Lightbox Disabled State (Global Body Toggle or Per-Section/Per-Card Block Style) */
@@ -1511,7 +1563,12 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover,
 .is-style-mtk-no-lightbox .mtk-photo-card:hover,
 .mtk-no-lightbox .mtk-photo-card:hover,
 .mtk-photo-card.is-style-mtk-no-lightbox:hover,
-.mtk-photo-card.mtk-no-lightbox:hover {
+.mtk-photo-card.mtk-no-lightbox:hover,
+body.mtk-lightbox-disabled .mtk-photo-card:focus-within,
+.is-style-mtk-no-lightbox .mtk-photo-card:focus-within,
+.mtk-no-lightbox .mtk-photo-card:focus-within,
+.mtk-photo-card.is-style-mtk-no-lightbox:focus-within,
+.mtk-photo-card.mtk-no-lightbox:focus-within {
 	border-color: var(--maatek-line-card);
 	box-shadow: none;
 }
@@ -1569,10 +1626,6 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 	transition: transform 380ms var(--mtk-ease);
 }
 
-.mtk-photo-card:hover .mtk-photo-card-media img {
-	transform: scale(1.03);
-}
-
 /* Focal Point Alignment Helpers (WordPress Inspector) */
 .mtk-focal-top { object-position: 50% 15% !important; --maatek-focal: 50% 15% !important; }
 .mtk-focal-bottom { object-position: 50% 85% !important; --maatek-focal: 50% 85% !important; }
@@ -1602,10 +1655,6 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 	pointer-events: none;
 	z-index: 2;
 	transition: background-color var(--mtk-duration) var(--mtk-ease);
-}
-
-.mtk-photo-card:hover .mtk-photo-card-media::after {
-	background-color: #FFFFFF;
 }
 
 .mtk-photo-card-body {
@@ -1665,10 +1714,15 @@ dialog.mtk-lightbox {
 	min-width: min(360px, calc(100vw - 32px));
 	max-width: min(1040px, calc(100vw - 32px));
 	max-height: calc(100vh - 32px);
+	max-height: calc(100dvh - 32px);
 	box-shadow:
 		0 28px 80px rgba(0, 0, 0, 0.72),
 		0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-	overflow: hidden;
+	/* Scroll inside the viewer (never clip) on short viewports or with long captions */
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
 }
 
 dialog.mtk-lightbox[open] {
@@ -1690,16 +1744,20 @@ dialog.mtk-lightbox::backdrop {
 .mtk-lightbox-inner {
 	display: flex;
 	flex-direction: column;
-	max-height: calc(100vh - 34px);
+	min-height: 0;
 }
 
+/* Keep the close / prev / next controls reachable while the viewer content scrolls */
 .mtk-lightbox-topbar {
+	position: sticky;
+	top: 0;
+	z-index: 2;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: 16px;
 	padding: 12px 16px 12px 22px;
-	background-color: rgba(7, 15, 22, 0.65);
+	background-color: rgba(7, 15, 22, 0.94);
 	border-bottom: 1px solid rgba(163, 191, 209, 0.14);
 }
 
@@ -1757,7 +1815,6 @@ dialog.mtk-lightbox::backdrop {
 		color var(--mtk-duration) var(--mtk-ease);
 }
 
-.mtk-lightbox-nav:hover,
 .mtk-lightbox-nav:focus-visible {
 	background-color: var(--maatek-blue);
 	border-color: var(--maatek-nav-active);
@@ -1768,11 +1825,24 @@ dialog.mtk-lightbox::backdrop {
 	font-size: 21px;
 }
 
-.mtk-lightbox-close:hover,
 .mtk-lightbox-close:focus-visible {
 	background-color: #FFFFFF;
 	border-color: #FFFFFF;
 	color: var(--maatek-ink-deep);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.mtk-lightbox-nav:hover {
+		background-color: var(--maatek-blue);
+		border-color: var(--maatek-nav-active);
+		color: #FFFFFF;
+	}
+
+	.mtk-lightbox-close:hover {
+		background-color: #FFFFFF;
+		border-color: #FFFFFF;
+		color: var(--maatek-ink-deep);
+	}
 }
 
 .mtk-lightbox-nav[hidden] {
@@ -1786,15 +1856,17 @@ dialog.mtk-lightbox::backdrop {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	overflow: hidden;
 }
 
+/* Image scales with the viewport and leaves room for the top bar + caption (~200px) */
 .mtk-lightbox-img {
 	display: block;
 	width: auto;
 	height: auto;
 	max-width: min(980px, calc(100vw - 80px));
-	max-height: 68vh;
+	max-height: min(68vh, calc(100vh - 220px));
+	max-height: min(68dvh, calc(100dvh - 220px));
+	min-height: 0;
 	object-fit: contain;
 	border-radius: var(--mtk-radius-sm);
 	box-shadow: 0 12px 36px rgba(0, 0, 0, 0.50);
@@ -2011,12 +2083,20 @@ dialog.mtk-lightbox::backdrop {
 	display: inline-block;
 }
 
-.mtk-footer-link:hover,
 .mtk-footer-link:focus-visible,
-.mtk-site-footer p a:hover,
-.mtk-footer-nav .wp-block-navigation-item__content:hover {
+.mtk-site-footer p a:focus-visible,
+.mtk-footer-nav .wp-block-navigation-item__content:focus-visible {
 	color: var(--maatek-nav-active);
 	transform: translateX(2px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.mtk-footer-link:hover,
+	.mtk-site-footer p a:hover,
+	.mtk-footer-nav .wp-block-navigation-item__content:hover {
+		color: var(--maatek-nav-active);
+		transform: translateX(2px);
+	}
 }
 
 /* ==========================================================================
@@ -2028,10 +2108,10 @@ dialog.mtk-lightbox::backdrop {
 	.mtk-service-row--service-page.mtk-service-row--reverse,
 	.wp-block-columns.mtk-service-row--service-page.mtk-service-row--reverse {
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 720px;
-		height: 720px !important;
-		min-height: 720px !important;
-		max-height: 720px !important;
+		grid-template-rows: minmax(560px, auto);
+		height: auto !important;
+		min-height: 560px;
+		max-height: none !important;
 	}
 }
 

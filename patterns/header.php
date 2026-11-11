@@ -25,10 +25,10 @@ $maatek_nav_items = array(
 	<!-- wp:group {"className":"mtk-container mtk-header-inner","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container mtk-header-inner">
 		<?php if ( has_custom_logo() ) : ?>
-		<!-- wp:site-logo {"width":170,"shouldSyncIcon":false} /-->
+		<!-- wp:site-logo {"width":170,"isLink":true,"linkTarget":"_self","shouldSyncIcon":false} /-->
 		<?php else : ?>
-		<!-- wp:image {"width":"170px","height":"60px","sizeSlug":"full","linkDestination":"custom","className":"mtk-brand-block"} -->
-		<figure class="wp-block-image size-full is-resized mtk-brand-block"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/maatek-logo-cleaned.svg' ); ?>" alt="<?php echo esc_attr__( 'Maatek Electrical Services', 'maatek' ); ?>" style="width:170px;height:60px"/></a></figure>
+		<!-- wp:image {"width":"170px","height":"60px","sizeSlug":"full","linkDestination":"custom","href":"<?php echo esc_url( home_url( '/' ) ); ?>","className":"mtk-brand-block"} -->
+		<figure class="wp-block-image size-full is-resized mtk-brand-block"><a class="mtk-brand-link" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/maatek-logo-cleaned.svg' ); ?>" alt="<?php echo esc_attr__( 'Maatek Electrical Services', 'maatek' ); ?>" style="width:170px;height:60px"/></a></figure>
 		<!-- /wp:image -->
 		<?php endif; ?>
 

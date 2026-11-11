@@ -73,7 +73,8 @@ HTML;
  */
 function maatek_block_service_feature_row( array $args ) {
 	$id            = ! empty( $args['id'] ) ? esc_attr( $args['id'] ) : '';
-	$overline      = esc_html( $args['overline'] );
+	$overline_raw  = isset( $args['overline'] ) ? (string) $args['overline'] : '';
+	$overline      = esc_html( $overline_raw );
 	$title         = esc_html( $args['title'] );
 	$img_url       = esc_url( $args['img_url'] );
 	$img_alt       = esc_attr( $args['img_alt'] );
@@ -137,12 +138,19 @@ HTML;
 HTML;
 	}
 
-	$copy_col = <<<HTML
-	<!-- wp:column {"className":"mtk-service-body"} -->
-	<div class="wp-block-column mtk-service-body">
+	$overline_html = '';
+	if ( '' !== $overline && ! preg_match( '/^\d/', $overline_raw ) ) {
+		$overline_html = <<<HTML
 		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
 		<p class="mtk-overline mtk-mb-2">{$overline}</p>
 		<!-- /wp:paragraph -->
+HTML;
+	}
+
+	$copy_col = <<<HTML
+	<!-- wp:column {"className":"mtk-service-body"} -->
+	<div class="wp-block-column mtk-service-body">
+{$overline_html}
 		<!-- wp:heading {"level":3,"className":"mtk-h3 mtk-text-deep"} -->
 		<h3 class="wp-block-heading mtk-h3 mtk-text-deep">{$title}</h3>
 		<!-- /wp:heading -->
@@ -253,18 +261,10 @@ function maatek_get_seeded_pages() {
 	$maint   = maatek_get_page_url( 'maintenance' );
 	$fab     = maatek_get_page_url( 'fabrication' );
 	$inst    = maatek_get_page_url( 'installations' );
-	$proj    = maatek_get_page_url( 'projects' );
 
 	/* ======================================================================
 	 * 1. HOME PAGE (Figma Node 11:194)
 	 * ====================================================================== */
-	$home_gallery_card = maatek_block_photo_card(
-		"{$assets}/55e5d9a70651bf11.webp",
-		'Crane and equipment handling',
-		'Site lifting arrangements and access for equipment positioning.',
-		'mtk-photo-card--preview'
-	);
-
 	$home_content = <<<HTML
 <!-- wp:cover {"url":"{$assets}/9241893b534162b6.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":680,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-home","layout":{"type":"default"}} -->
 <section class="wp-block-cover mtk-hero-home" style="min-height:680px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/9241893b534162b6.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
@@ -481,48 +481,6 @@ function maatek_get_seeded_pages() {
 			<!-- /wp:columns -->
 		</div>
 		<!-- /wp:group -->
-	</div>
-	<!-- /wp:group -->
-</section>
-<!-- /wp:group -->
-
-<!-- wp:group {"tagName":"section","className":"mtk-bg-surface mtk-py-16","layout":{"type":"default"}} -->
-<section class="wp-block-group mtk-bg-surface mtk-py-16">
-	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
-	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-		<p class="mtk-overline mtk-mb-2">INSTALLATION GALLERY</p>
-		<!-- /wp:paragraph -->
-
-		<!-- wp:heading {"className":"mtk-h2 mtk-mb-3"} -->
-		<h2 class="wp-block-heading mtk-h2 mtk-mb-3">Equipment handling and site access</h2>
-		<!-- /wp:heading -->
-
-		<!-- wp:columns {"className":"mtk-gallery-preview-grid"} -->
-		<div class="wp-block-columns mtk-gallery-preview-grid">
-{$home_gallery_card}
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-3"} -->
-				<h3 class="wp-block-heading mtk-h4 mtk-mb-3">Industrial installation environments</h3>
-				<!-- /wp:heading -->
-				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-3"} -->
-				<p class="mtk-body mtk-text-muted-dark mtk-mb-3">Explore equipment handling, lifting arrangements and machinery positioning in industrial environments.</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:paragraph {"className":"mtk-small mtk-text-muted mtk-mb-6"} -->
-				<p class="mtk-small mtk-text-muted mtk-mb-6">These images illustrate installation environments relevant to industrial projects.</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:buttons {"className":"mtk-btn-group"} -->
-				<div class="wp-block-buttons mtk-btn-group">
-					<!-- wp:button {"className":"mtk-btn mtk-btn-secondary"} -->
-					<div class="wp-block-button mtk-btn mtk-btn-secondary"><a class="wp-block-button__link wp-element-button" href="{$proj}">View installation gallery</a></div>
-					<!-- /wp:button -->
-				</div>
-				<!-- /wp:buttons -->
-			</div>
-			<!-- /wp:column -->
-		</div>
-		<!-- /wp:columns -->
 	</div>
 	<!-- /wp:group -->
 </section>
@@ -1763,46 +1721,6 @@ HTML;
 			<!-- /wp:column -->
 		</div>
 		<!-- /wp:columns -->
-
-		<!-- wp:group {"className":"mtk-enquiry-options-box","layout":{"type":"default"}} -->
-		<div class="wp-block-group mtk-enquiry-options-box">
-			<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-3"} -->
-			<h3 class="wp-block-heading mtk-h4 mtk-mb-3">Choose an enquiry</h3>
-			<!-- /wp:heading -->
-
-			<!-- wp:columns {"className":"mtk-enquiry-btn-row"} -->
-			<div class="wp-block-columns mtk-enquiry-btn-row">
-				<!-- wp:column -->
-				<div class="wp-block-column">
-					<!-- wp:buttons -->
-					<div class="wp-block-buttons">
-						<!-- wp:button {"className":"mtk-btn mtk-btn-primary mtk-btn-block"} -->
-						<div class="wp-block-button mtk-btn mtk-btn-primary mtk-btn-block"><a class="wp-block-button__link wp-element-button" href="mailto:marko@maatekelectrical.com.au?subject=Maintenance%20Enquiry">Discuss maintenance</a></div>
-						<!-- /wp:button -->
-					</div>
-					<!-- /wp:buttons -->
-				</div>
-				<!-- /wp:column -->
-
-				<!-- wp:column -->
-				<div class="wp-block-column">
-					<!-- wp:buttons -->
-					<div class="wp-block-buttons">
-						<!-- wp:button {"className":"mtk-btn mtk-btn-secondary--blue-border mtk-btn-block"} -->
-						<div class="wp-block-button mtk-btn mtk-btn-secondary--blue-border mtk-btn-block"><a class="wp-block-button__link wp-element-button" href="mailto:marko@maatekelectrical.com.au?subject=Installation%20Enquiry">Plan an installation</a></div>
-						<!-- /wp:button -->
-					</div>
-					<!-- /wp:buttons -->
-				</div>
-				<!-- /wp:column -->
-			</div>
-			<!-- /wp:columns -->
-
-			<!-- wp:paragraph {"className":"mtk-xs mtk-text-muted mtk-mt-4"} -->
-			<p class="mtk-xs mtk-text-muted mtk-mt-4">These options open an email with the relevant enquiry subject. Prefer to speak? Use the call action above.</p>
-			<!-- /wp:paragraph -->
-		</div>
-		<!-- /wp:group -->
 	</div>
 	<!-- /wp:group -->
 </section>

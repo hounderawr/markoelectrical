@@ -119,7 +119,8 @@ function maatek_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'maatek_enqueue_assets' );
-add_action( 'enqueue_block_assets', 'maatek_enqueue_assets' );
+// Note: the Block Editor receives style.css + fonts via add_editor_style() (scoped to the canvas),
+// so the unscoped front-end stylesheet is NOT enqueued on enqueue_block_assets (it would leak into wp-admin).
 
 /**
  * Output Typekit preconnect and theme favicons in <head>.
@@ -128,7 +129,6 @@ function maatek_head_links() {
 	$assets_uri = esc_url( untrailingslashit( get_template_directory_uri() ) . '/assets' );
 	echo '<link rel="preconnect" href="https://use.typekit.net" crossorigin>' . "\n";
 	echo '<link rel="preconnect" href="https://p.typekit.net" crossorigin>' . "\n";
-	echo '<link rel="stylesheet" href="https://use.typekit.net/ash7fiq.css">' . "\n";
 	echo '<link rel="icon" href="' . $assets_uri . '/favicon.svg" type="image/svg+xml">' . "\n";
 	echo '<link rel="apple-touch-icon" href="' . $assets_uri . '/apple-touch-icon.png">' . "\n";
 }
@@ -210,6 +210,69 @@ function maatek_replace_block_placeholders( $block_content ) {
 	return strtr( $block_content, $replacements );
 }
 add_filter( 'render_block', 'maatek_replace_block_placeholders' );
+
+/**
+ * Drop numbered service eyebrows (01, 02 / PLC PROGRAMMING, 03) from pages already saved in WordPress.
+ *
+ * @param string $block_content Rendered block HTML.
+ * @param array  $block         Parsed block.
+ * @return string
+ */
+function maatek_strip_numbered_overlines( $block_content, $block ) {
+	if ( ! is_string( $block_content ) || empty( $block['blockName'] ) || 'core/paragraph' !== $block['blockName'] ) {
+		return $block_content;
+	}
+
+	$class_name = isset( $block['attrs']['className'] ) ? (string) $block['attrs']['className'] : '';
+	if ( false === strpos( $class_name, 'mtk-overline' ) ) {
+		return $block_content;
+	}
+
+	// Only strip pure index labels like "01", "02 / PLC PROGRAMMING" — never real copy like "24/7 SUPPORT" or "3 PHASE".
+	$text = trim( wp_strip_all_tags( $block_content ) );
+	if ( preg_match( '/^\d{1,2}(\s*$|\s+\/\s)/u', $text ) ) {
+		return '';
+	}
+
+	return $block_content;
+}
+add_filter( 'render_block', 'maatek_strip_numbered_overlines', 12 );
+
+/**
+ * Keep the header logo linked to the homepage, including headers already saved in the Site Editor.
+ *
+ * @param string $block_content Rendered block HTML.
+ * @param array  $block         Parsed block.
+ * @return string
+ */
+function maatek_ensure_logo_links_home( $block_content, $block ) {
+	if ( ! is_string( $block_content ) || '' === $block_content || empty( $block['blockName'] ) ) {
+		return $block_content;
+	}
+
+	$is_site_logo = ( 'core/site-logo' === $block['blockName'] );
+	$class_name   = isset( $block['attrs']['className'] ) ? (string) $block['attrs']['className'] : '';
+	$is_brand     = ( 'core/image' === $block['blockName'] && false !== strpos( $class_name, 'mtk-brand-block' ) );
+
+	if ( ! $is_site_logo && ! $is_brand ) {
+		return $block_content;
+	}
+
+	if ( preg_match( '/<a\b[^>]*\bhref=/i', $block_content ) ) {
+		return $block_content;
+	}
+
+	$home   = esc_url( home_url( '/' ) );
+	$linked = preg_replace(
+		'/<img\b[^>]*>/i',
+		'<a class="mtk-brand-link" href="' . $home . '" rel="home">$0</a>',
+		$block_content,
+		1
+	);
+
+	return is_string( $linked ) ? $linked : $block_content;
+}
+add_filter( 'render_block', 'maatek_ensure_logo_links_home', 20 );
 add_filter( 'the_content', 'maatek_replace_block_placeholders' );
 
 /**
@@ -415,7 +478,10 @@ function maatek_seed_pages( $force = false ) {
 					)
 				);
 			}
-			delete_post_meta( $page_id, '_wp_page_template' );
+			// Only reset a page's chosen template on a forced reset — never on routine theme updates.
+			if ( $force ) {
+				delete_post_meta( $page_id, '_wp_page_template' );
+			}
 		} else {
 			$page_id = (int) wp_insert_post(
 				array(
@@ -439,10 +505,11 @@ function maatek_seed_pages( $force = false ) {
 		}
 	}
 
-	if ( $home_id > 0 && 'page' !== get_option( 'show_on_front' ) ) {
+	// Set the static front page on first install or forced reset only, so a client's own Reading settings survive updates.
+	if ( $home_id > 0 && ( $force || ! $already_installed ) ) {
 		update_option( 'show_on_front', 'page' );
 		update_option( 'page_on_front', $home_id );
-	} elseif ( $home_id > 0 && ! get_option( 'page_on_front' ) ) {
+	} elseif ( $home_id > 0 && 'page' === get_option( 'show_on_front' ) && ! get_option( 'page_on_front' ) ) {
 		update_option( 'page_on_front', $home_id );
 	}
 

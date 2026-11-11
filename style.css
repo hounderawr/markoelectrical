@@ -1275,16 +1275,24 @@ p.mtk-eyebrow-with-bar--short::before {
 .wp-block-columns.mtk-service-row {
 	display: grid !important;
 	grid-template-columns: 576px 1fr;
+	grid-template-rows: 440px;
 	gap: 0 !important;
 	background-color: #FFFFFF;
 	border: 1px solid var(--maatek-line-card);
 	overflow: hidden;
 	align-items: stretch;
+	height: 440px !important;
+	min-height: 440px !important;
+	max-height: 440px !important;
 }
 
 .mtk-service-row--service-page,
 .wp-block-columns.mtk-service-row--service-page {
 	grid-template-columns: 624px 1fr;
+	grid-template-rows: 520px;
+	height: 520px !important;
+	min-height: 520px !important;
+	max-height: 520px !important;
 }
 
 .mtk-service-row--reverse,
@@ -1297,43 +1305,43 @@ p.mtk-eyebrow-with-bar--short::before {
 	grid-template-columns: 1fr 624px;
 }
 
+.mtk-service-row > .wp-block-column,
+.wp-block-columns.mtk-service-row > .wp-block-column {
+	min-height: 0 !important;
+	max-height: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
 .mtk-service-media {
 	position: relative;
-	display: flex;
-	flex-direction: column;
-	min-height: 332px;
+	min-height: 0;
 	height: 100%;
 	margin: 0 !important;
 	overflow: hidden;
 	background-color: #E5ECF2;
 }
 
-.mtk-service-row--service-page .mtk-service-media {
-	min-height: 360px;
-}
-
 .mtk-service-media figure,
 .mtk-service-media .wp-block-image {
+	position: absolute;
+	inset: 0;
 	margin: 0 !important;
-	flex: 1 1 auto;
-	display: flex !important;
 	width: 100% !important;
 	height: 100% !important;
 }
 
 .mtk-service-media img {
-	flex: 1 1 auto;
+	position: absolute !important;
+	inset: 0 !important;
 	width: 100% !important;
 	height: 100% !important;
-	min-height: 332px;
+	min-height: 0 !important;
+	max-height: none !important;
 	object-fit: cover !important;
 	object-position: var(--maatek-focal, center center);
 	display: block !important;
 	transition: transform 420ms var(--mtk-ease);
-}
-
-.mtk-service-row--service-page .mtk-service-media img {
-	min-height: 360px;
 }
 
 .mtk-service-row:hover .mtk-service-media img {
@@ -1607,11 +1615,12 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 /* Home Installation Gallery Preview 2-Column Layout (Figma Node 70:859) */
 .mtk-gallery-preview-grid,
 .wp-block-columns.mtk-gallery-preview-grid {
-	display: grid !important;
-	grid-template-columns: 360px 1fr;
-	gap: 48px !important;
-	align-items: center;
-	margin-top: 28px !important;
+	display: none !important;
+}
+
+section:has(.mtk-gallery-preview-grid),
+.wp-block-group:has(.mtk-gallery-preview-grid) {
+	display: none !important;
 }
 
 /* Lightbox Dialog — Refined Industrial Viewer */
@@ -1664,6 +1673,11 @@ dialog.mtk-lightbox {
 
 dialog.mtk-lightbox[open] {
 	animation: mtk-lightbox-enter 240ms var(--mtk-ease) forwards;
+}
+
+/* Stop the page behind the lightbox scrolling (notably on mobile touch) */
+html:has(dialog.mtk-lightbox[open]) {
+	overflow: hidden;
 }
 
 dialog.mtk-lightbox::backdrop {
@@ -1831,6 +1845,11 @@ dialog.mtk-lightbox::backdrop {
 	padding-left: 48px;
 }
 
+.mtk-cta-right .wp-block-buttons,
+.mtk-cta-right .mtk-btn-group {
+	margin-top: 20px !important;
+}
+
 /* Projects Page Bottom Banner (Figma Node 117:491) */
 .mtk-projects-banner {
 	background-color: var(--maatek-navy);
@@ -1859,8 +1878,10 @@ dialog.mtk-lightbox::backdrop {
 .wp-block-group.is-style-mtk-contact-card {
 	background-color: #FFFFFF;
 	border: 1px solid var(--maatek-line);
-	border-radius: var(--mtk-radius-md);
-	padding: 32px;
+	border-bottom: 0;
+	border-radius: var(--mtk-radius-md) var(--mtk-radius-md) 0 0;
+	padding: 28px 28px 22px;
+	margin-bottom: 0 !important;
 }
 
 /* Hide "DIRECT CONTACT" overline inside .mtk-contact-card even on already-seeded pages */
@@ -1868,22 +1889,43 @@ dialog.mtk-lightbox::backdrop {
 	display: none !important;
 }
 
+.mtk-contact-card > .mtk-lead {
+	margin-top: 18px !important;
+	margin-bottom: 6px !important;
+	padding-top: 18px;
+	border-top: 1px solid var(--maatek-line);
+}
+
 .mtk-contact-actions,
 .wp-block-buttons.mtk-contact-actions {
 	display: flex !important;
-	flex-direction: column !important;
-	gap: 14px !important;
-	margin-top: 18px !important;
+	flex-direction: row !important;
+	flex-wrap: wrap;
+	align-items: stretch;
+	gap: 12px !important;
+	margin: -1px 0 0 !important;
+	padding: 16px 28px 24px;
+	background-color: #FFFFFF;
+	border: 1px solid var(--maatek-line);
+	border-top: 1px solid var(--maatek-line);
+	border-radius: 0 0 var(--mtk-radius-md) var(--mtk-radius-md);
+}
+
+.wp-block-buttons.mtk-contact-actions > .wp-block-button,
+.mtk-contact-actions > .wp-block-button {
+	flex: 1 1 calc(50% - 6px);
+	width: auto !important;
+	min-width: min(100%, 180px);
+	margin: 0 !important;
 }
 
 .mtk-contact-actions > .wp-block-button + .wp-block-button {
-	margin-top: 14px !important;
+	margin: 0 !important;
 }
 
+/* Already-seeded contact pages still contain this block; keep it off the page. */
 .mtk-enquiry-options-box {
-	border-top: 1px solid var(--maatek-line-strong);
-	padding-top: 32px;
-	margin-top: 48px !important;
+	display: none !important;
 }
 
 .mtk-enquiry-btn-row,
@@ -1906,12 +1948,7 @@ dialog.mtk-lightbox::backdrop {
 
 .mtk-footer-divider,
 .wp-block-separator.mtk-footer-divider {
-	border: 0 !important;
-	width: 100% !important;
-	max-width: 100% !important;
-	height: 1px !important;
-	background-color: rgba(163, 191, 209, 0.25) !important;
-	margin: 0 0 44px 0 !important;
+	display: none !important;
 }
 
 .mtk-footer-grid,
@@ -1920,7 +1957,7 @@ dialog.mtk-lightbox::backdrop {
 	grid-template-columns: 4fr 4.5fr 3.5fr;
 	gap: 40px !important;
 	align-items: start;
-	margin-top: 44px !important;
+	margin-top: 0 !important;
 }
 
 .mtk-footer-brand-title {
@@ -1985,6 +2022,19 @@ dialog.mtk-lightbox::backdrop {
 /* ==========================================================================
    15. RESPONSIVE BREAKPOINTS (Tablet <= 1024px, Mobile <= 767px)
    ========================================================================== */
+@media (max-width: 1400px) {
+	.mtk-service-row--service-page,
+	.wp-block-columns.mtk-service-row--service-page,
+	.mtk-service-row--service-page.mtk-service-row--reverse,
+	.wp-block-columns.mtk-service-row--service-page.mtk-service-row--reverse {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 720px;
+		height: 720px !important;
+		min-height: 720px !important;
+		max-height: 720px !important;
+	}
+}
+
 @media (max-width: 1120px) {
 	.mtk-container {
 		padding-left: var(--mtk-gutter-tablet);
@@ -2047,6 +2097,10 @@ dialog.mtk-lightbox::backdrop {
 		gap: 32px !important;
 	}
 
+	.mtk-contact-grid > .wp-block-column:first-child {
+		max-width: 520px;
+	}
+
 	.mtk-cta-right {
 		border-left: none;
 		border-top: 1px solid rgba(163, 191, 209, 0.28);
@@ -2063,6 +2117,10 @@ dialog.mtk-lightbox::backdrop {
 	.mtk-service-row--service-page.mtk-service-row--reverse,
 	.wp-block-columns.mtk-service-row--service-page.mtk-service-row--reverse {
 		grid-template-columns: 1fr;
+		height: auto !important;
+		min-height: 0 !important;
+		max-height: none !important;
+		grid-template-rows: auto;
 	}
 
 	/* Keep image on top when stacked on tablet/mobile */

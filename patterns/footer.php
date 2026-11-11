@@ -24,10 +24,6 @@ $maatek_footer_items = array(
 <footer class="wp-block-group mtk-site-footer">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:separator {"className":"mtk-footer-divider is-style-wide"} -->
-		<hr class="wp-block-separator has-alpha-channel-opacity mtk-footer-divider is-style-wide"/>
-		<!-- /wp:separator -->
-
 		<!-- wp:columns {"className":"mtk-footer-grid"} -->
 		<div class="wp-block-columns mtk-footer-grid">
 			<!-- wp:column {"className":"mtk-footer-col"} -->

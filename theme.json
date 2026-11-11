@@ -1,0 +1,220 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"useRootPaddingAwareAlignments": true,
+		"layout": {
+			"contentSize": "1272px",
+			"wideSize": "1440px"
+		},
+		"color": {
+			"custom": true,
+			"defaultPalette": false,
+			"defaultGradients": false,
+			"palette": [
+				{
+					"slug": "header",
+					"color": "#070F16",
+					"name": "Header Obsidian (#070F16)"
+				},
+				{
+					"slug": "footer",
+					"color": "#060E1A",
+					"name": "Footer Deep Navy (#060E1A)"
+				},
+				{
+					"slug": "navy",
+					"color": "#102C43",
+					"name": "Maatek Navy (#102C43)"
+				},
+				{
+					"slug": "cta-navy",
+					"color": "#13293C",
+					"name": "Enquiry Band Navy (#13293C)"
+				},
+				{
+					"slug": "blue",
+					"color": "#0063A4",
+					"name": "Primary Blue (#0063A4)"
+				},
+				{
+					"slug": "blue-hover",
+					"color": "#087AC7",
+					"name": "Interactive Blue (#087AC7)"
+				},
+				{
+					"slug": "accent-bright",
+					"color": "#18A5E8",
+					"name": "Accent Bright Cyan (#18A5E8)"
+				},
+				{
+					"slug": "nav-active",
+					"color": "#64C2F4",
+					"name": "Nav Active Sky (#64C2F4)"
+				},
+				{
+					"slug": "logo-grey",
+					"color": "#A8A9AC",
+					"name": "Logo Industrial Grey (#A8A9AC)"
+				},
+				{
+					"slug": "surface",
+					"color": "#FFFFFF",
+					"name": "Surface White (#FFFFFF)"
+				},
+				{
+					"slug": "section",
+					"color": "#F2F5F7",
+					"name": "Section Cool Grey (#F2F5F7)"
+				},
+				{
+					"slug": "paper",
+					"color": "#F5F8FB",
+					"name": "Soft Paper (#F5F8FB)"
+				},
+				{
+					"slug": "ink",
+					"color": "#183247",
+					"name": "Ink Dark (#183247)"
+				},
+				{
+					"slug": "heading-dark",
+					"color": "#091321",
+					"name": "Heading Deep Ink (#091321)"
+				},
+				{
+					"slug": "muted",
+					"color": "#52697B",
+					"name": "Muted Slate (#52697B)"
+				},
+				{
+					"slug": "line",
+					"color": "#DCE4EB",
+					"name": "Border Line (#DCE4EB)"
+				}
+			]
+		},
+		"typography": {
+			"customFontSize": true,
+			"lineHeight": true,
+			"letterSpacing": true,
+			"fontFamilies": [
+				{
+					"fontFamily": "\"handel-gothic\", \"handel-gothic-d\", \"handel-gothic-std\", \"Handel Gothic D\", \"Handel Gothic\", \"Inter\", sans-serif",
+					"slug": "heading",
+					"name": "Handel Gothic D (Headings)"
+				},
+				{
+					"fontFamily": "\"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+					"slug": "body",
+					"name": "Inter (Body & UI)"
+				}
+			],
+			"fluid": true,
+			"fontSizes": [
+				{ "slug": "overline", "size": "0.75rem", "fluid": false, "name": "Overline / Eyebrow (12px)" },
+				{ "slug": "small", "size": "0.875rem", "fluid": false, "name": "Body Small (14px)" },
+				{ "slug": "body", "size": "1rem", "fluid": false, "name": "Body Regular (16px)" },
+				{ "slug": "lead", "size": "1.125rem", "fluid": { "min": "1rem", "max": "1.125rem" }, "name": "Lead Copy (16–18px)" },
+				{ "slug": "subheading", "size": "1.375rem", "fluid": { "min": "1.25rem", "max": "1.375rem" }, "name": "Subheading H4 (20–22px)" },
+				{ "slug": "card-heading", "size": "1.875rem", "fluid": { "min": "1.5rem", "max": "1.875rem" }, "name": "Card Heading H3 (24–30px)" },
+				{ "slug": "section-heading", "size": "2.375rem", "fluid": { "min": "1.75rem", "max": "2.375rem" }, "name": "Section Heading H2 (28–38px)" },
+				{ "slug": "hero", "size": "3.25rem", "fluid": { "min": "2.25rem", "max": "3.25rem" }, "name": "Page Hero H1 (36–52px)" },
+				{ "slug": "display", "size": "4.5rem", "fluid": { "min": "2.4375rem", "max": "4.5rem" }, "name": "Home Hero Display (39–72px)" }
+			]
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true,
+			"blockGap": true,
+			"customSpacingSize": true,
+			"defaultSpacingSizes": false,
+			"units": [ "px", "rem", "%", "vh", "vw" ],
+			"spacingSizes": [
+				{ "slug": "1", "size": "4px", "name": "1 (4px)" },
+				{ "slug": "2", "size": "8px", "name": "2 (8px)" },
+				{ "slug": "3", "size": "12px", "name": "3 (12px)" },
+				{ "slug": "4", "size": "16px", "name": "4 (16px)" },
+				{ "slug": "5", "size": "20px", "name": "5 (20px)" },
+				{ "slug": "6", "size": "24px", "name": "6 (24px)" },
+				{ "slug": "8", "size": "32px", "name": "8 (32px)" },
+				{ "slug": "10", "size": "40px", "name": "10 (40px)" },
+				{ "slug": "12", "size": "48px", "name": "12 (48px)" },
+				{ "slug": "16", "size": "64px", "name": "16 (64px)" },
+				{ "slug": "20", "size": "80px", "name": "20 (80px)" },
+				{ "slug": "24", "size": "96px", "name": "24 (96px)" }
+			]
+		},
+		"border": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		},
+		"dimensions": {
+			"minHeight": true,
+			"aspectRatio": true
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--surface)",
+			"text": "var(--wp--preset--color--ink)"
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--body)",
+			"fontSize": "var(--wp--preset--font-size--body)",
+			"lineHeight": "1.625"
+		},
+		"spacing": {
+			"blockGap": "0px"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontFamily": "var(--wp--preset--font-family--heading)",
+					"fontWeight": "700",
+					"lineHeight": "1.2",
+					"letterSpacing": "0.01em"
+				},
+				"color": {
+					"text": "var(--wp--preset--color--heading-dark)"
+				}
+			},
+			"h1": { "typography": { "fontSize": "var(--wp--preset--font-size--hero)", "lineHeight": "1.17" } },
+			"h2": { "typography": { "fontSize": "var(--wp--preset--font-size--section-heading)", "lineHeight": "1.21" } },
+			"h3": { "typography": { "fontSize": "var(--wp--preset--font-size--card-heading)", "lineHeight": "1.27" } },
+			"h4": { "typography": { "fontSize": "var(--wp--preset--font-size--subheading)", "lineHeight": "1.36" } },
+			"h5": { "typography": { "fontSize": "var(--wp--preset--font-size--lead)", "lineHeight": "1.4" } },
+			"h6": { "typography": { "fontSize": "var(--wp--preset--font-size--body)", "lineHeight": "1.5" } },
+			"link": {
+				"color": {
+					"text": "var(--wp--preset--color--blue)"
+				}
+			},
+			"button": {
+				"typography": {
+					"fontFamily": "var(--wp--preset--font-family--body)",
+					"fontWeight": "600",
+					"fontSize": "0.9375rem"
+				},
+				"border": {
+					"radius": "2px"
+				}
+			}
+		}
+	},
+	"templateParts": [
+		{
+			"name": "header",
+			"title": "Header",
+			"area": "header"
+		},
+		{
+			"name": "footer",
+			"title": "Footer",
+			"area": "footer"
+		}
+	]
+}

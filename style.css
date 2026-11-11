@@ -1,0 +1,2126 @@
+/*
+Theme Name: Maatek
+Theme URI: https://maatekelectrical.com.au/
+Author: Daniel
+Author URI: http://dracz.com.au
+Description: Custom WordPress Block Theme for Maatek Electrical Services. Features a bespoke Tailwind-inspired utility and industrial design system (mtk-*), Adobe Typekit Handel Gothic D + Inter typography, full Gutenberg block editability, and subtle button/card micro-animations guided by the refined Figma design system.
+Version: 2.2.0
+Requires at least: 6.4
+Tested up to: 6.7
+Requires PHP: 7.4
+License: GPL-2.0-or-later
+Text Domain: maatek
+*/
+
+/* ==========================================================================
+   1. DESIGN TOKENS (Figma Node 59:933 & 92:1970 — Wired to theme.json Presets)
+   ========================================================================== */
+:root,
+.editor-styles-wrapper {
+	/* Color System — linked to WordPress Site Editor (theme.json) presets */
+	--maatek-header: var(--wp--preset--color--header, #070F16);
+	--maatek-footer: var(--wp--preset--color--footer, #060E1A);
+	--maatek-navy: var(--wp--preset--color--navy, #102C43);
+	--maatek-cta-navy: var(--wp--preset--color--cta-navy, #13293C);
+	--maatek-dark-hero: var(--wp--preset--color--heading-dark, #091321);
+	--maatek-blue: var(--wp--preset--color--blue, #0063A4);
+	--maatek-blue-mid: #006DA7;
+	--maatek-blue-hover: var(--wp--preset--color--blue-hover, #087AC7);
+	--maatek-accent-bright: var(--wp--preset--color--accent-bright, #18A5E8);
+	--maatek-nav-active: var(--wp--preset--color--nav-active, #64C2F4);
+	--maatek-logo-grey: var(--wp--preset--color--logo-grey, #A8A9AC);
+	--maatek-surface: var(--wp--preset--color--surface, #FFFFFF);
+	--maatek-section: var(--wp--preset--color--section, #F2F5F7);
+	--maatek-paper: var(--wp--preset--color--paper, #F5F8FB);
+	--maatek-shortcut-bg: #F2F6F9;
+	--maatek-ink: var(--wp--preset--color--ink, #183247);
+	--maatek-ink-deep: var(--wp--preset--color--heading-dark, #091321);
+	--maatek-ink-heading: #142130;
+	--maatek-muted: var(--wp--preset--color--muted, #52697B);
+	--maatek-muted-dark: #41566B;
+	--maatek-light-text: #D7E2EC;
+	--maatek-light-muted: #C2D0DE;
+	--maatek-line: var(--wp--preset--color--line, #DCE4EB);
+	--maatek-line-strong: #D1DBE3;
+	--maatek-line-card: #D8E1E8;
+
+	/* Typography — linked to WordPress Site Editor (theme.json) presets */
+	--maatek-font-heading: var(--wp--preset--font-family--heading, "handel-gothic", "handel-gothic-d", "handel-gothic-std", "Handel Gothic D", "Handel Gothic", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+	--maatek-font-body: var(--wp--preset--font-family--body, "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+
+	/* 4px Base Spacing Scale — linked to WordPress Site Editor (theme.json) presets */
+	--mtk-space-1: var(--wp--preset--spacing--1, 4px);
+	--mtk-space-2: var(--wp--preset--spacing--2, 8px);
+	--mtk-space-3: var(--wp--preset--spacing--3, 12px);
+	--mtk-space-4: var(--wp--preset--spacing--4, 16px);
+	--mtk-space-5: var(--wp--preset--spacing--5, 20px);
+	--mtk-space-6: var(--wp--preset--spacing--6, 24px);
+	--mtk-space-7: 28px;
+	--mtk-space-8: var(--wp--preset--spacing--8, 32px);
+	--mtk-space-10: var(--wp--preset--spacing--10, 40px);
+	--mtk-space-12: var(--wp--preset--spacing--12, 48px);
+	--mtk-space-14: 56px;
+	--mtk-space-16: var(--wp--preset--spacing--16, 64px);
+	--mtk-space-20: var(--wp--preset--spacing--20, 80px);
+	--mtk-space-24: var(--wp--preset--spacing--24, 96px);
+
+	/* Layout & Grid */
+	--mtk-max-frame: 1440px;
+	--mtk-container: 1272px;
+	--mtk-gutter-desktop: 84px;
+	--mtk-gutter-tablet: 32px;
+	--mtk-gutter-mobile: 24px;
+	--mtk-radius-sm: 2px;
+	--mtk-radius-md: 4px;
+
+	/* Motion */
+	--mtk-ease: cubic-bezier(0.22, 1, 0.36, 1);
+	--mtk-duration: 220ms;
+}
+
+/* ==========================================================================
+   2. BASE & RESET
+   ========================================================================== */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background-color: var(--maatek-surface);
+	color: var(--maatek-ink);
+	font-family: var(--maatek-font-body);
+	font-size: 16px;
+	line-height: 1.625;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
+}
+
+.wp-site-blocks {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.wp-site-blocks > main,
+.mtk-main {
+	flex: 1 0 auto;
+}
+
+/* Strip unexpected default block margins inside Maatek sections */
+.wp-site-blocks > * + * {
+	margin-block-start: 0 !important;
+}
+
+img,
+svg {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+a {
+	color: var(--maatek-blue);
+	text-decoration: none;
+	transition: color var(--mtk-duration) var(--mtk-ease);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	font-family: var(--maatek-font-heading);
+	font-weight: 700;
+	color: var(--maatek-ink-deep);
+	letter-spacing: 0.01em;
+}
+
+p {
+	margin: 0;
+}
+
+/* ==========================================================================
+   3. CUSTOM TAILWIND-LIKE UTILITY SYSTEM (mtk-*)
+   ========================================================================== */
+
+/* Container & Frame */
+.mtk-container {
+	width: 100%;
+	max-width: calc(var(--mtk-container) + (var(--mtk-gutter-desktop) * 2));
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--mtk-gutter-desktop);
+	padding-right: var(--mtk-gutter-desktop);
+}
+
+/* Backgrounds (Yields to WordPress Sidebar .has-background when user picks a custom color) */
+.mtk-bg-header:not(.has-background) { background-color: var(--maatek-header); }
+.mtk-bg-footer:not(.has-background) { background-color: var(--maatek-footer); }
+.mtk-bg-navy:not(.has-background) { background-color: var(--maatek-navy); }
+.mtk-bg-cta:not(.has-background) { background-color: var(--maatek-cta-navy); }
+.mtk-bg-dark-hero:not(.has-background) { background-color: var(--maatek-dark-hero); }
+.mtk-bg-surface:not(.has-background),
+.is-style-mtk-surface:not(.has-background) { background-color: var(--maatek-surface); }
+.mtk-bg-section:not(.has-background),
+.is-style-mtk-section-grey:not(.has-background) { background-color: var(--maatek-section); }
+.mtk-bg-paper:not(.has-background) { background-color: var(--maatek-paper); }
+.mtk-bg-shortcut:not(.has-background) { background-color: var(--maatek-shortcut-bg); }
+.mtk-bg-blue:not(.has-background) { background-color: var(--maatek-blue); }
+
+/* Text Colors (Yields to WordPress Sidebar .has-text-color when user picks a custom color) */
+.mtk-text-white:not(.has-text-color) { color: #FFFFFF; }
+.mtk-text-ink:not(.has-text-color) { color: var(--maatek-ink); }
+.mtk-text-deep:not(.has-text-color) { color: var(--maatek-ink-deep); }
+.mtk-text-heading:not(.has-text-color) { color: var(--maatek-ink-heading); }
+.mtk-text-muted:not(.has-text-color) { color: var(--maatek-muted); }
+.mtk-text-muted-dark:not(.has-text-color) { color: var(--maatek-muted-dark); }
+.mtk-text-light:not(.has-text-color) { color: var(--maatek-light-text); }
+.mtk-text-light-muted:not(.has-text-color) { color: var(--maatek-light-muted); }
+.mtk-text-blue:not(.has-text-color) { color: var(--maatek-blue); }
+.mtk-text-accent:not(.has-text-color) { color: var(--maatek-accent-bright); }
+.mtk-text-sky:not(.has-text-color) { color: var(--maatek-nav-active); }
+
+/* Typography Scale Classes (Figma Specimen Node 92:1970) */
+.mtk-font-heading { font-family: var(--maatek-font-heading) !important; }
+.mtk-font-body { font-family: var(--maatek-font-body) !important; }
+
+.mtk-h1-home {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--display, 72px);
+	line-height: 1.14;
+	font-weight: 700;
+	letter-spacing: 0.01em;
+}
+
+.mtk-h1-service {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--hero, 52px);
+	line-height: 1.17;
+	font-weight: 700;
+	letter-spacing: 0.01em;
+}
+
+.mtk-h1-compact {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--hero, 52px);
+	line-height: 1.2;
+	font-weight: 700;
+}
+
+.mtk-h2 {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--section-heading, 38px);
+	line-height: 1.21;
+	font-weight: 700;
+}
+
+.mtk-h2-lg {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--section-heading, 38px);
+	line-height: 1.2;
+	font-weight: 700;
+}
+
+.mtk-h3 {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--card-heading, 30px);
+	line-height: 1.27;
+	font-weight: 700;
+}
+
+.mtk-h3-sm {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--card-heading, 30px);
+	line-height: 1.27;
+	font-weight: 700;
+}
+
+.mtk-h4 {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--subheading, 22px);
+	line-height: 1.36;
+	font-weight: 700;
+}
+
+.mtk-overline,
+.is-style-mtk-overline {
+	font-family: var(--maatek-font-body);
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--maatek-blue);
+}
+
+.mtk-overline--bright {
+	color: var(--maatek-accent-bright);
+}
+
+.mtk-overline--sky {
+	color: #5EC2F7;
+}
+
+.mtk-lead {
+	font-size: 18px;
+	line-height: 28px;
+}
+
+.mtk-body {
+	font-size: 16px;
+	line-height: 26px;
+}
+
+.mtk-small {
+	font-size: 14px;
+	line-height: 22px;
+}
+
+.mtk-xs {
+	font-size: 13px;
+	line-height: 20px;
+}
+
+.mtk-font-medium { font-weight: 500 !important; }
+.mtk-font-semibold { font-weight: 600 !important; }
+.mtk-font-bold { font-weight: 700 !important; }
+.mtk-uppercase { text-transform: uppercase !important; }
+
+/* Flex & Grid Utilities */
+.mtk-flex { display: flex; }
+.mtk-inline-flex { display: inline-flex; }
+.mtk-flex-col { display: flex; flex-direction: column; }
+.mtk-flex-wrap { flex-wrap: wrap; }
+.mtk-items-start { align-items: flex-start; }
+.mtk-items-center { align-items: center; }
+.mtk-items-end { align-items: flex-end; }
+.mtk-items-stretch { align-items: stretch; }
+.mtk-justify-start { justify-content: flex-start; }
+.mtk-justify-center { justify-content: center; }
+.mtk-justify-between { justify-content: space-between; }
+
+.mtk-grid { display: grid; }
+.mtk-grid-2 {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--mtk-space-6);
+}
+.mtk-grid-3 {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--mtk-space-6);
+}
+.mtk-grid-4 {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: var(--mtk-space-6);
+}
+
+/* Gap Utilities */
+.mtk-gap-1 { gap: var(--mtk-space-1); }
+.mtk-gap-2 { gap: var(--mtk-space-2); }
+.mtk-gap-3 { gap: var(--mtk-space-3); }
+.mtk-gap-4 { gap: var(--mtk-space-4); }
+.mtk-gap-5 { gap: var(--mtk-space-5); }
+.mtk-gap-6 { gap: var(--mtk-space-6); }
+.mtk-gap-8 { gap: var(--mtk-space-8); }
+.mtk-gap-10 { gap: var(--mtk-space-10); }
+.mtk-gap-12 { gap: var(--mtk-space-12); }
+.mtk-gap-16 { gap: var(--mtk-space-16); }
+
+/* Reusable Padding Utilities (All-around, X-axis, Y-axis, Top/Bottom/Left/Right) */
+.mtk-p-0 { padding: 0; }
+.mtk-p-2 { padding: var(--mtk-space-2); }
+.mtk-p-3 { padding: var(--mtk-space-3); }
+.mtk-p-4 { padding: var(--mtk-space-4); }
+.mtk-p-5 { padding: var(--mtk-space-5); }
+.mtk-p-6 { padding: var(--mtk-space-6); }
+.mtk-p-8 { padding: var(--mtk-space-8); }
+.mtk-p-10 { padding: var(--mtk-space-10); }
+.mtk-p-12 { padding: var(--mtk-space-12); }
+
+.mtk-px-0 { padding-left: 0; padding-right: 0; }
+.mtk-px-3 { padding-left: var(--mtk-space-3); padding-right: var(--mtk-space-3); }
+.mtk-px-4 { padding-left: var(--mtk-space-4); padding-right: var(--mtk-space-4); }
+.mtk-px-6 { padding-left: var(--mtk-space-6); padding-right: var(--mtk-space-6); }
+.mtk-px-8 { padding-left: var(--mtk-space-8); padding-right: var(--mtk-space-8); }
+.mtk-px-12 { padding-left: var(--mtk-space-12); padding-right: var(--mtk-space-12); }
+
+.mtk-py-0 { padding-top: 0; padding-bottom: 0; }
+.mtk-py-2 { padding-top: var(--mtk-space-2); padding-bottom: var(--mtk-space-2); }
+.mtk-py-3 { padding-top: var(--mtk-space-3); padding-bottom: var(--mtk-space-3); }
+.mtk-py-4 { padding-top: var(--mtk-space-4); padding-bottom: var(--mtk-space-4); }
+.mtk-py-6 { padding-top: var(--mtk-space-6); padding-bottom: var(--mtk-space-6); }
+.mtk-py-8 { padding-top: var(--mtk-space-8); padding-bottom: var(--mtk-space-8); }
+.mtk-py-10 { padding-top: var(--mtk-space-10); padding-bottom: var(--mtk-space-10); }
+.mtk-py-12 { padding-top: var(--mtk-space-12); padding-bottom: var(--mtk-space-12); }
+.mtk-py-14 { padding-top: var(--mtk-space-14); padding-bottom: var(--mtk-space-14); }
+.mtk-py-16 { padding-top: var(--mtk-space-16); padding-bottom: var(--mtk-space-16); }
+.mtk-py-20 { padding-top: var(--mtk-space-20); padding-bottom: var(--mtk-space-20); }
+.mtk-py-24 { padding-top: var(--mtk-space-24); padding-bottom: var(--mtk-space-24); }
+
+.mtk-pt-0 { padding-top: 0; }
+.mtk-pt-2 { padding-top: var(--mtk-space-2); }
+.mtk-pt-4 { padding-top: var(--mtk-space-4); }
+.mtk-pt-6 { padding-top: var(--mtk-space-6); }
+.mtk-pt-8 { padding-top: var(--mtk-space-8); }
+.mtk-pt-12 { padding-top: var(--mtk-space-12); }
+.mtk-pt-16 { padding-top: var(--mtk-space-16); }
+
+.mtk-pb-0 { padding-bottom: 0; }
+.mtk-pb-4 { padding-bottom: var(--mtk-space-4); }
+.mtk-pb-6 { padding-bottom: var(--mtk-space-6); }
+.mtk-pb-8 { padding-bottom: var(--mtk-space-8); }
+.mtk-pb-12 { padding-bottom: var(--mtk-space-12); }
+.mtk-pb-16 { padding-bottom: var(--mtk-space-16); }
+
+/* Reusable Margin Utilities */
+:root .mtk-m-0 { margin: 0; }
+:root .mtk-mx-auto { margin-left: auto; margin-right: auto; }
+
+:root .mtk-mt-0 { margin-top: 0; }
+:root .mtk-mt-1 { margin-top: var(--mtk-space-1); }
+:root .mtk-mt-2 { margin-top: var(--mtk-space-2); }
+:root .mtk-mt-3 { margin-top: var(--mtk-space-3); }
+:root .mtk-mt-4 { margin-top: var(--mtk-space-4); }
+:root .mtk-mt-5 { margin-top: var(--mtk-space-5); }
+:root .mtk-mt-6 { margin-top: var(--mtk-space-6); }
+:root .mtk-mt-8 { margin-top: var(--mtk-space-8); }
+:root .mtk-mt-10 { margin-top: var(--mtk-space-10); }
+:root .mtk-mt-12 { margin-top: var(--mtk-space-12); }
+:root .mtk-mt-16 { margin-top: var(--mtk-space-16); }
+
+:root .mtk-mb-0 { margin-bottom: 0; }
+:root .mtk-mb-1 { margin-bottom: var(--mtk-space-1); }
+:root .mtk-mb-2 { margin-bottom: var(--mtk-space-2); }
+:root .mtk-mb-3 { margin-bottom: var(--mtk-space-3); }
+:root .mtk-mb-4 { margin-bottom: var(--mtk-space-4); }
+:root .mtk-mb-6 { margin-bottom: var(--mtk-space-6); }
+:root .mtk-mb-8 { margin-bottom: var(--mtk-space-8); }
+:root .mtk-mb-10 { margin-bottom: var(--mtk-space-10); }
+:root .mtk-mb-12 { margin-bottom: var(--mtk-space-12); }
+
+/* Width, Max-Width & Text Alignment Utilities */
+.mtk-w-full { width: 100%; }
+.mtk-max-w-520 { max-width: 520px; }
+.mtk-max-w-620 { max-width: 620px; }
+.mtk-max-w-680 { max-width: 680px; }
+.mtk-max-w-720 { max-width: 720px; }
+.mtk-max-w-760 { max-width: 760px; }
+.mtk-max-w-820 { max-width: 820px; }
+.mtk-text-left { text-align: left; }
+.mtk-text-center { text-align: center; }
+.mtk-text-right { text-align: right; }
+
+/* Borders, Radius & Shadows */
+.mtk-border { border: 1px solid var(--maatek-line); }
+.mtk-border-top { border-top: 1px solid var(--maatek-line); }
+.mtk-border-bottom { border-bottom: 1px solid var(--maatek-line); }
+.mtk-border-strong-bottom { border-bottom: 1px solid var(--maatek-line-strong); }
+.mtk-rounded-none { border-radius: 0; }
+.mtk-rounded-sm { border-radius: var(--mtk-radius-sm); }
+.mtk-rounded-md { border-radius: var(--mtk-radius-md); }
+.mtk-shadow-sm { box-shadow: 0 2px 6px rgba(9, 19, 33, 0.06); }
+.mtk-shadow-md { box-shadow: 0 8px 24px rgba(9, 19, 33, 0.10); }
+
+/* ==========================================================================
+   4. BUTTONS, LINKS & MICRO-ANIMATIONS
+   ========================================================================== */
+.mtk-btn-group,
+.wp-block-buttons.mtk-btn-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px;
+}
+
+/* Reset outer core/button wrapper so only the inner <a> (.wp-block-button__link) renders as a button */
+.wp-block-button.mtk-btn,
+.wp-block-button.mtk-btn-primary,
+.wp-block-button.mtk-btn-secondary,
+.wp-block-button.mtk-btn-secondary--blue-border,
+.wp-block-button.mtk-btn-hero-outline,
+.wp-block-button.mtk-btn-sm,
+.wp-block-button.is-style-mtk-primary,
+.wp-block-button.is-style-mtk-secondary,
+.wp-block-button.is-style-mtk-hero-outline {
+	display: inline-block;
+	margin: 0;
+	padding: 0 !important;
+	background: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	min-height: 0 !important;
+	transform: none !important;
+}
+
+a.mtk-btn,
+button.mtk-btn,
+.wp-block-button.mtk-btn .wp-block-button__link,
+.mtk-btn .wp-block-button__link,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link,
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	min-height: 46px;
+	padding: 12px 24px;
+	font-family: var(--maatek-font-body);
+	font-size: 15px;
+	line-height: 20px;
+	font-weight: 600;
+	border-radius: var(--mtk-radius-sm);
+	text-decoration: none !important;
+	cursor: pointer;
+	position: relative;
+	transition:
+		background-color var(--mtk-duration) var(--mtk-ease),
+		border-color var(--mtk-duration) var(--mtk-ease),
+		color var(--mtk-duration) var(--mtk-ease),
+		box-shadow var(--mtk-duration) var(--mtk-ease);
+}
+
+/* Primary Filled Button (#0063A4 / #006DA7) */
+a.mtk-btn-primary,
+button.mtk-btn-primary,
+.wp-block-button.mtk-btn-primary .wp-block-button__link:not(.has-background),
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:not(.has-background) {
+	background-color: var(--maatek-blue);
+	color: #FFFFFF;
+	border: 1px solid var(--maatek-blue);
+	box-shadow: 0 1px 2px rgba(7, 15, 22, 0.14);
+}
+
+a.mtk-btn-primary:hover,
+a.mtk-btn-primary:focus-visible,
+button.mtk-btn-primary:hover,
+button.mtk-btn-primary:focus-visible,
+.wp-block-button.mtk-btn-primary .wp-block-button__link:hover,
+.wp-block-button.mtk-btn-primary .wp-block-button__link:focus-visible,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:hover,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:focus-visible {
+	background-color: var(--maatek-blue-hover);
+	border-color: var(--maatek-blue-hover);
+	color: #FFFFFF;
+	box-shadow: 0 4px 12px rgba(0, 99, 164, 0.24);
+}
+
+/* Secondary Light Outlined Button (White bg, #0063A4 border & text) */
+a.mtk-btn-secondary,
+button.mtk-btn-secondary,
+.wp-block-button.mtk-btn-secondary .wp-block-button__link:not(.has-background),
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link:not(.has-background) {
+	background-color: #FFFFFF;
+	color: var(--maatek-blue);
+	border: 1px solid #B9CCDC;
+}
+
+a.mtk-btn-secondary--blue-border,
+button.mtk-btn-secondary--blue-border,
+.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link {
+	background-color: #FFFFFF;
+	color: var(--maatek-blue);
+	border: 1.5px solid var(--maatek-blue) !important;
+}
+
+a.mtk-btn-secondary:hover,
+a.mtk-btn-secondary:focus-visible,
+button.mtk-btn-secondary:hover,
+button.mtk-btn-secondary:focus-visible,
+.wp-block-button.mtk-btn-secondary .wp-block-button__link:hover,
+.wp-block-button.mtk-btn-secondary .wp-block-button__link:focus-visible,
+a.mtk-btn-secondary--blue-border:hover,
+button.mtk-btn-secondary--blue-border:hover,
+.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:hover,
+.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:focus-visible {
+	background-color: var(--maatek-paper);
+	border-color: var(--maatek-blue) !important;
+	color: var(--maatek-blue-hover);
+	box-shadow: 0 3px 10px rgba(9, 19, 33, 0.06);
+}
+
+/* Dark Hero Ghost/Outline Button (Translucent dark bg with border) */
+a.mtk-btn-hero-outline,
+button.mtk-btn-hero-outline,
+.wp-block-button.mtk-btn-hero-outline .wp-block-button__link,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link {
+	background-color: rgba(255, 255, 255, 0.07);
+	color: #FFFFFF;
+	border: 1px solid rgba(163, 191, 209, 0.62) !important;
+	backdrop-filter: blur(4px);
+}
+
+a.mtk-btn-hero-outline:hover,
+a.mtk-btn-hero-outline:focus-visible,
+button.mtk-btn-hero-outline:hover,
+button.mtk-btn-hero-outline:focus-visible,
+.wp-block-button.mtk-btn-hero-outline .wp-block-button__link:hover,
+.wp-block-button.mtk-btn-hero-outline .wp-block-button__link:focus-visible,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:hover,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:focus-visible {
+	background-color: rgba(255, 255, 255, 0.14);
+	border-color: var(--maatek-nav-active) !important;
+	color: #FFFFFF;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+/* Compact Button Sizing (Used in Support & Gallery cards) */
+a.mtk-btn-sm,
+button.mtk-btn-sm,
+.wp-block-button.mtk-btn-sm .wp-block-button__link {
+	min-height: 40px;
+	padding: 9px 18px;
+	font-size: 14px;
+}
+
+/* Full-width Button (Used on Contact page) */
+.wp-block-button.mtk-btn-block {
+	width: 100%;
+	display: block;
+}
+
+a.mtk-btn-block,
+button.mtk-btn-block,
+.wp-block-button.mtk-btn-block .wp-block-button__link {
+	width: 100%;
+	display: flex;
+}
+
+/* Directional Arrow Micro-Animations inside Buttons & Links */
+.mtk-arrow,
+.mtk-arrow-up {
+	display: inline-block;
+	transition: transform var(--mtk-duration) var(--mtk-ease);
+	font-style: normal;
+	line-height: 1;
+}
+
+.mtk-btn:hover .mtk-arrow,
+.mtk-btn:focus-visible .mtk-arrow,
+.wp-block-button__link:hover .mtk-arrow,
+.wp-block-button__link:focus-visible .mtk-arrow,
+.mtk-link-arrow:hover .mtk-arrow,
+.mtk-link-arrow:focus-visible .mtk-arrow,
+.mtk-shortcut:hover .mtk-arrow,
+.mtk-shortcut:focus-visible .mtk-arrow {
+	transform: translateX(4px);
+}
+
+.mtk-btn:hover .mtk-arrow-up,
+.mtk-btn:focus-visible .mtk-arrow-up,
+.wp-block-button__link:hover .mtk-arrow-up,
+.wp-block-button__link:focus-visible .mtk-arrow-up {
+	transform: translate(3px, -3px);
+}
+
+/* Inline Action Link with Arrow ("Explore Control & Automation  →") */
+.mtk-link-arrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: var(--maatek-font-body);
+	font-size: 15px;
+	line-height: 22px;
+	font-weight: 600;
+	color: var(--maatek-blue);
+	text-decoration: none !important;
+	transition: color var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-link-arrow:hover,
+.mtk-link-arrow:focus-visible {
+	color: var(--maatek-blue-hover);
+}
+
+/* ==========================================================================
+   5. HEADER & NAVIGATION (Figma Node 11:837 & Mobile 32:867)
+   ========================================================================== */
+.mtk-site-header {
+	background-color: var(--maatek-header);
+	border-bottom: 1px solid rgba(163, 191, 209, 0.14);
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+.mtk-header-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 100px;
+	gap: 24px;
+}
+
+.mtk-brand-block,
+figure.mtk-brand-block {
+	margin: 0 !important;
+	flex-shrink: 0;
+}
+
+.mtk-brand-link {
+	display: inline-flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.mtk-brand-logo,
+.mtk-brand-block img,
+.mtk-site-header .wp-block-site-logo img {
+	width: 170px;
+	height: 60px;
+	object-fit: contain;
+}
+
+.mtk-site-header .wp-block-site-logo {
+	flex-shrink: 0;
+	line-height: 0;
+}
+
+/* Primary menu = native core/navigation block (Appearance → Editor → Navigation).
+   Add, remove, rename or reorder pages there; the mobile MENU / CLOSE drawer updates automatically. */
+.mtk-nav {
+	font-family: var(--maatek-font-body);
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+}
+
+.mtk-nav .wp-block-navigation__container {
+	display: flex;
+	align-items: center;
+	gap: 28px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.mtk-nav .wp-block-navigation-item {
+	list-style: none;
+	margin: 0;
+}
+
+.mtk-nav:not(.has-text-color) .wp-block-navigation-item__content {
+	color: #E3ECF3;
+}
+
+.mtk-nav .wp-block-navigation-item__content {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	padding: 8px 0;
+	white-space: nowrap;
+	text-decoration: none;
+	transition: color var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-nav .wp-block-navigation-item__content::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 2px;
+	background-color: var(--maatek-nav-active);
+	transform: scaleX(0);
+	transform-origin: left center;
+	transition: transform var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-nav .wp-block-navigation-item__content:hover,
+.mtk-nav .wp-block-navigation-item__content:focus-visible {
+	color: #FFFFFF;
+}
+
+.mtk-nav .wp-block-navigation-item__content:hover::after,
+.mtk-nav .wp-block-navigation-item__content:focus-visible::after,
+.mtk-nav .current-menu-item > .wp-block-navigation-item__content::after,
+.mtk-nav .wp-block-navigation-item__content[aria-current="page"]::after,
+.mtk-nav .wp-block-navigation-item__content.is-active::after {
+	transform: scaleX(1);
+}
+
+.mtk-nav .current-menu-item > .wp-block-navigation-item__content,
+.mtk-nav .wp-block-navigation-item__content[aria-current="page"],
+.mtk-nav .wp-block-navigation-item__content.is-active {
+	color: #FFFFFF;
+	font-weight: 700;
+}
+
+/* MENU / CLOSE buttons (Figma 32:867) */
+.mtk-nav .wp-block-navigation__responsive-container-open,
+.mtk-nav .wp-block-navigation__responsive-container-close {
+	align-items: center;
+	padding: 9px 14px;
+	border-radius: var(--mtk-radius-sm);
+	font-family: var(--maatek-font-body);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background-color var(--mtk-duration) var(--mtk-ease), border-color var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-nav .wp-block-navigation__responsive-container-open {
+	background-color: var(--maatek-navy);
+	border: 1px solid #35546D;
+	color: #FFFFFF;
+}
+
+.mtk-nav .wp-block-navigation__responsive-container-open:hover,
+.mtk-nav .wp-block-navigation__responsive-container-open:focus-visible {
+	background-color: var(--maatek-blue);
+	border-color: var(--maatek-nav-active);
+}
+
+.mtk-nav .wp-block-navigation__responsive-container-close {
+	top: 20px;
+	right: 24px;
+	background-color: #FFFFFF;
+	border: 1px solid var(--maatek-line);
+	color: var(--maatek-ink-deep);
+}
+
+/* Open mobile drawer — background/text colours editable via the Navigation block's "Submenu & overlay" colours */
+.mtk-nav .wp-block-navigation__responsive-container.is-menu-open {
+	padding: 78px 24px 24px;
+}
+
+.mtk-nav .is-menu-open .wp-block-navigation__responsive-container-content {
+	align-items: stretch;
+	padding-top: 0;
+}
+
+.mtk-nav .is-menu-open .wp-block-navigation__container {
+	gap: 0;
+	width: 100%;
+	align-items: stretch;
+}
+
+.mtk-nav .is-menu-open .wp-block-navigation-item {
+	width: 100%;
+	border-bottom: 1px solid #E5EBF0;
+}
+
+.mtk-nav .is-menu-open .wp-block-navigation-item__content {
+	display: flex;
+	width: 100%;
+	min-height: 54px;
+	color: inherit;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.mtk-nav .is-menu-open .wp-block-navigation-item__content::after {
+	display: none;
+}
+
+.mtk-nav .is-menu-open .current-menu-item > .wp-block-navigation-item__content,
+.mtk-nav .is-menu-open .wp-block-navigation-item__content[aria-current="page"] {
+	color: var(--maatek-blue);
+}
+
+/* Seven links don't fit below 960px, so use the drawer up to tablet width (core switches at 600px) */
+@media (min-width: 600px) and (max-width: 960px) {
+	.mtk-nav .wp-block-navigation__responsive-container-open:not(.always-shown) {
+		display: flex;
+	}
+
+	.mtk-nav .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+		display: none;
+	}
+}
+
+/* ==========================================================================
+   6. HERO SECTIONS (Home, Service Pages, Dark Intro Pages)
+   ========================================================================== */
+
+/* 6.1 Home Hero (Figma Node 11:206 — 680px Desktop) */
+/* Heroes are native core/cover blocks: the background image, focal point,
+   overlay gradient/opacity and minimum height are all editable in the block sidebar. */
+.mtk-hero-home,
+.mtk-hero-service {
+	position: relative;
+	display: flex;
+	align-items: center;
+	background-color: var(--maatek-dark-hero);
+	color: #FFFFFF;
+	overflow: hidden;
+}
+
+.wp-block-cover.mtk-hero-home,
+.wp-block-cover.mtk-hero-service {
+	padding: 0;
+}
+
+.mtk-hero-home {
+	min-height: 680px;
+}
+
+.mtk-hero-service {
+	min-height: 470px;
+}
+
+.mtk-hero-home > .wp-block-cover__image-background,
+.mtk-hero-service > .wp-block-cover__image-background {
+	position: absolute;
+	inset: 0;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+	z-index: 0;
+}
+
+.mtk-hero-home > .wp-block-cover__background,
+.mtk-hero-service > .wp-block-cover__background {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+.mtk-hero-home > .wp-block-cover__inner-container,
+.mtk-hero-service > .wp-block-cover__inner-container {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+}
+
+.mtk-hero-home > .wp-block-cover__background {
+	background-color: transparent !important;
+	background-image: linear-gradient(
+		90deg,
+		rgba(7, 15, 22, 0.90) 0%,
+		rgba(7, 15, 22, 0.76) 48%,
+		rgba(7, 15, 22, 0.42) 100%
+	);
+	opacity: 1 !important;
+}
+
+.mtk-hero-service > .wp-block-cover__background {
+	background-color: transparent !important;
+	background-image: linear-gradient(
+		90deg,
+		rgba(7, 15, 22, 0.88) 0%,
+		rgba(9, 21, 34, 0.74) 55%,
+		rgba(9, 21, 34, 0.46) 100%
+	);
+	opacity: 1 !important;
+}
+
+/* Ensure WordPress core flex/column defaults never distort CSS Grid columns */
+.wp-block-columns[class*="mtk-"] > .wp-block-column {
+	min-width: 0;
+	width: 100%;
+}
+
+.mtk-hero-home .mtk-container {
+	position: relative;
+	z-index: 2;
+	padding-top: 84px;
+	padding-bottom: 84px;
+}
+
+.mtk-eyebrow-row {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 24px;
+}
+
+.mtk-eyebrow-bar {
+	width: 36px;
+	height: 3px;
+	background-color: var(--maatek-blue-hover);
+	display: inline-block;
+	flex-shrink: 0;
+}
+
+.mtk-eyebrow-bar--short {
+	width: 14px;
+	height: 3px;
+	background-color: var(--maatek-accent-bright);
+}
+
+/* Hide Gutenberg empty-group placeholder UI inside decorative bars if any exist */
+.mtk-eyebrow-bar .block-editor-block-list__layout,
+.mtk-eyebrow-bar .wp-block-group__inner-container,
+.mtk-zoom-badge .block-editor-block-list__layout {
+	display: none !important;
+}
+
+.mtk-eyebrow-text {
+	font-family: var(--maatek-font-body);
+	font-size: 13px;
+	line-height: 18px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #5EC2F7;
+}
+
+/* Pure-CSS eyebrow accent bars so no empty Group block is ever needed in Gutenberg */
+p.mtk-eyebrow-with-bar,
+p.mtk-eyebrow-with-bar--short {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 24px !important;
+}
+
+p.mtk-eyebrow-with-bar::before {
+	content: "";
+	width: 36px;
+	height: 3px;
+	background-color: var(--maatek-blue-hover);
+	display: inline-block;
+	flex-shrink: 0;
+}
+
+p.mtk-eyebrow-with-bar--short::before {
+	content: "";
+	width: 14px;
+	height: 3px;
+	background-color: var(--maatek-accent-bright);
+	display: inline-block;
+	flex-shrink: 0;
+}
+
+.mtk-hero-home-title {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--display, 72px);
+	line-height: 1.14;
+	font-weight: 700;
+	color: #FFFFFF;
+	max-width: 780px;
+}
+
+.mtk-hero-home-title .mtk-accent-line {
+	display: block;
+	color: var(--maatek-accent-bright);
+}
+
+.mtk-hero-home-subtitle {
+	margin-top: 24px !important;
+	margin-bottom: 36px !important;
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: 400;
+	color: #D6E1EC;
+}
+
+/* 6.2 Service Page Hero (Figma Nodes 11:289, 11:419, 11:518, 11:620 — 470px Desktop) */
+/* 6.2 Service Page Hero (Figma 11:289 / 11:419 / 11:518 / 11:620) — shares the core/cover rules above */
+
+.mtk-hero-service .mtk-container {
+	position: relative;
+	z-index: 2;
+	padding-top: 42px;
+	padding-bottom: 56px;
+}
+
+.mtk-breadcrumb {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	line-height: 18px;
+	color: #B4C5D6;
+	margin-bottom: 34px !important;
+}
+
+.mtk-breadcrumb a {
+	color: #B4C5D6;
+	text-decoration: none;
+}
+
+.mtk-breadcrumb a:hover {
+	color: #FFFFFF;
+}
+
+.mtk-hero-kicker {
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--maatek-accent-bright);
+	margin-bottom: 12px !important;
+}
+
+.mtk-hero-service-title {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--hero, 52px);
+	line-height: 1.17;
+	font-weight: 700;
+	color: #FFFFFF;
+	margin-bottom: 16px !important;
+}
+
+.mtk-hero-service-lead {
+	font-size: 17px;
+	line-height: 27px;
+	color: #D7E2EC;
+	max-width: 660px;
+	margin-bottom: 28px !important;
+}
+
+/* 6.3 Solid Dark Intro Hero (Projects 11:726 & Contact 11:786) */
+.mtk-hero-dark-solid {
+	background-color: var(--maatek-dark-hero);
+	color: #FFFFFF;
+	padding-top: 68px;
+	padding-bottom: 68px;
+}
+
+.mtk-hero-navy-solid {
+	background-color: var(--maatek-navy);
+	color: #FFFFFF;
+	padding-top: 64px;
+	padding-bottom: 64px;
+}
+
+/* ==========================================================================
+   7. INTEGRATED SOLUTIONS SHORTCUT CARDS & SUPPORT BAND (Homepage)
+   ========================================================================== */
+.mtk-shortcut-grid,
+.wp-block-columns.mtk-shortcut-grid {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 24px !important;
+	margin-top: 28px !important;
+}
+
+.mtk-shortcut-col {
+	margin: 0 !important;
+}
+
+.mtk-shortcut {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 56px;
+	padding: 0 18px;
+	background-color: var(--maatek-shortcut-bg);
+	border: 1px solid #D5E0E8;
+	border-radius: var(--mtk-radius-sm);
+	font-family: var(--maatek-font-body);
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 700;
+	color: var(--maatek-ink-heading);
+	text-decoration: none !important;
+	transition:
+		background-color var(--mtk-duration) var(--mtk-ease),
+		border-color var(--mtk-duration) var(--mtk-ease),
+		transform var(--mtk-duration) var(--mtk-ease),
+		box-shadow var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-shortcut .mtk-arrow {
+	color: var(--maatek-blue);
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.mtk-shortcut:hover,
+.mtk-shortcut:focus-visible {
+	background-color: #FFFFFF;
+	border-color: var(--maatek-blue);
+	box-shadow: 0 4px 12px rgba(9, 19, 33, 0.06);
+}
+
+/* Choose Your Enquiry Split Grid (Figma Node 70:840) */
+.mtk-support-box {
+	border-top: 1px solid var(--maatek-line);
+	padding-top: 40px;
+}
+
+.mtk-support-grid,
+.wp-block-columns.mtk-support-grid {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 48px !important;
+	position: relative;
+	margin-top: 28px !important;
+	margin-bottom: 24px !important;
+}
+
+.mtk-support-col:first-child {
+	border-right: 1px solid #D6E0E8;
+	padding-right: 32px;
+}
+
+/* ==========================================================================
+   8. SUBNAV BAR & THE MAATEK APPROACH (Service Pages)
+   ========================================================================== */
+.mtk-subnav-bar {
+	background-color: var(--maatek-section);
+	border-bottom: 1px solid var(--maatek-line-card);
+	padding: 20px 0;
+}
+
+.mtk-subnav-links {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin-top: 6px !important;
+	font-size: 14px;
+	line-height: 22px;
+	color: var(--maatek-muted);
+}
+
+.mtk-subnav-links a {
+	color: var(--maatek-ink-heading);
+	font-weight: 500;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	text-decoration-color: #9BB0C1;
+	transition: color var(--mtk-duration) var(--mtk-ease), text-decoration-color var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-subnav-links a:hover,
+.mtk-subnav-links a:focus-visible {
+	color: var(--maatek-blue);
+	text-decoration-color: var(--maatek-blue);
+}
+
+.mtk-subnav-sep {
+	color: #6B7F92;
+	margin: 0 4px;
+}
+
+/* The Maatek Approach 2-Column Section */
+.mtk-approach-section {
+	background-color: var(--maatek-section);
+	border-bottom: 1px solid var(--maatek-line-strong);
+	padding: 56px 0;
+}
+
+.mtk-approach-grid,
+.wp-block-columns.mtk-approach-grid {
+	display: grid !important;
+	grid-template-columns: 5fr 7fr;
+	gap: 48px !important;
+	align-items: start;
+}
+
+/* ==========================================================================
+   9. ALTERNATING SERVICE ROWS (Homepage & Service Pages)
+   ========================================================================== */
+.mtk-service-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+.mtk-service-row,
+.wp-block-columns.mtk-service-row {
+	display: grid !important;
+	grid-template-columns: 576px 1fr;
+	gap: 0 !important;
+	background-color: #FFFFFF;
+	border: 1px solid var(--maatek-line-card);
+	overflow: hidden;
+	align-items: stretch;
+}
+
+.mtk-service-row--service-page,
+.wp-block-columns.mtk-service-row--service-page {
+	grid-template-columns: 624px 1fr;
+}
+
+.mtk-service-row--reverse,
+.wp-block-columns.mtk-service-row--reverse {
+	grid-template-columns: 1fr 576px;
+}
+
+.mtk-service-row--service-page.mtk-service-row--reverse,
+.wp-block-columns.mtk-service-row--service-page.mtk-service-row--reverse {
+	grid-template-columns: 1fr 624px;
+}
+
+.mtk-service-media {
+	position: relative;
+	min-height: 332px;
+	height: 100%;
+	margin: 0 !important;
+	overflow: hidden;
+	background-color: #E5ECF2;
+}
+
+.mtk-service-row--service-page .mtk-service-media {
+	min-height: 360px;
+}
+
+.mtk-service-media figure,
+.mtk-service-media .wp-block-image {
+	margin: 0 !important;
+	width: 100%;
+	height: 100%;
+}
+
+.mtk-service-media img {
+	width: 100% !important;
+	height: 100% !important;
+	min-height: 332px;
+	object-fit: cover;
+	object-position: var(--maatek-focal, center center);
+	display: block;
+	transition: transform 420ms var(--mtk-ease);
+}
+
+.mtk-service-row:hover .mtk-service-media img {
+	transform: scale(1.02);
+}
+
+/* Optional dark bottom caption overlay on service media (e.g. SCADA & HMI 11:327) */
+.mtk-media-caption-overlay {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 10px 18px;
+	background-color: rgba(9, 19, 33, 0.80);
+	color: #E2ECF5;
+	font-size: 13px;
+	line-height: 18px;
+	font-weight: 500;
+}
+
+.mtk-service-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 44px 48px;
+	margin: 0 !important;
+}
+
+/* Industrial Square-Bullet List inside Service Cards */
+.mtk-check-list,
+ul.mtk-check-list {
+	list-style: none !important;
+	margin: 20px 0 0 0 !important;
+	padding: 0 !important;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.mtk-check-list li,
+p.mtk-check-item,
+p.is-style-mtk-check-item {
+	position: relative;
+	padding-left: 20px;
+	font-size: 15px;
+	line-height: 23px;
+	font-weight: 600;
+	color: var(--maatek-ink-heading);
+}
+
+.mtk-check-list li::before,
+p.mtk-check-item::before,
+p.is-style-mtk-check-item::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 8px;
+	width: 6px;
+	height: 6px;
+	background-color: var(--maatek-accent-bright);
+}
+
+/* ==========================================================================
+   10. SCADA DETAIL CARDS & SAFETY SYSTEMS 3-CARD GRID
+   ========================================================================== */
+.mtk-detail-grid,
+.wp-block-columns.mtk-detail-grid {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px !important;
+}
+
+.mtk-detail-card {
+	background-color: #FFFFFF;
+	border: 1px solid var(--maatek-line-card);
+	padding: 28px 32px;
+	margin: 0 !important;
+}
+
+.mtk-safety-grid,
+.wp-block-columns.mtk-safety-grid {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 24px !important;
+	margin-top: 24px !important;
+}
+
+.mtk-safety-card {
+	background-color: #FFFFFF;
+	border: 1px solid var(--maatek-line-card);
+	display: flex;
+	flex-direction: column;
+	margin: 0 !important;
+	overflow: hidden;
+}
+
+.mtk-safety-card .wp-block-image,
+.mtk-safety-card figure {
+	margin: 0 !important;
+	height: 216px;
+	overflow: hidden;
+}
+
+.mtk-safety-card img {
+	width: 100% !important;
+	height: 216px !important;
+	object-fit: cover;
+	object-position: var(--maatek-focal, center center);
+}
+
+.mtk-safety-card-body {
+	padding: 24px;
+}
+
+/* ==========================================================================
+   11. PROJECT DETAILS & INSTALLATION GALLERY CARDS + LIGHTBOX
+   ========================================================================== */
+.mtk-photo-grid-2,
+.wp-block-columns.mtk-photo-grid-2 {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px !important;
+	margin-top: 28px !important;
+}
+
+.mtk-photo-grid-3,
+.wp-block-columns.mtk-photo-grid-3 {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 24px !important;
+	margin-top: 24px !important;
+}
+
+.mtk-photo-card {
+	position: relative;
+	background-color: var(--maatek-section);
+	border: 1px solid var(--maatek-line-card);
+	display: flex;
+	flex-direction: column;
+	margin: 0 !important;
+	cursor: zoom-in;
+	overflow: hidden;
+	transition:
+		border-color var(--mtk-duration) var(--mtk-ease),
+		box-shadow var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-photo-card:hover,
+.mtk-photo-card:focus-within {
+	border-color: var(--maatek-blue);
+	box-shadow: 0 8px 20px rgba(9, 19, 33, 0.07);
+}
+
+/* Lightbox Disabled State (Global Body Toggle or Per-Section/Per-Card Block Style) */
+body.mtk-lightbox-disabled .mtk-photo-card,
+.is-style-mtk-no-lightbox .mtk-photo-card,
+.mtk-no-lightbox .mtk-photo-card,
+.mtk-photo-card.is-style-mtk-no-lightbox,
+.mtk-photo-card.mtk-no-lightbox {
+	cursor: default !important;
+}
+
+body.mtk-lightbox-disabled .mtk-photo-card:hover,
+.is-style-mtk-no-lightbox .mtk-photo-card:hover,
+.mtk-no-lightbox .mtk-photo-card:hover,
+.mtk-photo-card.is-style-mtk-no-lightbox:hover,
+.mtk-photo-card.mtk-no-lightbox:hover {
+	border-color: var(--maatek-line-card);
+	box-shadow: none;
+}
+
+body.mtk-lightbox-disabled .mtk-zoom-badge,
+.is-style-mtk-no-lightbox .mtk-zoom-badge,
+.mtk-no-lightbox .mtk-zoom-badge,
+.mtk-photo-card.is-style-mtk-no-lightbox .mtk-zoom-badge,
+.mtk-photo-card.mtk-no-lightbox .mtk-zoom-badge,
+body.mtk-lightbox-disabled .mtk-photo-card-media::after,
+.is-style-mtk-no-lightbox .mtk-photo-card-media::after,
+.mtk-no-lightbox .mtk-photo-card-media::after,
+.mtk-photo-card.is-style-mtk-no-lightbox .mtk-photo-card-media::after,
+.mtk-photo-card.mtk-no-lightbox .mtk-photo-card-media::after {
+	display: none !important;
+}
+
+body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
+.is-style-mtk-no-lightbox .mtk-photo-card:hover .mtk-photo-card-media img,
+.mtk-no-lightbox .mtk-photo-card:hover .mtk-photo-card-media img,
+.mtk-photo-card.is-style-mtk-no-lightbox:hover .mtk-photo-card-media img,
+.mtk-photo-card.mtk-no-lightbox:hover .mtk-photo-card-media img {
+	transform: none;
+}
+
+.mtk-photo-card-media {
+	position: relative;
+	height: 290px;
+	overflow: hidden;
+	background-color: #E2EBF2;
+}
+
+.mtk-photo-grid-3 .mtk-photo-card-media {
+	height: 270px;
+}
+
+.mtk-photo-card--preview .mtk-photo-card-media {
+	height: 248px;
+}
+
+.mtk-photo-card-media figure,
+.mtk-photo-card-media .wp-block-image {
+	margin: 0 !important;
+	width: 100%;
+	height: 100%;
+}
+
+.mtk-photo-card-media img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+	object-position: var(--maatek-focal, center center);
+	transition: transform 380ms var(--mtk-ease);
+}
+
+.mtk-photo-card:hover .mtk-photo-card-media img {
+	transform: scale(1.03);
+}
+
+/* Focal Point Alignment Helpers (WordPress Inspector) */
+.mtk-focal-top { object-position: 50% 15% !important; --maatek-focal: 50% 15% !important; }
+.mtk-focal-bottom { object-position: 50% 85% !important; --maatek-focal: 50% 85% !important; }
+.mtk-focal-left { object-position: 15% 50% !important; --maatek-focal: 15% 50% !important; }
+.mtk-focal-right { object-position: 85% 50% !important; --maatek-focal: 85% 50% !important; }
+.mtk-focal-center { object-position: 50% 50% !important; --maatek-focal: 50% 50% !important; }
+
+/* Top-Right White Zoom Icon Badge (Figma Node 11:366 — 38x38px, pure CSS on .mtk-photo-card-media::after) */
+.mtk-zoom-badge {
+	display: none !important;
+}
+
+.mtk-photo-card-media::after {
+	content: "";
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	width: 38px;
+	height: 38px;
+	border-radius: var(--mtk-radius-md);
+	background-color: rgba(255, 255, 255, 0.94);
+	border: 1px solid rgba(9, 19, 33, 0.14);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23091321' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='8.5' cy='8.5' r='5.5'/%3E%3Cline x1='13' y1='13' x2='18' y2='18'/%3E%3Cline x1='8.5' y1='6' x2='8.5' y2='11'/%3E%3Cline x1='6' y1='8.5' x2='11' y2='8.5'/%3E%3C/svg%3E");
+	background-size: 14px 14px;
+	background-position: center;
+	background-repeat: no-repeat;
+	pointer-events: none;
+	z-index: 2;
+	transition: background-color var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-photo-card:hover .mtk-photo-card-media::after {
+	background-color: #FFFFFF;
+}
+
+.mtk-photo-card-body {
+	padding: 20px 24px 24px;
+}
+
+/* Home Installation Gallery Preview 2-Column Layout (Figma Node 70:859) */
+.mtk-gallery-preview-grid,
+.wp-block-columns.mtk-gallery-preview-grid {
+	display: grid !important;
+	grid-template-columns: 360px 1fr;
+	gap: 48px !important;
+	align-items: center;
+	margin-top: 28px !important;
+}
+
+/* Lightbox Dialog — Refined Industrial Viewer */
+@keyframes mtk-lightbox-enter {
+	from {
+		opacity: 0;
+		transform: scale(0.95) translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+@keyframes mtk-lightbox-backdrop {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes mtk-lightbox-img-fade {
+	from {
+		opacity: 0.25;
+		transform: scale(0.985);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+dialog.mtk-lightbox {
+	padding: 0;
+	border: 1px solid rgba(163, 191, 209, 0.22);
+	border-radius: 6px;
+	background: linear-gradient(180deg, #0E1B29 0%, #09131E 100%);
+	color: #FFFFFF;
+	width: fit-content;
+	min-width: min(360px, calc(100vw - 32px));
+	max-width: min(1040px, calc(100vw - 32px));
+	max-height: calc(100vh - 32px);
+	box-shadow:
+		0 28px 80px rgba(0, 0, 0, 0.72),
+		0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+	overflow: hidden;
+}
+
+dialog.mtk-lightbox[open] {
+	animation: mtk-lightbox-enter 240ms var(--mtk-ease) forwards;
+}
+
+dialog.mtk-lightbox::backdrop {
+	background-color: rgba(5, 11, 18, 0.88);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	animation: mtk-lightbox-backdrop 220ms ease forwards;
+}
+
+.mtk-lightbox-inner {
+	display: flex;
+	flex-direction: column;
+	max-height: calc(100vh - 34px);
+}
+
+.mtk-lightbox-topbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 12px 16px 12px 22px;
+	background-color: rgba(7, 15, 22, 0.65);
+	border-bottom: 1px solid rgba(163, 191, 209, 0.14);
+}
+
+.mtk-lightbox-meta {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-family: var(--maatek-font-body);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--maatek-nav-active);
+}
+
+.mtk-lightbox-meta::before {
+	content: "";
+	width: 12px;
+	height: 2px;
+	background-color: var(--maatek-accent-bright);
+	display: inline-block;
+}
+
+.mtk-lightbox-counter {
+	color: #96AEC4;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+}
+
+.mtk-lightbox-controls {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.mtk-lightbox-nav,
+.mtk-lightbox-close {
+	width: 36px;
+	height: 36px;
+	border-radius: var(--mtk-radius-md);
+	background-color: rgba(255, 255, 255, 0.07);
+	border: 1px solid rgba(163, 191, 209, 0.24);
+	color: #FFFFFF;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	padding: 0;
+	transition:
+		background-color var(--mtk-duration) var(--mtk-ease),
+		border-color var(--mtk-duration) var(--mtk-ease),
+		color var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-lightbox-nav:hover,
+.mtk-lightbox-nav:focus-visible {
+	background-color: var(--maatek-blue);
+	border-color: var(--maatek-nav-active);
+	color: #FFFFFF;
+}
+
+.mtk-lightbox-close {
+	font-size: 21px;
+}
+
+.mtk-lightbox-close:hover,
+.mtk-lightbox-close:focus-visible {
+	background-color: #FFFFFF;
+	border-color: #FFFFFF;
+	color: var(--maatek-ink-deep);
+}
+
+.mtk-lightbox-nav[hidden] {
+	display: none !important;
+}
+
+.mtk-lightbox-stage {
+	position: relative;
+	padding: 20px 24px;
+	background: radial-gradient(circle at center, rgba(19, 41, 60, 0.55) 0%, rgba(7, 15, 22, 0.92) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.mtk-lightbox-img {
+	display: block;
+	width: auto;
+	height: auto;
+	max-width: min(980px, calc(100vw - 80px));
+	max-height: 68vh;
+	object-fit: contain;
+	border-radius: var(--mtk-radius-sm);
+	box-shadow: 0 12px 36px rgba(0, 0, 0, 0.50);
+	animation: mtk-lightbox-img-fade 220ms var(--mtk-ease) forwards;
+}
+
+.mtk-lightbox-caption {
+	padding: 16px 24px 20px;
+	background-color: #0B1622;
+	border-top: 1px solid rgba(163, 191, 209, 0.14);
+	max-width: 980px;
+}
+
+.mtk-lightbox-title {
+	font-family: var(--maatek-font-heading);
+	font-size: 18px;
+	line-height: 1.3;
+	font-weight: 700;
+	color: #FFFFFF;
+	letter-spacing: 0.01em;
+}
+
+.mtk-lightbox-desc {
+	margin-top: 4px;
+	font-size: 14px;
+	line-height: 1.55;
+	color: var(--maatek-light-muted);
+}
+
+/* ==========================================================================
+   12. PROJECT ENQUIRY SPLIT CTA BAND & PROJECTS BANNER
+   ========================================================================== */
+.mtk-cta-band {
+	background-color: var(--maatek-cta-navy);
+	color: #FFFFFF;
+	padding: 64px 0;
+}
+
+.mtk-cta-split,
+.wp-block-columns.mtk-cta-split {
+	display: grid !important;
+	grid-template-columns: 7fr 5fr;
+	gap: 56px !important;
+	align-items: center;
+}
+
+.mtk-cta-right {
+	border-left: 1px solid rgba(163, 191, 209, 0.28);
+	padding-left: 48px;
+}
+
+/* Projects Page Bottom Banner (Figma Node 117:491) */
+.mtk-projects-banner {
+	background-color: var(--maatek-navy);
+	border: 1px solid #234766;
+	border-radius: var(--mtk-radius-md);
+	padding: 28px 32px;
+	display: flex !important;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	margin-top: 40px !important;
+}
+
+/* ==========================================================================
+   13. CONTACT PAGE LAYOUT (Figma Node 11:785)
+   ========================================================================== */
+.mtk-contact-grid,
+.wp-block-columns.mtk-contact-grid {
+	display: grid !important;
+	grid-template-columns: 516px 1fr;
+	gap: 64px !important;
+	align-items: start;
+}
+
+.mtk-contact-card,
+.wp-block-group.is-style-mtk-contact-card {
+	background-color: #FFFFFF;
+	border: 1px solid var(--maatek-line);
+	border-radius: var(--mtk-radius-md);
+	padding: 32px;
+}
+
+.mtk-contact-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-top: 16px !important;
+}
+
+.mtk-enquiry-options-box {
+	border-top: 1px solid var(--maatek-line-strong);
+	padding-top: 32px;
+	margin-top: 48px !important;
+}
+
+.mtk-enquiry-btn-row,
+.wp-block-columns.mtk-enquiry-btn-row {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px !important;
+	max-width: 1056px;
+	margin-top: 16px !important;
+}
+
+/* ==========================================================================
+   14. FOOTER (Figma Node 11:848)
+   ========================================================================== */
+.mtk-site-footer {
+	background-color: var(--maatek-footer);
+	color: #FFFFFF;
+	padding: 44px 0 48px;
+}
+
+.mtk-footer-divider {
+	border: 0;
+	width: 100%;
+	height: 1px;
+	background-color: rgba(163, 191, 209, 0.25);
+	margin: 0 0 36px 0;
+}
+
+.mtk-footer-grid,
+.wp-block-columns.mtk-footer-grid {
+	display: grid !important;
+	grid-template-columns: 4fr 4.5fr 3.5fr;
+	gap: 40px !important;
+	align-items: start;
+}
+
+.mtk-footer-brand-title {
+	font-family: var(--maatek-font-body);
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	color: #FFFFFF;
+}
+
+.mtk-footer-heading {
+	font-family: var(--maatek-font-body);
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--maatek-accent-bright);
+	margin-bottom: 14px !important;
+}
+
+.mtk-footer-nav .wp-block-navigation__container {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px 24px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.mtk-footer-nav .wp-block-navigation-item {
+	list-style: none;
+	margin: 0;
+}
+
+.mtk-footer-links-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px 24px;
+}
+
+.mtk-footer-link,
+.mtk-site-footer p a,
+.mtk-footer-nav .wp-block-navigation-item__content {
+	font-size: 14px;
+	line-height: 22px;
+	color: #D7E2EC;
+	text-decoration: none !important;
+	transition: color var(--mtk-duration) var(--mtk-ease), transform var(--mtk-duration) var(--mtk-ease);
+	display: inline-block;
+}
+
+.mtk-footer-link:hover,
+.mtk-footer-link:focus-visible,
+.mtk-site-footer p a:hover,
+.mtk-footer-nav .wp-block-navigation-item__content:hover {
+	color: var(--maatek-nav-active);
+	transform: translateX(2px);
+}
+
+/* ==========================================================================
+   15. RESPONSIVE BREAKPOINTS (Tablet <= 1024px, Mobile <= 767px)
+   ========================================================================== */
+@media (max-width: 1120px) {
+	.mtk-container {
+		padding-left: var(--mtk-gutter-tablet);
+		padding-right: var(--mtk-gutter-tablet);
+	}
+
+	.mtk-nav-desktop {
+		gap: 18px;
+	}
+
+	.mtk-nav-link {
+		font-size: 13px;
+	}
+
+	.mtk-service-row,
+	.wp-block-columns.mtk-service-row,
+	.mtk-service-row--service-page,
+	.wp-block-columns.mtk-service-row--service-page,
+	.mtk-service-row--reverse,
+	.wp-block-columns.mtk-service-row--reverse,
+	.mtk-service-row--service-page.mtk-service-row--reverse,
+	.wp-block-columns.mtk-service-row--service-page.mtk-service-row--reverse {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.mtk-contact-grid,
+	.wp-block-columns.mtk-contact-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 36px !important;
+	}
+}
+
+@media (max-width: 960px) {
+	/* Compact mobile header */
+	.mtk-header-inner {
+		height: 78px;
+	}
+
+	.mtk-brand-logo,
+	.mtk-brand-block img,
+	.mtk-site-header .wp-block-site-logo img {
+		width: 150px;
+		height: 53px;
+	}
+
+	.mtk-shortcut-grid,
+	.wp-block-columns.mtk-shortcut-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.mtk-approach-grid,
+	.wp-block-columns.mtk-approach-grid,
+	.mtk-cta-split,
+	.wp-block-columns.mtk-cta-split,
+	.mtk-gallery-preview-grid,
+	.wp-block-columns.mtk-gallery-preview-grid,
+	.mtk-contact-grid,
+	.wp-block-columns.mtk-contact-grid {
+		grid-template-columns: 1fr;
+		gap: 32px !important;
+	}
+
+	.mtk-cta-right {
+		border-left: none;
+		border-top: 1px solid rgba(163, 191, 209, 0.28);
+		padding-left: 0;
+		padding-top: 32px;
+	}
+
+	.mtk-service-row,
+	.wp-block-columns.mtk-service-row,
+	.mtk-service-row--service-page,
+	.wp-block-columns.mtk-service-row--service-page,
+	.mtk-service-row--reverse,
+	.wp-block-columns.mtk-service-row--reverse,
+	.mtk-service-row--service-page.mtk-service-row--reverse,
+	.wp-block-columns.mtk-service-row--service-page.mtk-service-row--reverse {
+		grid-template-columns: 1fr;
+	}
+
+	/* Keep image on top when stacked on tablet/mobile */
+	.mtk-service-row--reverse .mtk-service-media {
+		order: -1;
+	}
+
+	.mtk-service-media,
+	.mtk-service-media img {
+		min-height: 260px;
+		max-height: 340px;
+	}
+
+	.mtk-service-body {
+		padding: 32px;
+	}
+
+	.mtk-safety-grid,
+	.wp-block-columns.mtk-safety-grid,
+	.mtk-photo-grid-3,
+	.wp-block-columns.mtk-photo-grid-3 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.mtk-footer-grid,
+	.wp-block-columns.mtk-footer-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 767px) {
+	.mtk-container {
+		padding-left: var(--mtk-gutter-mobile);
+		padding-right: var(--mtk-gutter-mobile);
+	}
+
+	.mtk-hero-home {
+		min-height: 540px !important;
+	}
+
+	.mtk-hero-home .mtk-container {
+		padding-top: 48px;
+		padding-bottom: 56px;
+	}
+
+	.mtk-hero-home-subtitle {
+		font-size: 15px;
+		line-height: 24px;
+	}
+
+	.mtk-shortcut-grid,
+	.wp-block-columns.mtk-shortcut-grid,
+	.mtk-support-grid,
+	.wp-block-columns.mtk-support-grid,
+	.mtk-detail-grid,
+	.wp-block-columns.mtk-detail-grid,
+	.mtk-safety-grid,
+	.wp-block-columns.mtk-safety-grid,
+	.mtk-photo-grid-2,
+	.wp-block-columns.mtk-photo-grid-2,
+	.mtk-photo-grid-3,
+	.wp-block-columns.mtk-photo-grid-3,
+	.mtk-enquiry-btn-row,
+	.wp-block-columns.mtk-enquiry-btn-row,
+	.mtk-footer-grid,
+	.wp-block-columns.mtk-footer-grid {
+		grid-template-columns: 1fr;
+		gap: 20px !important;
+	}
+
+	.mtk-support-col:first-child {
+		border-right: none;
+		border-bottom: 1px solid #D6E0E8;
+		padding-right: 0;
+		padding-bottom: 24px;
+	}
+
+	.mtk-service-body {
+		padding: 24px;
+	}
+
+	.mtk-service-media,
+	.mtk-service-media img {
+		min-height: 200px;
+		max-height: 240px;
+	}
+
+	.mtk-photo-card-media,
+	.mtk-photo-grid-3 .mtk-photo-card-media,
+	.mtk-photo-card--preview .mtk-photo-card-media {
+		height: 210px;
+	}
+
+	.mtk-btn-group,
+	.wp-block-buttons.mtk-btn-group {
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+		gap: 12px;
+	}
+
+	.mtk-btn-group .wp-block-button,
+	.mtk-btn-group .wp-block-button__link {
+		width: 100%;
+		min-height: 50px;
+	}
+
+	.mtk-projects-banner {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.mtk-py-20,
+	.mtk-py-24 {
+		padding-top: 56px;
+		padding-bottom: 56px;
+	}
+
+	.mtk-py-16 {
+		padding-top: 48px;
+		padding-bottom: 48px;
+	}
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

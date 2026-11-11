@@ -211,7 +211,7 @@ function maatek_block_service_enquiry_cta( $contact_url ) {
 				<!-- wp:buttons {"className":"mtk-btn-group"} -->
 				<div class="wp-block-buttons mtk-btn-group">
 					<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-					<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$esc_contact}">Contact Maatek Electrical <span class="mtk-arrow-up">↗</span></a></div>
+					<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$esc_contact}">Contact Maatek Electrical <span class="mtk-arrow">→</span></a></div>
 					<!-- /wp:button -->
 				</div>
 				<!-- /wp:buttons -->
@@ -285,7 +285,7 @@ function maatek_get_seeded_pages() {
 		<!-- wp:buttons {"className":"mtk-btn-group"} -->
 		<div class="wp-block-buttons mtk-btn-group">
 			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project</a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 			<!-- wp:button {"className":"mtk-btn mtk-btn-hero-outline"} -->
 			<div class="wp-block-button mtk-btn mtk-btn-hero-outline"><a class="wp-block-button__link wp-element-button" href="#home-services">Explore services <span class="mtk-arrow">→</span></a></div>
@@ -406,8 +406,8 @@ function maatek_get_seeded_pages() {
 </section>
 <!-- /wp:group -->
 
-<!-- wp:group {"tagName":"section","anchor":"home-services","className":"mtk-bg-section mtk-py-20","layout":{"type":"default"}} -->
-<section class="wp-block-group mtk-bg-section mtk-py-20" id="home-services">
+<!-- wp:group {"tagName":"section","anchor":"home-services","className":"mtk-bg-section mtk-py-16","layout":{"type":"default"}} -->
+<section class="wp-block-group mtk-bg-section mtk-py-16" id="home-services">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
@@ -550,8 +550,8 @@ function maatek_get_seeded_pages() {
 		<p class="mtk-overline mtk-mb-2">INSTALLATION GALLERY</p>
 		<!-- /wp:paragraph -->
 
-		<!-- wp:heading {"className":"mtk-h3 mtk-mb-2"} -->
-		<h2 class="wp-block-heading mtk-h3 mtk-mb-2">Equipment handling and site access</h2>
+		<!-- wp:heading {"className":"mtk-h2 mtk-mb-3"} -->
+		<h2 class="wp-block-heading mtk-h2 mtk-mb-3">Equipment handling and site access</h2>
 		<!-- /wp:heading -->
 
 		<!-- wp:columns {"className":"mtk-gallery-preview-grid"} -->
@@ -586,44 +586,44 @@ function maatek_get_seeded_pages() {
 
 <!-- wp:group {"tagName":"section","className":"mtk-cta-band","layout":{"type":"default"}} -->
 <section class="wp-block-group mtk-cta-band">
-	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
-	<div class="wp-block-group mtk-container">
-		<!-- wp:columns {"className":"mtk-cta-split"} -->
-		<div class="wp-block-columns mtk-cta-split">
-			<!-- wp:column {"className":"mtk-cta-left"} -->
-			<div class="wp-block-column mtk-cta-left">
-				<!-- wp:paragraph {"className":"mtk-overline mtk-overline--sky mtk-mb-3"} -->
-				<p class="mtk-overline mtk-overline--sky mtk-mb-3">START A CONVERSATION</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:heading {"className":"mtk-h2-lg mtk-text-white mtk-mb-3"} -->
-				<h2 class="wp-block-heading mtk-h2-lg mtk-text-white mtk-mb-3">Discuss your next industrial project</h2>
-				<!-- /wp:heading -->
-				<!-- wp:paragraph {"className":"mtk-body mtk-text-light mtk-max-w-520"} -->
-				<p class="mtk-body mtk-text-light mtk-max-w-520">From controls upgrades to complete production-line installations, contact Maatek Electrical to discuss your requirements.</p>
-				<!-- /wp:paragraph -->
-			</div>
-			<!-- /wp:column -->
-
-			<!-- wp:column {"className":"mtk-cta-right"} -->
-			<div class="wp-block-column mtk-cta-right">
-				<!-- wp:paragraph {"className":"mtk-overline mtk-overline--sky mtk-mb-2"} -->
-				<p class="mtk-overline mtk-overline--sky mtk-mb-2">PROJECT ENQUIRIES</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:paragraph {"className":"mtk-body mtk-text-light mtk-mb-5"} -->
-				<p class="mtk-body mtk-text-light mtk-mb-5">Contact Marko Markovic directly on <a class="mtk-text-white mtk-font-semibold" href="tel:+61414421651">0414 421 651</a> or email <a class="mtk-text-white mtk-font-semibold" href="mailto:marko@maatekelectrical.com.au">marko@maatekelectrical.com.au</a>.</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:buttons {"className":"mtk-btn-group"} -->
-				<div class="wp-block-buttons mtk-btn-group">
-					<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-					<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Contact Marko <span class="mtk-arrow">→</span></a></div>
-					<!-- /wp:button -->
+		<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
+		<div class="wp-block-group mtk-container">
+			<!-- wp:columns {"className":"mtk-cta-split"} -->
+			<div class="wp-block-columns mtk-cta-split">
+				<!-- wp:column {"className":"mtk-cta-left"} -->
+				<div class="wp-block-column mtk-cta-left">
+					<!-- wp:paragraph {"className":"mtk-overline mtk-overline--sky mtk-mb-3"} -->
+					<p class="mtk-overline mtk-overline--sky mtk-mb-3">START A CONVERSATION</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:heading {"className":"mtk-h2-lg mtk-text-white mtk-mb-3"} -->
+					<h2 class="wp-block-heading mtk-h2-lg mtk-text-white mtk-mb-3">Discuss your next industrial project</h2>
+					<!-- /wp:heading -->
+					<!-- wp:paragraph {"className":"mtk-body mtk-text-light mtk-max-w-520"} -->
+					<p class="mtk-body mtk-text-light mtk-max-w-520">From controls upgrades to complete production-line installations, contact Maatek Electrical to discuss your requirements.</p>
+					<!-- /wp:paragraph -->
 				</div>
-				<!-- /wp:buttons -->
+				<!-- /wp:column -->
+
+				<!-- wp:column {"className":"mtk-cta-right"} -->
+				<div class="wp-block-column mtk-cta-right">
+					<!-- wp:paragraph {"className":"mtk-overline mtk-overline--sky mtk-mb-2"} -->
+					<p class="mtk-overline mtk-overline--sky mtk-mb-2">PROJECT ENQUIRIES</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"mtk-body mtk-font-bold mtk-text-white mtk-mb-4"} -->
+					<p class="mtk-body mtk-font-bold mtk-text-white mtk-mb-4">Talk to Marko Markovic · <a class="mtk-text-white" href="tel:+61414421651">0414 421 651</a></p>
+					<!-- /wp:paragraph -->
+					<!-- wp:buttons {"className":"mtk-btn-group"} -->
+					<div class="wp-block-buttons mtk-btn-group">
+						<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
+						<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Contact Maatek Electrical <span class="mtk-arrow">→</span></a></div>
+						<!-- /wp:button -->
+					</div>
+					<!-- /wp:buttons -->
+				</div>
+				<!-- /wp:column -->
 			</div>
-			<!-- /wp:column -->
+			<!-- /wp:columns -->
 		</div>
-		<!-- /wp:columns -->
-	</div>
 	<!-- /wp:group -->
 </section>
 <!-- /wp:group -->
@@ -750,7 +750,7 @@ HTML;
 		<!-- wp:buttons {"className":"mtk-btn-group"} -->
 		<div class="wp-block-buttons mtk-btn-group">
 			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow-up">↗</span></a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->
@@ -1057,7 +1057,7 @@ HTML;
 		<!-- wp:buttons {"className":"mtk-btn-group"} -->
 		<div class="wp-block-buttons mtk-btn-group">
 			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow-up">↗</span></a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->
@@ -1270,7 +1270,7 @@ HTML;
 		<!-- wp:buttons {"className":"mtk-btn-group"} -->
 		<div class="wp-block-buttons mtk-btn-group">
 			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow-up">↗</span></a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->
@@ -1489,7 +1489,7 @@ HTML;
 		<!-- wp:buttons {"className":"mtk-btn-group"} -->
 		<div class="wp-block-buttons mtk-btn-group">
 			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow-up">↗</span></a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->
@@ -1640,16 +1640,16 @@ HTML;
 <section class="wp-block-group mtk-hero-dark-solid">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-eyebrow-text mtk-eyebrow-with-bar--short"} -->
-		<p class="mtk-eyebrow-text mtk-eyebrow-with-bar--short">MAATEK ELECTRICAL &nbsp;/&nbsp; SELECTED WORK</p>
+		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
+		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / SELECTED WORK</p>
 		<!-- /wp:paragraph -->
 
-		<!-- wp:heading {"level":1,"className":"mtk-h1-service mtk-text-white mtk-mb-4"} -->
-		<h1 class="wp-block-heading mtk-h1-service mtk-text-white mtk-mb-4">Built for the demands of industry.</h1>
+		<!-- wp:heading {"level":1,"className":"mtk-hero-service-title mtk-max-w-760"} -->
+		<h1 class="wp-block-heading mtk-hero-service-title mtk-max-w-760">Built for the demands of industry.</h1>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"className":"mtk-body mtk-text-light mtk-max-w-680"} -->
-		<p class="mtk-body mtk-text-light mtk-max-w-680">Explore selected industrial equipment and installation environments. These images illustrate the equipment handling, lifting and installation environments relevant to industrial projects.</p>
+		<!-- wp:paragraph {"className":"mtk-hero-service-lead"} -->
+		<p class="mtk-hero-service-lead">Explore selected industrial equipment and installation environments. These images illustrate the equipment handling, lifting and installation environments relevant to industrial projects.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -1711,20 +1711,20 @@ HTML;
 	 * 7. CONTACT PAGE (Figma Node 11:785)
 	 * ====================================================================== */
 	$contact_content = <<<HTML
-<!-- wp:group {"tagName":"section","className":"mtk-hero-navy-solid","layout":{"type":"default"}} -->
-<section class="wp-block-group mtk-hero-navy-solid">
+<!-- wp:group {"tagName":"section","className":"mtk-hero-dark-solid","layout":{"type":"default"}} -->
+<section class="wp-block-group mtk-hero-dark-solid">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-hero-kicker mtk-mb-3"} -->
-		<p class="mtk-hero-kicker mtk-mb-3">MAATEK ELECTRICAL / CONTACT</p>
+		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
+		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / CONTACT</p>
 		<!-- /wp:paragraph -->
 
-		<!-- wp:heading {"level":1,"className":"mtk-h1-compact mtk-text-white mtk-mb-3"} -->
-		<h1 class="wp-block-heading mtk-h1-compact mtk-text-white mtk-mb-3">Let’s talk about your next project.</h1>
+		<!-- wp:heading {"level":1,"className":"mtk-hero-service-title mtk-max-w-760"} -->
+		<h1 class="wp-block-heading mtk-hero-service-title mtk-max-w-760">Let’s talk about your next project.</h1>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"className":"mtk-body mtk-text-light mtk-max-w-680"} -->
-		<p class="mtk-body mtk-text-light mtk-max-w-680">For industrial plant and production facilities. Tell us about your site, equipment and what you need to achieve.</p>
+		<!-- wp:paragraph {"className":"mtk-hero-service-lead"} -->
+		<p class="mtk-hero-service-lead">For industrial plant and production facilities. Tell us about your site, equipment and what you need to achieve.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->

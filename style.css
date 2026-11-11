@@ -907,24 +907,26 @@ figure.mtk-brand-block {
 
 .mtk-hero-home > .wp-block-cover__background {
 	background-color: transparent !important;
-	background-image: linear-gradient(
-		90deg,
-		rgba(7, 15, 22, 0.90) 0%,
-		rgba(7, 15, 22, 0.76) 48%,
-		rgba(7, 15, 22, 0.42) 100%
-	);
+	background-image:
+		linear-gradient(180deg, rgba(7, 15, 22, 0.96) 0%, rgba(7, 15, 22, 0.28) 22%, rgba(7, 15, 22, 0) 45%),
+		linear-gradient(90deg, rgba(7, 15, 22, 0.92) 0%, rgba(7, 15, 22, 0.78) 48%, rgba(7, 15, 22, 0.44) 100%);
 	opacity: 1 !important;
 }
 
 .mtk-hero-service > .wp-block-cover__background {
 	background-color: transparent !important;
-	background-image: linear-gradient(
-		90deg,
-		rgba(7, 15, 22, 0.88) 0%,
-		rgba(9, 21, 34, 0.74) 55%,
-		rgba(9, 21, 34, 0.46) 100%
-	);
+	background-image:
+		linear-gradient(180deg, rgba(7, 15, 22, 0.96) 0%, rgba(7, 15, 22, 0.28) 25%, rgba(7, 15, 22, 0) 50%),
+		linear-gradient(90deg, rgba(7, 15, 22, 0.90) 0%, rgba(9, 21, 34, 0.76) 55%, rgba(9, 21, 34, 0.48) 100%);
 	opacity: 1 !important;
+}
+
+/* When a Cover hero has no background image (or image is removed in the Editor), use the nav-blending gradient */
+.wp-block-cover.mtk-hero-home:not(:has(.wp-block-cover__image-background)) > .wp-block-cover__background,
+.wp-block-cover.mtk-hero-service:not(:has(.wp-block-cover__image-background)) > .wp-block-cover__background {
+	background-image:
+		radial-gradient(ellipse 68% 95% at 82% 50%, rgba(0, 99, 164, 0.20) 0%, rgba(16, 44, 67, 0) 70%),
+		linear-gradient(180deg, #070F16 0%, #0B1928 48%, #10283E 100%) !important;
 }
 
 /* Ensure WordPress core flex/column defaults never distort CSS Grid columns */
@@ -968,41 +970,37 @@ figure.mtk-brand-block {
 	display: none !important;
 }
 
-.mtk-eyebrow-text {
+/* Uniform Hero Eyebrow / Kicker with Cyan Accent Indent Bar across ALL 7 pages */
+.mtk-eyebrow-text,
+.mtk-hero-kicker {
 	font-family: var(--maatek-font-body);
-	font-size: 13px;
+	font-size: 12px;
 	line-height: 18px;
 	font-weight: 700;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	color: #5EC2F7;
-}
-
-/* Pure-CSS eyebrow accent bars so no empty Group block is ever needed in Gutenberg */
-p.mtk-eyebrow-with-bar,
-p.mtk-eyebrow-with-bar--short {
 	display: inline-flex;
 	align-items: center;
 	gap: 12px;
-	margin-bottom: 24px !important;
+	margin-bottom: 18px !important;
 }
 
-p.mtk-eyebrow-with-bar::before {
-	content: "";
-	width: 36px;
-	height: 3px;
-	background-color: var(--maatek-blue-hover);
-	display: inline-block;
-	flex-shrink: 0;
-}
-
+.mtk-eyebrow-text::before,
+.mtk-hero-kicker::before,
+p.mtk-eyebrow-with-bar::before,
 p.mtk-eyebrow-with-bar--short::before {
 	content: "";
-	width: 14px;
+	width: 18px;
 	height: 3px;
 	background-color: var(--maatek-accent-bright);
 	display: inline-block;
 	flex-shrink: 0;
+}
+
+/* Prevent duplicate bar if legacy .mtk-eyebrow-row still wraps .mtk-eyebrow-text */
+.mtk-eyebrow-row .mtk-eyebrow-bar {
+	display: none !important;
 }
 
 .mtk-hero-home-title {
@@ -1043,16 +1041,6 @@ p.mtk-eyebrow-with-bar--short::before {
 	display: none !important;
 }
 
-.mtk-hero-kicker {
-	font-size: 12px;
-	line-height: 18px;
-	font-weight: 700;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: var(--maatek-accent-bright);
-	margin-bottom: 12px !important;
-}
-
 .mtk-hero-service-title {
 	font-family: var(--maatek-font-heading);
 	font-size: var(--wp--preset--font-size--hero, 52px);
@@ -1070,19 +1058,39 @@ p.mtk-eyebrow-with-bar--short::before {
 	margin-bottom: 28px !important;
 }
 
-/* 6.3 Solid Dark Intro Hero (Projects 11:726 & Contact 11:786) */
-.mtk-hero-dark-solid {
-	background-color: var(--maatek-dark-hero);
+/* 6.3 Non-Photo Hero Sections (Projects & Contact — Uniform Gradient Blending with #070F16 Nav) */
+.mtk-hero-dark-solid,
+.mtk-hero-navy-solid,
+.wp-block-cover.mtk-hero-home:not(:has(.wp-block-cover__image-background)),
+.wp-block-cover.mtk-hero-service:not(:has(.wp-block-cover__image-background)) {
+	position: relative;
+	background-color: var(--maatek-header);
+	background-image:
+		radial-gradient(ellipse 68% 95% at 82% 50%, rgba(0, 99, 164, 0.20) 0%, rgba(16, 44, 67, 0) 70%),
+		linear-gradient(180deg, #070F16 0%, #0B1928 48%, #10283E 100%);
 	color: #FFFFFF;
 	padding-top: 68px;
 	padding-bottom: 68px;
+	border-bottom: 1px solid rgba(163, 191, 209, 0.14);
 }
 
-.mtk-hero-navy-solid {
-	background-color: var(--maatek-navy);
+.mtk-hero-dark-solid h1,
+.mtk-hero-navy-solid h1 {
+	font-family: var(--maatek-font-heading);
+	font-size: var(--wp--preset--font-size--hero, 52px);
+	line-height: 1.17;
+	font-weight: 700;
 	color: #FFFFFF;
-	padding-top: 64px;
-	padding-bottom: 64px;
+	margin-bottom: 16px !important;
+	max-width: 760px;
+}
+
+.mtk-hero-dark-solid p:not(.mtk-eyebrow-text):not(.mtk-hero-kicker),
+.mtk-hero-navy-solid p:not(.mtk-eyebrow-text):not(.mtk-hero-kicker) {
+	font-size: 17px;
+	line-height: 27px;
+	color: #D7E2EC;
+	max-width: 660px;
 }
 
 /* ==========================================================================

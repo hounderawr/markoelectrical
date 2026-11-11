@@ -668,7 +668,7 @@ function maatek_register_block_patterns() {
 		<!-- wp:buttons {"className":"mtk-btn-group"} -->
 		<div class="wp-block-buttons mtk-btn-group">
 			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow-up">↗</span></a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->

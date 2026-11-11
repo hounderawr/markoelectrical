@@ -345,62 +345,6 @@ function maatek_get_seeded_pages() {
 			<!-- /wp:column -->
 		</div>
 		<!-- /wp:columns -->
-
-		<!-- wp:group {"className":"mtk-support-box mtk-mt-10","layout":{"type":"default"}} -->
-		<div class="wp-block-group mtk-support-box mtk-mt-10">
-			<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-			<p class="mtk-overline mtk-mb-2">HOW CAN WE HELP?</p>
-			<!-- /wp:paragraph -->
-
-			<!-- wp:heading {"className":"mtk-h3-sm mtk-mb-4"} -->
-			<h2 class="wp-block-heading mtk-h3-sm mtk-mb-4">Find the right support</h2>
-			<!-- /wp:heading -->
-
-			<!-- wp:columns {"className":"mtk-support-grid"} -->
-			<div class="wp-block-columns mtk-support-grid">
-				<!-- wp:column {"className":"mtk-support-col"} -->
-				<div class="wp-block-column mtk-support-col">
-					<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-1"} -->
-					<h3 class="wp-block-heading mtk-h4 mtk-mb-1">Maintenance</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph {"className":"mtk-small mtk-text-muted mtk-mb-4"} -->
-					<p class="mtk-small mtk-text-muted mtk-mb-4">Troubleshooting, equipment servicing and planned maintenance.</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:buttons {"className":"mtk-btn-group"} -->
-					<div class="wp-block-buttons mtk-btn-group">
-						<!-- wp:button {"className":"mtk-btn mtk-btn-primary mtk-btn-sm"} -->
-						<div class="wp-block-button mtk-btn mtk-btn-primary mtk-btn-sm"><a class="wp-block-button__link wp-element-button" href="mailto:marko@maatekelectrical.com.au?subject=Maintenance%20Enquiry">Discuss maintenance</a></div>
-						<!-- /wp:button -->
-					</div>
-					<!-- /wp:buttons -->
-				</div>
-				<!-- /wp:column -->
-
-				<!-- wp:column {"className":"mtk-support-col"} -->
-				<div class="wp-block-column mtk-support-col">
-					<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-1"} -->
-					<h3 class="wp-block-heading mtk-h4 mtk-mb-1">Installations</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph {"className":"mtk-small mtk-text-muted mtk-mb-4"} -->
-					<p class="mtk-small mtk-text-muted mtk-mb-4">Equipment installation, plant relocation and commissioning.</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:buttons {"className":"mtk-btn-group"} -->
-					<div class="wp-block-buttons mtk-btn-group">
-						<!-- wp:button {"className":"mtk-btn mtk-btn-secondary mtk-btn-sm"} -->
-						<div class="wp-block-button mtk-btn mtk-btn-secondary mtk-btn-sm"><a class="wp-block-button__link wp-element-button" href="mailto:marko@maatekelectrical.com.au?subject=Installation%20Enquiry">Plan an installation</a></div>
-						<!-- /wp:button -->
-					</div>
-					<!-- /wp:buttons -->
-				</div>
-				<!-- /wp:column -->
-			</div>
-			<!-- /wp:columns -->
-
-			<!-- wp:paragraph {"className":"mtk-xs mtk-text-muted"} -->
-			<p class="mtk-xs mtk-text-muted">Include your site location, equipment and preferred timeframe in your enquiry.</p>
-			<!-- /wp:paragraph -->
-		</div>
-		<!-- /wp:group -->
 	</div>
 	<!-- /wp:group -->
 </section>
@@ -1749,9 +1693,6 @@ HTML;
 
 				<!-- wp:group {"className":"mtk-contact-card","layout":{"type":"default"}} -->
 				<div class="wp-block-group mtk-contact-card">
-					<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-					<p class="mtk-overline mtk-mb-2">DIRECT CONTACT</p>
-					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"mtk-h3-sm mtk-mb-1"} -->
 					<h3 class="wp-block-heading mtk-h3-sm mtk-mb-1">Marko Markovic</h3>
 					<!-- /wp:heading -->

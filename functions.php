@@ -762,9 +762,6 @@ HTML,
 <div class="wp-block-group mtk-max-w-520">
 	<!-- wp:group {"className":"mtk-contact-card","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-contact-card">
-		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-		<p class="mtk-overline mtk-mb-2">DIRECT CONTACT</p>
-		<!-- /wp:paragraph -->
 		<!-- wp:heading {"level":3,"className":"mtk-h3-sm mtk-mb-1"} -->
 		<h3 class="wp-block-heading mtk-h3-sm mtk-mb-1">Marko Markovic</h3>
 		<!-- /wp:heading -->

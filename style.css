@@ -1143,25 +1143,9 @@ p.mtk-eyebrow-with-bar--short::before {
 	box-shadow: 0 4px 12px rgba(9, 19, 33, 0.06);
 }
 
-/* Choose Your Enquiry Split Grid (Figma Node 70:840) */
+/* Hide "HOW CAN WE HELP? / Find the right support" box on Homepage even if already seeded in DB */
 .mtk-support-box {
-	border-top: 1px solid var(--maatek-line);
-	padding-top: 40px;
-}
-
-.mtk-support-grid,
-.wp-block-columns.mtk-support-grid {
-	display: grid !important;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 48px !important;
-	position: relative;
-	margin-top: 28px !important;
-	margin-bottom: 24px !important;
-}
-
-.mtk-support-col:first-child {
-	border-right: 1px solid #D6E0E8;
-	padding-right: 32px;
+	display: none !important;
 }
 
 /* ==========================================================================
@@ -1806,11 +1790,21 @@ dialog.mtk-lightbox::backdrop {
 	padding: 32px;
 }
 
-.mtk-contact-actions {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	margin-top: 16px !important;
+/* Hide "DIRECT CONTACT" overline inside .mtk-contact-card even on already-seeded pages */
+.mtk-contact-card > .mtk-overline {
+	display: none !important;
+}
+
+.mtk-contact-actions,
+.wp-block-buttons.mtk-contact-actions {
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 14px !important;
+	margin-top: 18px !important;
+}
+
+.mtk-contact-actions > .wp-block-button + .wp-block-button {
+	margin-top: 14px !important;
 }
 
 .mtk-enquiry-options-box {

@@ -493,11 +493,47 @@ button.mtk-btn,
 	text-decoration: none !important;
 	cursor: pointer;
 	position: relative;
+	isolation: isolate;
+	overflow: hidden;
 	transition:
-		background-color var(--mtk-duration) var(--mtk-ease),
-		border-color var(--mtk-duration) var(--mtk-ease),
-		color var(--mtk-duration) var(--mtk-ease),
+		border-color 420ms var(--mtk-ease),
+		color 420ms var(--mtk-ease),
 		box-shadow var(--mtk-duration) var(--mtk-ease);
+}
+
+/* Hover fill sweeps in from the left. Painted above the resting background and behind the label. */
+a.mtk-btn::before,
+button.mtk-btn::before,
+.wp-block-button.mtk-btn .wp-block-button__link::before,
+.mtk-btn .wp-block-button__link::before,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link::before,
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link::before,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	transform: scaleX(0);
+	transform-origin: left center;
+	transition: transform 420ms var(--mtk-ease);
+}
+
+a.mtk-btn:hover::before,
+a.mtk-btn:focus-visible::before,
+button.mtk-btn:hover::before,
+button.mtk-btn:focus-visible::before,
+.wp-block-button.mtk-btn .wp-block-button__link:hover::before,
+.wp-block-button.mtk-btn .wp-block-button__link:focus-visible::before,
+.mtk-btn .wp-block-button__link:hover::before,
+.mtk-btn .wp-block-button__link:focus-visible::before,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:hover::before,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:focus-visible::before,
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link:hover::before,
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link:focus-visible::before,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:hover::before,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:focus-visible::before {
+	transform: scaleX(1);
 }
 
 /* Primary Filled Button (#0063A4 / #006DA7) */
@@ -511,6 +547,13 @@ button.mtk-btn-primary,
 	box-shadow: 0 1px 2px rgba(7, 15, 22, 0.14);
 }
 
+a.mtk-btn-primary::before,
+button.mtk-btn-primary::before,
+.wp-block-button.mtk-btn-primary .wp-block-button__link:not(.has-background)::before,
+.wp-block-button.is-style-mtk-primary .wp-block-button__link:not(.has-background)::before {
+	background-color: var(--maatek-blue-hover);
+}
+
 a.mtk-btn-primary:hover,
 a.mtk-btn-primary:focus-visible,
 button.mtk-btn-primary:hover,
@@ -519,7 +562,6 @@ button.mtk-btn-primary:focus-visible,
 .wp-block-button.mtk-btn-primary .wp-block-button__link:focus-visible,
 .wp-block-button.is-style-mtk-primary .wp-block-button__link:hover,
 .wp-block-button.is-style-mtk-primary .wp-block-button__link:focus-visible {
-	background-color: var(--maatek-blue-hover);
 	border-color: var(--maatek-blue-hover);
 	color: #FFFFFF;
 	box-shadow: 0 4px 12px rgba(0, 99, 164, 0.24);
@@ -543,6 +585,16 @@ button.mtk-btn-secondary--blue-border,
 	border: 1.5px solid var(--maatek-blue) !important;
 }
 
+a.mtk-btn-secondary::before,
+button.mtk-btn-secondary::before,
+.wp-block-button.mtk-btn-secondary .wp-block-button__link:not(.has-background)::before,
+.wp-block-button.is-style-mtk-secondary .wp-block-button__link:not(.has-background)::before,
+a.mtk-btn-secondary--blue-border::before,
+button.mtk-btn-secondary--blue-border::before,
+.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link::before {
+	background-color: var(--maatek-blue);
+}
+
 a.mtk-btn-secondary:hover,
 a.mtk-btn-secondary:focus-visible,
 button.mtk-btn-secondary:hover,
@@ -550,13 +602,14 @@ button.mtk-btn-secondary:focus-visible,
 .wp-block-button.mtk-btn-secondary .wp-block-button__link:hover,
 .wp-block-button.mtk-btn-secondary .wp-block-button__link:focus-visible,
 a.mtk-btn-secondary--blue-border:hover,
+a.mtk-btn-secondary--blue-border:focus-visible,
 button.mtk-btn-secondary--blue-border:hover,
+button.mtk-btn-secondary--blue-border:focus-visible,
 .wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:hover,
 .wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:focus-visible {
-	background-color: var(--maatek-paper);
 	border-color: var(--maatek-blue) !important;
-	color: var(--maatek-blue-hover);
-	box-shadow: 0 3px 10px rgba(9, 19, 33, 0.06);
+	color: #FFFFFF;
+	box-shadow: 0 4px 12px rgba(0, 99, 164, 0.18);
 }
 
 /* Dark Hero Ghost/Outline Button (Translucent dark bg with border) */
@@ -570,6 +623,13 @@ button.mtk-btn-hero-outline,
 	backdrop-filter: blur(4px);
 }
 
+a.mtk-btn-hero-outline::before,
+button.mtk-btn-hero-outline::before,
+.wp-block-button.mtk-btn-hero-outline .wp-block-button__link::before,
+.wp-block-button.is-style-mtk-hero-outline .wp-block-button__link::before {
+	background-color: #FFFFFF;
+}
+
 a.mtk-btn-hero-outline:hover,
 a.mtk-btn-hero-outline:focus-visible,
 button.mtk-btn-hero-outline:hover,
@@ -578,9 +638,8 @@ button.mtk-btn-hero-outline:focus-visible,
 .wp-block-button.mtk-btn-hero-outline .wp-block-button__link:focus-visible,
 .wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:hover,
 .wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:focus-visible {
-	background-color: rgba(255, 255, 255, 0.14);
-	border-color: var(--maatek-nav-active) !important;
-	color: #FFFFFF;
+	border-color: #FFFFFF !important;
+	color: var(--maatek-ink-deep);
 	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
@@ -1240,6 +1299,8 @@ p.mtk-eyebrow-with-bar--short::before {
 
 .mtk-service-media {
 	position: relative;
+	display: flex;
+	flex-direction: column;
 	min-height: 332px;
 	height: 100%;
 	margin: 0 !important;
@@ -1254,18 +1315,25 @@ p.mtk-eyebrow-with-bar--short::before {
 .mtk-service-media figure,
 .mtk-service-media .wp-block-image {
 	margin: 0 !important;
-	width: 100%;
-	height: 100%;
+	flex: 1 1 auto;
+	display: flex !important;
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .mtk-service-media img {
+	flex: 1 1 auto;
 	width: 100% !important;
 	height: 100% !important;
 	min-height: 332px;
-	object-fit: cover;
+	object-fit: cover !important;
 	object-position: var(--maatek-focal, center center);
-	display: block;
+	display: block !important;
 	transition: transform 420ms var(--mtk-ease);
+}
+
+.mtk-service-row--service-page .mtk-service-media img {
+	min-height: 360px;
 }
 
 .mtk-service-row:hover .mtk-service-media img {
@@ -1365,14 +1433,17 @@ p.is-style-mtk-check-item::before {
 .mtk-safety-card .wp-block-image,
 .mtk-safety-card figure {
 	margin: 0 !important;
-	height: 216px;
+	display: block !important;
+	width: 100% !important;
+	height: 216px !important;
 	overflow: hidden;
 }
 
 .mtk-safety-card img {
+	display: block !important;
 	width: 100% !important;
 	height: 216px !important;
-	object-fit: cover;
+	object-fit: cover !important;
 	object-position: var(--maatek-focal, center center);
 }
 
@@ -1476,14 +1547,16 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 .mtk-photo-card-media figure,
 .mtk-photo-card-media .wp-block-image {
 	margin: 0 !important;
-	width: 100%;
-	height: 100%;
+	display: block !important;
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .mtk-photo-card-media img {
+	display: block !important;
 	width: 100% !important;
 	height: 100% !important;
-	object-fit: cover;
+	object-fit: cover !important;
 	object-position: var(--maatek-focal, center center);
 	transition: transform 380ms var(--mtk-ease);
 }
@@ -1998,9 +2071,19 @@ dialog.mtk-lightbox::backdrop {
 	}
 
 	.mtk-service-media,
-	.mtk-service-media img {
-		min-height: 260px;
-		max-height: 340px;
+	.mtk-service-row--service-page .mtk-service-media {
+		height: 300px !important;
+		min-height: 300px !important;
+		max-height: 300px !important;
+	}
+
+	.mtk-service-media img,
+	.mtk-service-row--service-page .mtk-service-media img {
+		width: 100% !important;
+		height: 100% !important;
+		min-height: 100% !important;
+		max-height: none !important;
+		object-fit: cover !important;
 	}
 
 	.mtk-service-body {
@@ -2072,28 +2155,44 @@ dialog.mtk-lightbox::backdrop {
 	}
 
 	.mtk-service-media,
-	.mtk-service-media img {
-		min-height: 200px;
-		max-height: 240px;
+	.mtk-service-row--service-page .mtk-service-media {
+		height: 230px !important;
+		min-height: 230px !important;
+		max-height: 230px !important;
+	}
+
+	.mtk-service-media img,
+	.mtk-service-row--service-page .mtk-service-media img {
+		width: 100% !important;
+		height: 100% !important;
+		min-height: 100% !important;
+		max-height: none !important;
+		object-fit: cover !important;
 	}
 
 	.mtk-photo-card-media,
 	.mtk-photo-grid-3 .mtk-photo-card-media,
 	.mtk-photo-card--preview .mtk-photo-card-media {
-		height: 210px;
+		height: 220px !important;
 	}
 
 	.mtk-btn-group,
 	.wp-block-buttons.mtk-btn-group {
-		flex-direction: column;
-		align-items: stretch;
-		width: 100%;
-		gap: 12px;
+		flex-direction: column !important;
+		align-items: stretch !important;
+		width: 100% !important;
+		gap: 12px !important;
 	}
 
-	.mtk-btn-group .wp-block-button,
-	.mtk-btn-group .wp-block-button__link {
-		width: 100%;
+	.mtk-btn-group .wp-block-button {
+		display: block !important;
+		width: 100% !important;
+	}
+
+	.mtk-btn-group .wp-block-button__link,
+	.mtk-btn-group a.mtk-btn {
+		display: flex !important;
+		width: 100% !important;
 		min-height: 50px;
 	}
 

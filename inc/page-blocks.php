@@ -310,7 +310,7 @@ function maatek_get_seeded_pages() {
 		<!-- /wp:heading -->
 
 		<!-- wp:paragraph {"className":"mtk-body mtk-text-muted mtk-max-w-720"} -->
-		<p class="mtk-body mtk-text-muted mtk-max-w-720">Electrical, mechanical and automation services for industrial plant and production facilities.</p>
+		<p class="mtk-body mtk-text-muted mtk-max-w-720">Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project galleries.</p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:columns {"className":"mtk-shortcut-grid"} -->
@@ -386,7 +386,7 @@ function maatek_get_seeded_pages() {
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Control &amp; Automation</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-6"} -->
-					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Switchboards, PLC programming, HMI, SCADA, industrial networks, process controls and machinery safety.</p>
+					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Electrical switchboards, PLC programming, HMI and SCADA systems and machinery safety designed around the needs of industrial production.</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph -->
 					<p><a class="mtk-link-arrow" href="{$ctrl}"><span>Explore Control &amp; Automation</span><span class="mtk-arrow">→</span></a></p>
@@ -407,7 +407,7 @@ function maatek_get_seeded_pages() {
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Maintenance</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-6"} -->
-					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Troubleshooting, breakdown response, equipment servicing and planned maintenance for industrial plant.</p>
+					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Practical support for industrial plant reliability, troubleshooting, equipment servicing and planned maintenance.</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph -->
 					<p><a class="mtk-link-arrow" href="{$maint}"><span>Explore Maintenance</span><span class="mtk-arrow">→</span></a></p>
@@ -442,7 +442,7 @@ function maatek_get_seeded_pages() {
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Fabrication</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-6"} -->
-					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Conveyors, machinery, steelwork and equipment integration, with attention to access and maintainability.</p>
+					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Mechanical fabrication and equipment integration, with attention to plant access, installation requirements and maintainability.</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph -->
 					<p><a class="mtk-link-arrow" href="{$fab}"><span>Explore Fabrication</span><span class="mtk-arrow">→</span></a></p>
@@ -463,7 +463,7 @@ function maatek_get_seeded_pages() {
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Installations</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-6"} -->
-					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Plant relocation, equipment installation, machinery integration and coordinated commissioning.</p>
+					<p class="mtk-body mtk-text-muted-dark mtk-mb-6">Industrial equipment installation, machinery integration and coordinated commissioning in working production environments.</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph -->
 					<p><a class="mtk-link-arrow" href="{$inst}"><span>Explore Installations</span><span class="mtk-arrow">→</span></a></p>
@@ -1626,7 +1626,7 @@ HTML;
 		<!-- /wp:heading -->
 
 		<!-- wp:paragraph {"className":"mtk-hero-service-lead"} -->
-		<p class="mtk-hero-service-lead">For industrial plant and production facilities. Tell us about your site, equipment and what you need to achieve.</p>
+		<p class="mtk-hero-service-lead">From industrial maintenance and machine upgrades to switchboards, automation and turnkey installations, start with a conversation about your site and what you need to achieve.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -1682,7 +1682,7 @@ HTML;
 			<!-- wp:column {"className":"mtk-pt-8"} -->
 			<div class="wp-block-column mtk-pt-8">
 				<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-2"} -->
-				<h3 class="wp-block-heading mtk-h4 mtk-mb-2">What to include</h3>
+				<h3 class="wp-block-heading mtk-h4 mtk-mb-2">Tell us about the challenge.</h3>
 				<!-- /wp:heading -->
 
 				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-4"} -->
@@ -1706,16 +1706,12 @@ HTML;
 				</div>
 				<!-- /wp:group -->
 
-				<!-- wp:paragraph {"className":"mtk-small mtk-text-muted mtk-mb-8"} -->
-				<p class="mtk-small mtk-text-muted mtk-mb-8">Share your site location to discuss suitability, access and installation requirements.</p>
-				<!-- /wp:paragraph -->
-
 				<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-2"} -->
 				<h3 class="wp-block-heading mtk-h4 mtk-mb-2">Next steps</h3>
 				<!-- /wp:heading -->
 
 				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-max-w-520"} -->
-				<p class="mtk-body mtk-text-muted-dark mtk-max-w-520">Start with your requirements, discuss the scope and site access, then talk through the appropriate next steps with Marko.</p>
+				<p class="mtk-body mtk-text-muted-dark mtk-max-w-520">We can then discuss the appropriate next steps.</p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:column -->

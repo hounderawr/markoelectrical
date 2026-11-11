@@ -704,6 +704,147 @@ function maatek_maybe_seed_on_init() {
 add_action( 'init', 'maatek_maybe_seed_on_init', 1 );
 
 /**
+ * Update only the known Home and Contact copy from the previous Maatek layout.
+ *
+ * This is separate from page seeding: it runs once after a theme update, changes
+ * only exact paragraph/heading text in the two named pages, and leaves all other
+ * saved blocks intact. Text edited by a site administrator is not replaced.
+ *
+ * @param string $content Existing Gutenberg post content.
+ * @param array  $changes Map of old text to its replacement; null removes a block.
+ * @return array{content:string,skipped:int} Updated content and unmatched entries.
+ */
+function maatek_replace_known_copy_blocks( $content, $changes ) {
+	$pattern = '~<!--\s+wp:(paragraph|heading)(?:\s+.*?)?\s*-->(.*?)<!--\s+/wp:\1\s*-->~s';
+	if ( ! preg_match_all( $pattern, $content, $blocks, PREG_SET_ORDER ) ) {
+		return array( 'content' => $content, 'skipped' => count( array_filter( $changes, 'is_string' ) ) );
+	}
+
+	$old_counts = array_fill_keys( array_keys( $changes ), 0 );
+	$new_counts = array();
+	$removable  = array();
+	foreach ( $blocks as $block ) {
+		$text = trim( html_entity_decode( wp_strip_all_tags( $block[2] ), ENT_QUOTES, 'UTF-8' ) );
+		$expected_type = 'What to include' === $text ? 'heading' : 'paragraph';
+		if ( array_key_exists( $text, $old_counts ) && $expected_type === $block[1] && 1 === substr_count( $block[0], $text ) && 1 === substr_count( $block[2], $text ) ) {
+			++$old_counts[ $text ];
+			if ( null === $changes[ $text ] && preg_match( '~^\s*<p\b[^>]*>' . preg_quote( $text, '~' ) . '</p>\s*$~s', $block[2] ) ) {
+				$removable[ $text ] = true;
+			}
+		}
+		$new_counts[ $text ] = true;
+	}
+
+	$skipped = 0;
+	foreach ( $changes as $old => $new ) {
+		if ( $old_counts[ $old ] > 1 || ( 0 === $old_counts[ $old ] && null !== $new && ! isset( $new_counts[ $new ] ) ) || ( 1 === $old_counts[ $old ] && null === $new && ! isset( $removable[ $old ] ) ) ) {
+			++$skipped;
+		}
+	}
+
+	$updated = preg_replace_callback(
+		$pattern,
+		static function ( $block ) use ( $changes, $old_counts ) {
+			$text = trim( html_entity_decode( wp_strip_all_tags( $block[2] ), ENT_QUOTES, 'UTF-8' ) );
+			$expected_type = 'What to include' === $text ? 'heading' : 'paragraph';
+			if ( ! array_key_exists( $text, $changes ) || $expected_type !== $block[1] || 1 !== $old_counts[ $text ] || 1 !== substr_count( $block[0], $text ) || 1 !== substr_count( $block[2], $text ) ) {
+				return $block[0];
+			}
+			if ( null === $changes[ $text ] ) {
+				// Remove only the original plain paragraph, never a modified block.
+				return preg_match( '~^\s*<p\b[^>]*>' . preg_quote( $text, '~' ) . '</p>\s*$~s', $block[2] ) ? '' : $block[0];
+			}
+			return str_replace( $text, $changes[ $text ], $block[0] );
+		},
+		$content
+	);
+	return array( 'content' => is_string( $updated ) ? $updated : $content, 'skipped' => $skipped );
+}
+
+/** Apply the targeted copy update after pages have been seeded, including on WP Puller updates. */
+function maatek_apply_copy_update() {
+	$option_name = 'maatek_copy_update_20261112';
+	$lock_name   = 'maatek_copy_update_lock_20261112';
+	if ( get_option( $option_name, false ) ) {
+		return;
+	}
+	$lock = (int) get_option( $lock_name, 0 );
+	if ( $lock && $lock < time() - 120 ) {
+		delete_option( $lock_name );
+	}
+	if ( ! add_option( $lock_name, time(), '', false ) ) {
+		return;
+	}
+
+	$changes = array(
+		'home' => array(
+			'Electrical, mechanical and automation services for industrial plant and production facilities.' => 'Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project galleries.',
+			'Switchboards, PLC programming, HMI, SCADA, industrial networks, process controls and machinery safety.' => 'Electrical switchboards, PLC programming, HMI and SCADA systems and machinery safety designed around the needs of industrial production.',
+			'Troubleshooting, breakdown response, equipment servicing and planned maintenance for industrial plant.' => 'Practical support for industrial plant reliability, troubleshooting, equipment servicing and planned maintenance.',
+			'Conveyors, machinery, steelwork and equipment integration, with attention to access and maintainability.' => 'Mechanical fabrication and equipment integration, with attention to plant access, installation requirements and maintainability.',
+			'Plant relocation, equipment installation, machinery integration and coordinated commissioning.' => 'Industrial equipment installation, machinery integration and coordinated commissioning in working production environments.',
+		),
+		'contact' => array(
+			'For industrial plant and production facilities. Tell us about your site, equipment and what you need to achieve.' => 'From industrial maintenance and machine upgrades to switchboards, automation and turnkey installations, start with a conversation about your site and what you need to achieve.',
+			'What to include' => 'Tell us about the challenge.',
+			'Share your site location to discuss suitability, access and installation requirements.' => null,
+			'Start with your requirements, discuss the scope and site access, then talk through the appropriate next steps with Marko.' => 'We can then discuss the appropriate next steps.',
+		),
+	);
+	$errors  = array();
+	$skipped = array();
+	try {
+		foreach ( $changes as $slug => $replacements ) {
+			$page = get_page_by_path( $slug, OBJECT, 'page' );
+			if ( ! ( $page instanceof WP_Post ) ) {
+				$errors[] = $slug;
+				continue;
+			}
+			$result = maatek_replace_known_copy_blocks( $page->post_content, $replacements );
+			if ( $result['skipped'] ) {
+				$skipped[ $slug ] = $result['skipped'];
+			}
+			if ( $result['content'] === $page->post_content ) {
+				continue;
+			}
+			// Do not overwrite an edit made after we read the page.
+			clean_post_cache( $page->ID );
+			$latest = get_post( $page->ID );
+			if ( ! ( $latest instanceof WP_Post ) || $latest->post_content !== $page->post_content ) {
+				$errors[] = $slug;
+				continue;
+			}
+			// On a logged-out request KSES can strip existing block attributes. The
+			// content comes from the database and only exact known text is changed.
+			$had_kses = ( false !== has_filter( 'content_save_pre', 'wp_filter_post_kses' ) );
+			if ( $had_kses ) {
+				kses_remove_filters();
+			}
+			try {
+				$revision = wp_save_post_revision( $page->ID );
+				$updated  = is_wp_error( $revision ) ? $revision : wp_update_post( array( 'ID' => $page->ID, 'post_content' => wp_slash( $result['content'] ) ), true );
+			} finally {
+				if ( $had_kses ) {
+					kses_init_filters();
+				}
+			}
+			if ( is_wp_error( $updated ) || ! $updated ) {
+				$errors[] = $slug;
+			}
+		}
+		if ( $errors ) {
+			update_option( 'maatek_copy_update_errors', $errors, false );
+		} else {
+			delete_option( 'maatek_copy_update_errors' );
+			update_option( $option_name, array( 'done' => true, 'skipped' => $skipped ), false );
+		}
+	} finally {
+		delete_option( $lock_name );
+	}
+}
+add_action( 'init', 'maatek_apply_copy_update', 20 );
+
+/**
  * Register Lightbox ON/OFF toggle in WordPress Customizer for live previewing.
  *
  * @param WP_Customize_Manager $wp_customize Customizer manager instance.
@@ -764,6 +905,14 @@ function maatek_admin_theme_notice() {
 			echo '<p>Check the database and plugin logs, then <a href="' . esc_url( $retry_url ) . '">retry setup</a>. Existing page content is preserved.</p>';
 		}
 		echo '</div>';
+	}
+	$copy_errors = get_option( 'maatek_copy_update_errors', false );
+	if ( is_array( $copy_errors ) && $copy_errors ) {
+		echo '<div class="notice notice-error"><p><strong>Maatek:</strong> The copy update could not finish for ' . esc_html( implode( ', ', $copy_errors ) ) . '. Check the pages and database or plugin logs; the update will retry on the next request.</p></div>';
+	}
+	$copy_status = get_option( 'maatek_copy_update_20261112', false );
+	if ( is_array( $copy_status ) && ! empty( $copy_status['skipped'] ) && is_array( $copy_status['skipped'] ) ) {
+		echo '<div class="notice notice-warning"><p><strong>Maatek:</strong> Some Home or Contact wording was already different and was left unchanged. <a href="' . esc_url( admin_url( 'edit.php?post_type=page' ) ) . '">Review the pages</a> if you want to update it manually.</p></div>';
 	}
 	$unpublished = maatek_unpublished_destinations();
 	if ( $unpublished ) {

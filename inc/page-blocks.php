@@ -261,6 +261,13 @@ function maatek_get_seeded_pages() {
 	$maint   = maatek_get_page_url( 'maintenance' );
 	$fab     = maatek_get_page_url( 'fabrication' );
 	$inst    = maatek_get_page_url( 'installations' );
+	$projects = maatek_get_page_url( 'projects' );
+	$home_gallery_card = maatek_block_photo_card(
+		"{$assets}/55e5d9a70651bf11.webp",
+		'Crane and equipment handling',
+		'Site lifting arrangements and access for equipment positioning.',
+		'mtk-photo-card--preview'
+	);
 
 	/* ======================================================================
 	 * 1. HOME PAGE (Figma Node 11:194)
@@ -288,7 +295,7 @@ function maatek_get_seeded_pages() {
 			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 			<!-- wp:button {"className":"mtk-btn mtk-btn-hero-outline"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-hero-outline"><a class="wp-block-button__link wp-element-button" href="#home-services">Explore services <span class="mtk-arrow">→</span></a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-hero-outline"><a class="wp-block-button__link wp-element-button" href="#home-services">Explore Our Services <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->
@@ -310,7 +317,7 @@ function maatek_get_seeded_pages() {
 		<!-- /wp:heading -->
 
 		<!-- wp:paragraph {"className":"mtk-body mtk-text-muted mtk-max-w-720"} -->
-		<p class="mtk-body mtk-text-muted mtk-max-w-720">Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project galleries.</p>
+		<p class="mtk-body mtk-text-muted mtk-max-w-720">Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project image galleries below.</p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:columns {"className":"mtk-shortcut-grid"} -->
@@ -318,28 +325,28 @@ function maatek_get_seeded_pages() {
 			<!-- wp:column {"className":"mtk-shortcut-col"} -->
 			<div class="wp-block-column mtk-shortcut-col">
 				<!-- wp:paragraph -->
-				<p><a class="mtk-shortcut" href="{$ctrl}"><span>Control &amp; Automation</span><span class="mtk-arrow">→</span></a></p>
+				<p><a class="mtk-shortcut" href="{$ctrl}"><span class="mtk-shortcut-copy"><span class="mtk-shortcut-title">Control &amp; Automation</span><span class="mtk-shortcut-desc">PLC, SCADA, HMI, industrial networks and process controls.</span></span><span class="mtk-arrow">→</span></a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:column -->
 			<!-- wp:column {"className":"mtk-shortcut-col"} -->
 			<div class="wp-block-column mtk-shortcut-col">
 				<!-- wp:paragraph -->
-				<p><a class="mtk-shortcut" href="{$maint}"><span>Maintenance</span><span class="mtk-arrow">→</span></a></p>
+				<p><a class="mtk-shortcut" href="{$maint}"><span class="mtk-shortcut-copy"><span class="mtk-shortcut-title">Maintenance</span><span class="mtk-shortcut-desc">Breakdown response, troubleshooting and preventative maintenance.</span></span><span class="mtk-arrow">→</span></a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:column -->
 			<!-- wp:column {"className":"mtk-shortcut-col"} -->
 			<div class="wp-block-column mtk-shortcut-col">
 				<!-- wp:paragraph -->
-				<p><a class="mtk-shortcut" href="{$fab}"><span>Fabrication</span><span class="mtk-arrow">→</span></a></p>
+				<p><a class="mtk-shortcut" href="{$fab}"><span class="mtk-shortcut-copy"><span class="mtk-shortcut-title">Fabrication</span><span class="mtk-shortcut-desc">Mechanical fabrication, conveyors, machinery and steelwork.</span></span><span class="mtk-arrow">→</span></a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:column -->
 			<!-- wp:column {"className":"mtk-shortcut-col"} -->
 			<div class="wp-block-column mtk-shortcut-col">
 				<!-- wp:paragraph -->
-				<p><a class="mtk-shortcut" href="{$inst}"><span>Installations</span><span class="mtk-arrow">→</span></a></p>
+				<p><a class="mtk-shortcut" href="{$inst}"><span class="mtk-shortcut-copy"><span class="mtk-shortcut-title">Installations</span><span class="mtk-shortcut-desc">Plant relocation, factory installations and commissioning.</span></span><span class="mtk-arrow">→</span></a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:column -->
@@ -486,6 +493,46 @@ function maatek_get_seeded_pages() {
 </section>
 <!-- /wp:group -->
 
+<!-- wp:group {"tagName":"section","className":"mtk-bg-surface mtk-py-16","layout":{"type":"default"}} -->
+<section class="wp-block-group mtk-bg-surface mtk-py-16">
+	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
+	<div class="wp-block-group mtk-container">
+		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
+		<p class="mtk-overline mtk-mb-2">INSTALLATION GALLERY</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:heading {"className":"mtk-h3 mtk-mb-2"} -->
+		<h2 class="wp-block-heading mtk-h3 mtk-mb-2">Equipment handling and site access</h2>
+		<!-- /wp:heading -->
+		<!-- wp:columns {"className":"mtk-gallery-preview-grid"} -->
+		<div class="wp-block-columns mtk-gallery-preview-grid">
+{$home_gallery_card}
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-3"} -->
+				<h3 class="wp-block-heading mtk-h4 mtk-mb-3">Industrial installation environments</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-3"} -->
+				<p class="mtk-body mtk-text-muted-dark mtk-mb-3">Explore equipment handling, lifting arrangements and machinery positioning in industrial environments.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"className":"mtk-small mtk-text-muted mtk-mb-6"} -->
+				<p class="mtk-small mtk-text-muted mtk-mb-6">These images illustrate installation environments relevant to industrial projects.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons {"className":"mtk-btn-group"} -->
+				<div class="wp-block-buttons mtk-btn-group">
+					<!-- wp:button {"className":"mtk-btn mtk-btn-secondary"} -->
+					<div class="wp-block-button mtk-btn mtk-btn-secondary"><a class="wp-block-button__link wp-element-button" href="{$projects}">View installation gallery</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:column -->
+		</div>
+		<!-- /wp:columns -->
+	</div>
+	<!-- /wp:group -->
+</section>
+<!-- /wp:group -->
+
 <!-- wp:group {"tagName":"section","className":"mtk-cta-band","layout":{"type":"default"}} -->
 <section class="wp-block-group mtk-cta-band">
 		<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
@@ -517,7 +564,7 @@ function maatek_get_seeded_pages() {
 					<!-- wp:buttons {"className":"mtk-btn-group"} -->
 					<div class="wp-block-buttons mtk-btn-group">
 						<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-						<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Contact Maatek Electrical <span class="mtk-arrow">→</span></a></div>
+						<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Contact Marko <span class="mtk-arrow">→</span></a></div>
 						<!-- /wp:button -->
 					</div>
 					<!-- /wp:buttons -->
@@ -1344,9 +1391,9 @@ HTML;
 	);
 
 	$inst_photo_1 = maatek_block_photo_card(
-		"{$assets}/55e5d9a70651bf11.webp",
-		'Crane and equipment handling',
-		'Site lifting arrangements and safe access are coordinated before equipment is moved into position.'
+		"{$assets}/f00e6bf8ff0c2934.webp",
+		'Factory equipment installation',
+		'Industrial machinery installation and positioning within an operating manufacturing facility.'
 	);
 	$inst_photo_2 = maatek_block_photo_card(
 		"{$assets}/20d8589f5bff2485.webp",
@@ -1651,6 +1698,9 @@ HTML;
 
 				<!-- wp:group {"className":"mtk-contact-card","layout":{"type":"default"}} -->
 				<div class="wp-block-group mtk-contact-card">
+					<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
+					<p class="mtk-overline mtk-mb-2">DIRECT CONTACT</p>
+					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"mtk-h3-sm mtk-mb-1"} -->
 					<h3 class="wp-block-heading mtk-h3-sm mtk-mb-1">Marko Markovic</h3>
 					<!-- /wp:heading -->
@@ -1662,6 +1712,9 @@ HTML;
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"mtk-body mtk-font-semibold"} -->
 					<p class="mtk-body mtk-font-semibold"><a class="mtk-text-blue" href="mailto:marko@maatekelectrical.com.au">marko@maatekelectrical.com.au</a></p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"mtk-small mtk-text-muted mtk-mt-2"} -->
+					<p class="mtk-small mtk-text-muted mtk-mt-2">Tap the number to call from your mobile.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -1686,32 +1739,15 @@ HTML;
 				<!-- /wp:heading -->
 
 				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-4"} -->
-				<p class="mtk-body mtk-text-muted-dark mtk-mb-4">Share a few details when you call or email:</p>
+				<p class="mtk-body mtk-text-muted-dark mtk-mb-4">Share the equipment involved, your project timeframe, the operating environment and any relevant drawings or specifications. We can then discuss the appropriate next steps.</p>
 				<!-- /wp:paragraph -->
 
-				<!-- wp:group {"className":"mtk-check-list mtk-mb-6","layout":{"type":"default"}} -->
-				<div class="wp-block-group mtk-check-list mtk-mb-6">
-					<!-- wp:paragraph {"className":"mtk-check-item"} -->
-					<p class="mtk-check-item">Equipment and work required</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph {"className":"mtk-check-item"} -->
-					<p class="mtk-check-item">Site location and operating environment</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph {"className":"mtk-check-item"} -->
-					<p class="mtk-check-item">Project timeframe</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph {"className":"mtk-check-item"} -->
-					<p class="mtk-check-item">Relevant drawings or specifications</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-
 				<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-2"} -->
-				<h3 class="wp-block-heading mtk-h4 mtk-mb-2">Next steps</h3>
+				<h3 class="wp-block-heading mtk-h4 mtk-mb-2">Discuss your project</h3>
 				<!-- /wp:heading -->
 
 				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-max-w-520"} -->
-				<p class="mtk-body mtk-text-muted-dark mtk-max-w-520">We can then discuss the appropriate next steps.</p>
+				<p class="mtk-body mtk-text-muted-dark mtk-max-w-520">For industrial maintenance, PLC and automation systems, switchboard manufacturing, fabrication and equipment installation, contact Marko directly.</p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:column -->

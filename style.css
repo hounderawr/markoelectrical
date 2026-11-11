@@ -838,7 +838,7 @@ figure.mtk-brand-block {
 	font-weight: 700;
 }
 
-/* MENU / CLOSE buttons (Figma 32:867) */
+/* Mobile navigation controls */
 .mtk-nav .wp-block-navigation__responsive-container-open,
 .mtk-nav .wp-block-navigation__responsive-container-close {
 	align-items: center;
@@ -854,14 +854,46 @@ figure.mtk-brand-block {
 }
 
 .mtk-nav .wp-block-navigation__responsive-container-open {
+	position: relative;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	padding: 0;
+	/* Keep WordPress's text in the accessible name while displaying an icon. */
+	font-size: 0 !important;
+	line-height: 0;
 	background-color: var(--maatek-navy);
 	border: 1px solid #35546D;
 	color: #FFFFFF;
 }
 
+.mtk-nav .wp-block-navigation__responsive-container-open::before {
+	content: "";
+	display: block;
+	flex: 0 0 20px;
+	width: 20px;
+	height: 16px;
+	border-top: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+}
+
+.mtk-nav .wp-block-navigation__responsive-container-open::after {
+	content: "";
+	position: absolute;
+	width: 20px;
+	border-top: 2px solid currentColor;
+}
+
+/* The same icon is used whether the navigation block is saved with an icon or text. */
+.mtk-nav .wp-block-navigation__responsive-container-open svg {
+	display: none;
+}
+
 .mtk-nav .wp-block-navigation__responsive-container-open:focus-visible {
 	background-color: var(--maatek-blue);
 	border-color: var(--maatek-nav-active);
+	outline: 2px solid #FFFFFF;
+	outline-offset: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -919,6 +951,9 @@ figure.mtk-brand-block {
 .mtk-nav .is-menu-open .current-menu-item > .wp-block-navigation-item__content,
 .mtk-nav .is-menu-open .wp-block-navigation-item__content[aria-current="page"] {
 	color: var(--maatek-blue);
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 5px;
 }
 
 /* Seven links don't fit below 960px, so use the drawer up to tablet width (core switches at 600px) */
@@ -1189,12 +1224,18 @@ p.mtk-eyebrow-with-bar--short::before {
 	margin: 0 !important;
 }
 
+.mtk-shortcut-col > p {
+	height: 100%;
+	margin: 0;
+}
+
 .mtk-shortcut {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
+	height: 100%;
 	min-height: 56px;
-	padding: 10px 18px;
+	padding: 16px 18px;
 	gap: 12px;
 	background-color: var(--maatek-shortcut-bg);
 	border: 1px solid #D5E0E8;
@@ -1210,6 +1251,21 @@ p.mtk-eyebrow-with-bar--short::before {
 		border-color var(--mtk-duration) var(--mtk-ease),
 		transform var(--mtk-duration) var(--mtk-ease),
 		box-shadow var(--mtk-duration) var(--mtk-ease);
+}
+
+.mtk-shortcut-copy {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	gap: 8px;
+}
+
+.mtk-shortcut-desc {
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.5;
+	color: var(--maatek-muted-dark);
+	overflow-wrap: anywhere;
 }
 
 .mtk-shortcut .mtk-arrow {
@@ -1693,7 +1749,10 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 /* Home Installation Gallery Preview 2-Column Layout (Figma Node 70:859) */
 .mtk-gallery-preview-grid,
 .wp-block-columns.mtk-gallery-preview-grid {
-	display: none !important;
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 32px !important;
+	align-items: center;
 }
 
 /* Lightbox Dialog — Refined Industrial Viewer */
@@ -1983,11 +2042,6 @@ dialog.mtk-lightbox::backdrop {
 	padding: 28px 28px 22px;
 	margin-bottom: 0 !important;
 	overflow-wrap: anywhere;
-}
-
-/* Hide "DIRECT CONTACT" overline inside .mtk-contact-card even on already-seeded pages */
-.mtk-contact-card > .mtk-overline {
-	display: none !important;
 }
 
 .mtk-contact-card > .mtk-lead {

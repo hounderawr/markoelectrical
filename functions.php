@@ -212,6 +212,62 @@ function maatek_replace_block_placeholders( $block_content ) {
 add_filter( 'render_block', 'maatek_replace_block_placeholders' );
 
 /**
+ * Supply smaller theme-owned image candidates without changing saved editor blocks.
+ * WordPress media-library images keep their own srcset and loading decisions.
+ *
+ * @param string $content Rendered block HTML.
+ * @param array  $block Parsed block.
+ * @return string
+ */
+function maatek_responsive_theme_images( $content, $block ) {
+	if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ! is_string( $content ) || empty( $block['blockName'] ) || ! in_array( $block['blockName'], array( 'core/image', 'core/cover' ), true ) || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return $content;
+	}
+
+	$assets_url = untrailingslashit( get_template_directory_uri() ) . '/assets/';
+	$assets_path = (string) wp_parse_url( $assets_url, PHP_URL_PATH );
+	$assets_host = strtolower( (string) wp_parse_url( $assets_url, PHP_URL_HOST ) );
+	$widths = array(
+		'9241893b534162b6.webp'                  => 1806,
+		'home-control-cabinet-enhanced.jpg'       => 1218,
+		'home-robot-maintenance-enhanced.jpg'     => 1448,
+		'home-fabrication-workshop-enhanced.webp' => 1774,
+		'f00e6bf8ff0c2934.webp'                  => 1536,
+	);
+	$processor = new WP_HTML_Tag_Processor( $content );
+	while ( $processor->next_tag( 'img' ) ) {
+		$src = $processor->get_attribute( 'src' );
+		if ( ! is_string( $src ) || '' === $src ) {
+			continue;
+		}
+		$path = (string) wp_parse_url( $src, PHP_URL_PATH );
+		$host = wp_parse_url( $src, PHP_URL_HOST );
+		if ( ( is_string( $host ) && strtolower( $host ) !== $assets_host ) || 0 !== strpos( $path, $assets_path ) ) {
+			continue;
+		}
+		$name = substr( $path, strlen( $assets_path ) );
+		if ( 'core/image' === $block['blockName'] && ( isset( $widths[ $name ] ) || '55e5d9a70651bf11.webp' === $name ) && ! $processor->get_attribute( 'loading' ) ) {
+			$processor->set_attribute( 'loading', 'lazy' );
+		}
+		if ( ! isset( $widths[ $name ] ) || $processor->get_attribute( 'srcset' ) ) {
+			continue;
+		}
+		$parts = pathinfo( $name );
+		$first = $parts['filename'] . '-480.' . $parts['extension'];
+		$second = $parts['filename'] . '-960.' . $parts['extension'];
+		// Fall back to the original image if thumbnail assets are missing.
+		$asset_dir = get_template_directory() . '/assets/';
+		if ( ! is_file( $asset_dir . $first ) || ! is_file( $asset_dir . $second ) ) {
+			continue;
+		}
+		$processor->set_attribute( 'srcset', $assets_url . $first . ' 480w, ' . $assets_url . $second . ' 960w, ' . $assets_url . $name . ' ' . $widths[ $name ] . 'w' );
+		$processor->set_attribute( 'sizes', 'core/cover' === $block['blockName'] ? '100vw' : '(max-width: 960px) calc(100vw - 48px), 624px' );
+	}
+	return $processor->get_updated_html();
+}
+add_filter( 'render_block', 'maatek_responsive_theme_images', 15, 2 );
+
+/**
  * Find the theme's destination pages which are not available to site visitors.
  * Saved blocks remain unchanged; links become available when the page is published.
  *
@@ -725,7 +781,7 @@ function maatek_replace_known_copy_blocks( $content, $changes ) {
 	$removable  = array();
 	foreach ( $blocks as $block ) {
 		$text = trim( html_entity_decode( wp_strip_all_tags( $block[2] ), ENT_QUOTES, 'UTF-8' ) );
-		$expected_type = 'What to include' === $text ? 'heading' : 'paragraph';
+		$expected_type = in_array( $text, array( 'What to include', 'Next steps' ), true ) ? 'heading' : 'paragraph';
 		if ( array_key_exists( $text, $old_counts ) && $expected_type === $block[1] && 1 === substr_count( $block[0], $text ) && 1 === substr_count( $block[2], $text ) ) {
 			++$old_counts[ $text ];
 			if ( null === $changes[ $text ] && preg_match( '~^\s*<p\b[^>]*>' . preg_quote( $text, '~' ) . '</p>\s*$~s', $block[2] ) ) {
@@ -746,7 +802,7 @@ function maatek_replace_known_copy_blocks( $content, $changes ) {
 		$pattern,
 		static function ( $block ) use ( $changes, $old_counts ) {
 			$text = trim( html_entity_decode( wp_strip_all_tags( $block[2] ), ENT_QUOTES, 'UTF-8' ) );
-			$expected_type = 'What to include' === $text ? 'heading' : 'paragraph';
+			$expected_type = in_array( $text, array( 'What to include', 'Next steps' ), true ) ? 'heading' : 'paragraph';
 			if ( ! array_key_exists( $text, $changes ) || $expected_type !== $block[1] || 1 !== $old_counts[ $text ] || 1 !== substr_count( $block[0], $text ) || 1 !== substr_count( $block[2], $text ) ) {
 				return $block[0];
 			}
@@ -778,7 +834,7 @@ function maatek_apply_copy_update() {
 
 	$changes = array(
 		'home' => array(
-			'Electrical, mechanical and automation services for industrial plant and production facilities.' => 'Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project galleries.',
+			'Electrical, mechanical and automation services for industrial plant and production facilities.' => 'Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project image galleries below.',
 			'Switchboards, PLC programming, HMI, SCADA, industrial networks, process controls and machinery safety.' => 'Electrical switchboards, PLC programming, HMI and SCADA systems and machinery safety designed around the needs of industrial production.',
 			'Troubleshooting, breakdown response, equipment servicing and planned maintenance for industrial plant.' => 'Practical support for industrial plant reliability, troubleshooting, equipment servicing and planned maintenance.',
 			'Conveyors, machinery, steelwork and equipment integration, with attention to access and maintainability.' => 'Mechanical fabrication and equipment integration, with attention to plant access, installation requirements and maintainability.',
@@ -788,7 +844,7 @@ function maatek_apply_copy_update() {
 			'For industrial plant and production facilities. Tell us about your site, equipment and what you need to achieve.' => 'From industrial maintenance and machine upgrades to switchboards, automation and turnkey installations, start with a conversation about your site and what you need to achieve.',
 			'What to include' => 'Tell us about the challenge.',
 			'Share your site location to discuss suitability, access and installation requirements.' => null,
-			'Start with your requirements, discuss the scope and site access, then talk through the appropriate next steps with Marko.' => 'We can then discuss the appropriate next steps.',
+			'Start with your requirements, discuss the scope and site access, then talk through the appropriate next steps with Marko.' => 'For industrial maintenance, PLC and automation systems, switchboard manufacturing, fabrication and equipment installation, contact Marko directly.',
 		),
 	);
 	$errors  = array();
@@ -843,6 +899,147 @@ function maatek_apply_copy_update() {
 	}
 }
 add_action( 'init', 'maatek_apply_copy_update', 20 );
+
+/**
+ * Restore exact original wording in the newer layout. Only known unchanged
+ * blocks are updated; a site editor's replacement text is left untouched.
+ */
+function maatek_apply_original_details_update() {
+	$option = 'maatek_original_details_update_v1';
+	$lock = 'maatek_original_details_lock_v1';
+	if ( get_option( $option, false ) ) {
+		return;
+	}
+	$lock_time = (int) get_option( $lock, 0 );
+	if ( $lock_time && $lock_time < time() - 120 ) {
+		delete_option( $lock );
+	}
+	if ( ! add_option( $lock, time(), '', false ) ) {
+		return;
+	}
+	$changes = array(
+		'home' => array(
+			'Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project galleries.' => 'Maatek Electrical provides electrical control and automation, industrial maintenance, mechanical fabrication and factory installations. Explore our services and project image galleries below.',
+		),
+		'contact' => array(
+			'Share a few details when you call or email:' => 'Share the equipment involved, your project timeframe, the operating environment and any relevant drawings or specifications. We can then discuss the appropriate next steps.',
+			'Next steps' => 'Discuss your project',
+			'We can then discuss the appropriate next steps.' => 'For industrial maintenance, PLC and automation systems, switchboard manufacturing, fabrication and equipment installation, contact Marko directly.',
+		),
+		'installations' => array(),
+	);
+	$shortcuts = array(
+		'Control &amp; Automation' => 'PLC, SCADA, HMI, industrial networks and process controls.',
+		'Maintenance' => 'Breakdown response, troubleshooting and preventative maintenance.',
+		'Fabrication' => 'Mechanical fabrication, conveyors, machinery and steelwork.',
+		'Installations' => 'Plant relocation, factory installations and commissioning.',
+	);
+	$errors = array();
+	$skipped = array();
+	try {
+		foreach ( $changes as $slug => $replacements ) {
+			$page = get_page_by_path( $slug, OBJECT, 'page' );
+			if ( ! ( $page instanceof WP_Post ) ) {
+				$errors[] = $slug;
+				continue;
+			}
+			$result = maatek_replace_known_copy_blocks( $page->post_content, $replacements );
+			$content = $result['content'];
+			if ( $result['skipped'] ) {
+				$skipped[ $slug ] = true;
+			}
+			if ( 'home' === $slug ) {
+				// Change only the known default shortcut anchors, leaving links and custom copy intact.
+				foreach ( $shortcuts as $title => $description ) {
+					$old = '<span>' . $title . '</span><span class="mtk-arrow">→</span>';
+					$new = '<span class="mtk-shortcut-copy"><span class="mtk-shortcut-title">' . $title . '</span><span class="mtk-shortcut-desc">' . $description . '</span></span><span class="mtk-arrow">→</span>';
+					$pattern = '~(<a\\b(?=[^>]*\\bclass="[^"]*\\bmtk-shortcut\\b[^"]*")[^>]*>)' . preg_quote( $old, '~' ) . '(</a>)~s';
+					if ( 1 === preg_match_all( $pattern, $content ) ) {
+						$content = preg_replace_callback( $pattern, static function ( $m ) use ( $new ) { return $m[1] . $new . $m[2]; }, $content, 1 );
+					} elseif ( false === strpos( $content, $new ) ) {
+						$skipped[ $slug ] = true;
+					}
+				}
+				$hero_pattern = '~(<a\\b(?=[^>]*\\bhref="#home-services")[^>]*>)Explore services (\\s*<span class="mtk-arrow">→</span>\\s*</a>)~s';
+				if ( 1 === preg_match_all( $hero_pattern, $content ) ) {
+					$content = preg_replace_callback( $hero_pattern, static function ( $m ) { return $m[1] . 'Explore Our Services ' . $m[2]; }, $content, 1 );
+				}
+			} elseif ( 'contact' === $slug ) {
+				// Remove only the unchanged default checklist, which repeats the restored paragraph.
+				$list_pattern = '~<!--\\s+wp:group\\s+\\{[^>]*"className":"mtk-check-list mtk-mb-6"[^>]*\\}\\s*-->.*?<!--\\s+/wp:group\\s*-->~s';
+				preg_match_all( $list_pattern, $content, $lists );
+				if ( 1 === count( $lists[0] ) ) {
+					$default_list = '<!-- wp:group {"className":"mtk-check-list mtk-mb-6","layout":{"type":"default"}} --><div class="wp-block-group mtk-check-list mtk-mb-6"><!-- wp:paragraph {"className":"mtk-check-item"} --><p class="mtk-check-item">Equipment and work required</p><!-- /wp:paragraph --><!-- wp:paragraph {"className":"mtk-check-item"} --><p class="mtk-check-item">Site location and operating environment</p><!-- /wp:paragraph --><!-- wp:paragraph {"className":"mtk-check-item"} --><p class="mtk-check-item">Project timeframe</p><!-- /wp:paragraph --><!-- wp:paragraph {"className":"mtk-check-item"} --><p class="mtk-check-item">Relevant drawings or specifications</p><!-- /wp:paragraph --></div><!-- /wp:group -->';
+					if ( preg_replace( '/\\s+/', '', $lists[0][0] ) === preg_replace( '/\\s+/', '', $default_list ) ) {
+						$content = str_replace( $lists[0][0], '', $content );
+					} else {
+						$skipped[ $slug ] = true;
+					}
+				}
+				if ( false === strpos( $content, 'DIRECT CONTACT' ) ) {
+					$label_pattern = '~(<!--\\s+wp:group\\s+\\{[^>]*"className":"mtk-contact-card"[^>]*\\}\\s*-->\\s*<div\\b[^>]*\\bclass="[^"]*\\bmtk-contact-card\\b[^"]*"[^>]*>)(\\s*<!--\\s+wp:heading\\b[^>]*-->\\s*<h3\\b[^>]*>Marko Markovic</h3>)~s';
+					if ( 1 === preg_match_all( $label_pattern, $content ) ) {
+						$label_block = "\n<!-- wp:paragraph {\"className\":\"mtk-overline mtk-mb-2\"} -->\n<p class=\"mtk-overline mtk-mb-2\">DIRECT CONTACT</p>\n<!-- /wp:paragraph -->\n";
+						$content = preg_replace_callback( $label_pattern, static function ( $m ) use ( $label_block ) { return $m[1] . $label_block . $m[2]; }, $content, 1 );
+					} else {
+						$skipped[ $slug ] = true;
+					}
+				}
+				$hint = 'Tap the number to call from your mobile.';
+				if ( false === strpos( $content, $hint ) ) {
+					$pattern = '~(<!--\\s+wp:paragraph\\b[^>]*-->\\s*<p\\b[^>]*>\\s*<a\\b[^>]*href="mailto:marko@maatekelectrical\\.com\\.au"[^>]*>marko@maatekelectrical\\.com\\.au</a>\\s*</p>\\s*<!--\\s+/wp:paragraph\\s*-->)~s';
+					if ( 1 === preg_match_all( $pattern, $content ) ) {
+						$hint_block = "\n<!-- wp:paragraph {\"className\":\"mtk-small mtk-text-muted mtk-mt-2\"} -->\n<p class=\"mtk-small mtk-text-muted mtk-mt-2\">" . $hint . "</p>\n<!-- /wp:paragraph -->";
+						$content = preg_replace_callback( $pattern, static function ( $m ) use ( $hint_block ) { return $m[1] . $hint_block; }, $content, 1 );
+					} else {
+						$skipped[ $slug ] = true;
+					}
+				}
+			} elseif ( 'installations' === $slug ) {
+				// Replace this gallery card only when all its original image and text still match.
+				$pattern = '~<!--\\s+wp:column\\s+\\{[^>]*mtk-photo-card[^>]*\\}\\s*-->.*?<!--\\s+/wp:column\\s*-->~s';
+				preg_match_all( $pattern, $content, $matches );
+				$old_caption = 'Site lifting arrangements and safe access are coordinated before equipment is moved into position.';
+				$candidates = array_values( array_filter( $matches[0], static function ( $card ) use ( $old_caption ) {
+					return 1 === substr_count( $card, '55e5d9a70651bf11.webp' ) && 2 === substr_count( $card, 'Crane and equipment handling' ) && 1 === substr_count( $card, $old_caption );
+				} ) );
+				if ( 1 === count( $candidates ) ) {
+					$updated_card = str_replace( array( '55e5d9a70651bf11.webp', 'Crane and equipment handling', $old_caption ), array( 'f00e6bf8ff0c2934.webp', 'Factory equipment installation', 'Industrial machinery installation and positioning within an operating manufacturing facility.' ), $candidates[0] );
+					$content = str_replace( $candidates[0], $updated_card, $content );
+				} elseif ( false === strpos( $content, 'Factory equipment installation' ) ) {
+					$skipped[ $slug ] = true;
+				}
+			}
+			if ( ! is_string( $content ) || $content === $page->post_content ) {
+				continue;
+			}
+			clean_post_cache( $page->ID );
+			$latest = get_post( $page->ID );
+			if ( ! ( $latest instanceof WP_Post ) || $latest->post_content !== $page->post_content ) {
+				$errors[] = $slug;
+				continue;
+			}
+			$had_kses = ( false !== has_filter( 'content_save_pre', 'wp_filter_post_kses' ) );
+			if ( $had_kses ) { kses_remove_filters(); }
+			try {
+				$revision = wp_save_post_revision( $page->ID );
+				$updated = is_wp_error( $revision ) ? $revision : wp_update_post( array( 'ID' => $page->ID, 'post_content' => wp_slash( $content ) ), true );
+			} finally {
+				if ( $had_kses ) { kses_init_filters(); }
+			}
+			if ( is_wp_error( $updated ) || ! $updated ) { $errors[] = $slug; }
+		}
+		if ( $errors ) {
+			update_option( 'maatek_original_details_errors', $errors, false );
+		} else {
+			delete_option( 'maatek_original_details_errors' );
+			update_option( $option, array( 'done' => true, 'skipped' => $skipped ), false );
+		}
+	} finally {
+		delete_option( $lock );
+	}
+}
+add_action( 'init', 'maatek_apply_original_details_update', 21 );
 
 /**
  * Register Lightbox ON/OFF toggle in WordPress Customizer for live previewing.
@@ -913,6 +1110,14 @@ function maatek_admin_theme_notice() {
 	$copy_status = get_option( 'maatek_copy_update_20261112', false );
 	if ( is_array( $copy_status ) && ! empty( $copy_status['skipped'] ) && is_array( $copy_status['skipped'] ) ) {
 		echo '<div class="notice notice-warning"><p><strong>Maatek:</strong> Some Home or Contact wording was already different and was left unchanged. <a href="' . esc_url( admin_url( 'edit.php?post_type=page' ) ) . '">Review the pages</a> if you want to update it manually.</p></div>';
+	}
+	$details_errors = get_option( 'maatek_original_details_errors', false );
+	if ( is_array( $details_errors ) && $details_errors ) {
+		echo '<div class="notice notice-error"><p><strong>Maatek:</strong> The original wording update could not finish for ' . esc_html( implode( ', ', $details_errors ) ) . '. Check the pages and database or plugin logs; the update will retry on the next request.</p></div>';
+	}
+	$details_status = get_option( 'maatek_original_details_update_v1', false );
+	if ( is_array( $details_status ) && ! empty( $details_status['skipped'] ) ) {
+		echo '<div class="notice notice-warning"><p><strong>Maatek:</strong> Some original wording or gallery details had already been changed and were preserved. <a href="' . esc_url( admin_url( 'edit.php?post_type=page' ) ) . '">Review the pages</a> if you want to update them manually.</p></div>';
 	}
 	$unpublished = maatek_unpublished_destinations();
 	if ( $unpublished ) {

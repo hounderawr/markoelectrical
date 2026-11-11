@@ -7,22 +7,30 @@
 (function () {
 	'use strict';
 
-	function normalizePath(urlOrPath) {
+	// WordPress plain permalinks distinguish pages by query parameters, while
+	// tracking parameters and fragments do not change which page is current.
+	var pageQueryKeys = ['page_id', 'p', 'pagename', 'name', 'post_type', 'cat', 'category_name', 'tag', 'author', 's'];
+
+	function pageIdentity(urlOrPath) {
 		try {
-			var u = new URL(urlOrPath, window.location.origin);
-			return u.pathname.replace(/\/+$/, '') || '/';
+			var u = new URL(urlOrPath, window.location.href);
+			var query = pageQueryKeys.map(function (key) {
+				return [key, u.searchParams.getAll(key).sort()];
+			});
+			return JSON.stringify([u.origin, u.pathname.replace(/\/+$/, '') || '/', query]);
 		} catch (e) {
-			return (urlOrPath || '/').replace(/\/+$/, '') || '/';
+			return null;
 		}
 	}
 
 	function initNavigation() {
-		var currentPath = normalizePath(window.location.pathname);
+		var currentPage = pageIdentity(window.location.href);
 		var navLinks = document.querySelectorAll('.mtk-nav .wp-block-navigation-item__content, [data-nav-slug]');
 
 		navLinks.forEach(function (link) {
-			var linkPath = normalizePath(link.getAttribute('href') || '');
-			if (linkPath === currentPath) {
+			var href = link.getAttribute('href');
+			// A fragment links to a section, not the current page in the main navigation.
+			if (href && href.charAt(0) !== '#' && pageIdentity(href) === currentPage) {
 				link.classList.add('is-active');
 				link.setAttribute('aria-current', 'page');
 			}
@@ -58,6 +66,18 @@
 		var prevBtn = dialog.querySelector('.mtk-lightbox-prev');
 		var nextBtn = dialog.querySelector('.mtk-lightbox-next');
 		var closeBtn = dialog.querySelector('.mtk-lightbox-close');
+		var statusEl = null;
+		if (counterEl && counterEl.parentNode) {
+			// Keep the visible count short while announcing the changed image title too.
+			// The empty region exists before its first update so assistive technology
+			// can observe later changes when Next or Previous is activated.
+			counterEl.removeAttribute('aria-live');
+			statusEl = document.createElement('span');
+			statusEl.className = 'mtk-sr-only';
+			statusEl.setAttribute('role', 'status');
+			statusEl.setAttribute('aria-live', 'polite');
+			counterEl.parentNode.appendChild(statusEl);
+		}
 
 		var allCards = Array.prototype.slice
 			.call(document.querySelectorAll('.mtk-photo-card'))
@@ -90,7 +110,12 @@
 			void imgEl.offsetWidth;
 			imgEl.style.animation = '';
 
-			imgEl.src = cardImg.currentSrc || cardImg.src;
+			// currentSrc is selected for the small card and can be a thumbnail. Let
+			// the browser select a candidate for the larger viewer instead, clearing
+			// the previous card's candidates when the next image has no srcset.
+			imgEl.sizes = cardImg.srcset ? '(max-width: 1060px) calc(100vw - 80px), 980px' : '';
+			imgEl.srcset = cardImg.srcset || '';
+			imgEl.src = cardImg.src || cardImg.currentSrc;
 			imgEl.alt = cardImg.alt || (titleNode ? titleNode.textContent : '');
 
 			if (titleEl) {
@@ -101,6 +126,10 @@
 			}
 			if (counterEl) {
 				counterEl.textContent = allCards.length > 1 ? '· ' + (currentIndex + 1) + ' / ' + allCards.length : '';
+			}
+			if (statusEl) {
+				var photoTitle = titleNode ? titleNode.textContent.trim() : (cardImg.alt || '').trim();
+				statusEl.textContent = (photoTitle ? photoTitle + '. ' : '') + 'Photograph ' + (currentIndex + 1) + ' of ' + allCards.length + '.';
 			}
 
 			var showNav = allCards.length > 1;
@@ -121,6 +150,12 @@
 
 			if (typeof dialog.showModal === 'function') {
 				if (!dialog.open) {
+					// Clicking the card body may not focus the button. Give the native
+					// dialog a consistent trigger to return to when it closes.
+					var trigger = card.querySelector('.mtk-photo-card-open');
+					if (trigger && document.activeElement !== trigger) {
+						trigger.focus({ preventScroll: true });
+					}
 					dialog.showModal();
 				}
 			} else {
@@ -143,16 +178,17 @@
 				card.removeAttribute('tabindex');
 			}
 
-			// Inject one real, clearly named <button> over the photo. Keyboard users Tab to it and
-			// press Enter/Space natively; nested links in the card keep their own behaviour.
+			// Leave linked images clickable; their separate viewer button occupies only
+			// the zoom badge, while an unlinked photo uses the whole media as a target.
 			var media = card.querySelector('.mtk-photo-card-media') || card;
 			if (!media.querySelector('.mtk-photo-card-open')) {
 				var titleNode = card.querySelector('.mtk-card-title');
 				var cardImg = card.querySelector('img');
+				var imageLink = cardImg && cardImg.closest('a[href]');
 				var label = (titleNode && titleNode.textContent.trim()) || (cardImg && cardImg.alt) || 'project photograph';
 				var openBtn = document.createElement('button');
 				openBtn.type = 'button';
-				openBtn.className = 'mtk-photo-card-open';
+				openBtn.className = 'mtk-photo-card-open' + (imageLink ? ' mtk-photo-card-open--linked' : '');
 				openBtn.setAttribute('aria-haspopup', 'dialog');
 				openBtn.setAttribute('aria-label', 'View larger photo: ' + label);
 				media.appendChild(openBtn);

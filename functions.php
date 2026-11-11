@@ -212,6 +212,75 @@ function maatek_replace_block_placeholders( $block_content ) {
 add_filter( 'render_block', 'maatek_replace_block_placeholders' );
 
 /**
+ * Find the theme's destination pages which are not available to site visitors.
+ * Saved blocks remain unchanged; links become available when the page is published.
+ *
+ * @return array<string, WP_Post> Existing unpublished pages indexed by slug.
+ */
+function maatek_unpublished_destinations() {
+	static $pages = null;
+	if ( null !== $pages ) {
+		return $pages;
+	}
+	$pages = array();
+	foreach ( array( 'control-automation', 'maintenance', 'fabrication', 'installations', 'projects', 'contact' ) as $slug ) {
+		$page = get_page_by_path( $slug, OBJECT, 'page' );
+		if ( ! ( $page instanceof WP_Post ) ) {
+			$matches = get_posts( array( 'name' => $slug, 'post_type' => 'page', 'post_status' => array( 'draft', 'pending', 'private', 'future' ), 'posts_per_page' => 1 ) );
+			$page    = ! empty( $matches[0] ) ? $matches[0] : null;
+		}
+		if ( $page instanceof WP_Post && 'publish' !== $page->post_status ) {
+			$pages[ $slug ] = $page;
+		}
+	}
+	return $pages;
+}
+
+/**
+ * Temporarily hide visitor-facing links to the theme's unpublished destinations.
+ * Use the HTML processor rather than altering saved content or suppressing blocks.
+ *
+ * @param string $content Rendered block HTML.
+ * @return string Filtered HTML.
+ */
+function maatek_hide_unpublished_destination_links( $content ) {
+	if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ! is_string( $content ) || false === stripos( $content, '<a' ) || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return $content;
+	}
+	$pages = maatek_unpublished_destinations();
+	if ( ! $pages ) {
+		return $content;
+	}
+	$home_host = strtolower( (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST ) );
+	$processor = new WP_HTML_Tag_Processor( $content );
+	while ( $processor->next_tag( 'a' ) ) {
+		$href = $processor->get_attribute( 'href' );
+		if ( ! is_string( $href ) || '' === $href || '#' === $href[0] ) {
+			continue;
+		}
+		$host = wp_parse_url( $href, PHP_URL_HOST );
+		if ( is_string( $host ) && strtolower( $host ) !== $home_host ) {
+			continue;
+		}
+		$path  = untrailingslashit( (string) wp_parse_url( $href, PHP_URL_PATH ) );
+		$query = array();
+		parse_str( (string) wp_parse_url( $href, PHP_URL_QUERY ), $query );
+		foreach ( $pages as $slug => $page ) {
+			$pretty_path = untrailingslashit( (string) wp_parse_url( home_url( '/' . $slug ), PHP_URL_PATH ) );
+			if ( ( '' !== $path && $path === $pretty_path ) || ( isset( $query['page_id'] ) && (string) $page->ID === (string) $query['page_id'] ) || ( isset( $query['pagename'] ) && $slug === $query['pagename'] ) ) {
+				$processor->set_attribute( 'hidden', true );
+				// Author display rules can override the browser's [hidden] rule.
+				$style = $processor->get_attribute( 'style' );
+				$processor->set_attribute( 'style', ( is_string( $style ) ? rtrim( $style, '; ' ) . ';' : '' ) . 'display:none!important' );
+				break;
+			}
+		}
+	}
+	return $processor->get_updated_html();
+}
+add_filter( 'render_block', 'maatek_hide_unpublished_destination_links', 25 );
+
+/**
  * Drop numbered service eyebrows (01, 02 / PLC PROGRAMMING, 03) from pages already saved in WordPress.
  *
  * @param string $block_content Rendered block HTML.
@@ -236,7 +305,7 @@ function maatek_strip_numbered_overlines( $block_content, $block ) {
 
 	return $block_content;
 }
-add_filter( 'render_block', 'maatek_strip_numbered_overlines', 12 );
+add_filter( 'render_block', 'maatek_strip_numbered_overlines', 12, 2 );
 
 /**
  * Keep the header logo linked to the homepage, including headers already saved in the Site Editor.
@@ -272,7 +341,7 @@ function maatek_ensure_logo_links_home( $block_content, $block ) {
 
 	return is_string( $linked ) ? $linked : $block_content;
 }
-add_filter( 'render_block', 'maatek_ensure_logo_links_home', 20 );
+add_filter( 'render_block', 'maatek_ensure_logo_links_home', 20, 2 );
 add_filter( 'the_content', 'maatek_replace_block_placeholders' );
 
 /**
@@ -416,7 +485,7 @@ function maatek_fallback_resolve_slug_pages() {
 add_action( 'template_redirect', 'maatek_fallback_resolve_slug_pages', 1 );
 
 /**
- * Seed the 7 Maatek pages with native Gutenberg block content and set Static Front Page.
+ * Seed the 7 Maatek pages with native Gutenberg block content.
  *
  * By default ($force = false), if a page already exists in WordPress with content,
  * its existing content is NEVER overwritten—preserving all client edits across
@@ -424,13 +493,14 @@ add_action( 'template_redirect', 'maatek_fallback_resolve_slug_pages', 1 );
  * an administrator explicitly clicks "Reset Default Page Content" ($force = true).
  *
  * @param bool $force Whether to force-reset existing pages back to default Figma content.
+ * @return bool Whether all required writes succeeded.
  */
 function maatek_seed_pages( $force = false ) {
 	$already_installed = (bool) get_option( 'maatek_theme_installed', false );
 	$seeded_version    = get_option( 'maatek_block_pages_version', '' );
 
-	if ( ! $force && $already_installed && MAATEK_THEME_VERSION === $seeded_version ) {
-		return;
+	if ( ! $force && $already_installed && MAATEK_THEME_VERSION === $seeded_version && ! get_option( 'maatek_seed_errors', false ) ) {
+		return true;
 	}
 
 	// Ensure wp_filter_post_kses never strips block attributes (e.g. data-object-fit or style) if triggered by an unauthenticated init request.
@@ -439,15 +509,10 @@ function maatek_seed_pages( $force = false ) {
 		kses_remove_filters();
 	}
 
-	// Ensure pretty permalinks (/%postname%/) are enabled on first theme installation only (not forced on existing sites).
-	if ( ! $already_installed && '' === get_option( 'permalink_structure', '' ) ) {
-		update_option( 'permalink_structure', '/%postname%/' );
-	}
-
 	$initial_pages = maatek_get_seeded_pages();
 	$page_ids      = array();
 	$created_new   = array();
-	$home_id       = 0;
+	$errors        = array();
 
 	// Pass 1: Check if each page already exists (by slug or title) so we never create duplicates.
 	foreach ( $initial_pages as $slug => $page_data ) {
@@ -470,21 +535,23 @@ function maatek_seed_pages( $force = false ) {
 
 		if ( $existing instanceof WP_Post ) {
 			$page_id = (int) $existing->ID;
-			// Preserve existing post_status (do not force draft/private to publish).
-			// Only reset a page's chosen template on a forced reset — never on routine theme updates.
-			if ( $force ) {
-				delete_post_meta( $page_id, '_wp_page_template' );
-			}
+			// Preserve existing status and template; a reset changes the template only after a successful content update.
 		} else {
-			$page_id = (int) wp_insert_post(
+			$page_result = wp_insert_post(
 				array(
 					'post_type'    => 'page',
 					'post_title'   => $page_data['title'],
 					'post_name'    => $slug,
 					'post_content' => '',
 					'post_status'  => 'publish',
-				)
+				),
+				true
 			);
+			if ( is_wp_error( $page_result ) || ! $page_result ) {
+				$errors[] = sprintf( __( 'Could not create the %s page.', 'maatek' ), $page_data['title'] );
+				continue;
+			}
+			$page_id = (int) $page_result;
 			if ( $page_id > 0 ) {
 				$created_new[ $slug ] = true;
 			}
@@ -492,19 +559,11 @@ function maatek_seed_pages( $force = false ) {
 
 		if ( $page_id > 0 ) {
 			$page_ids[ $slug ] = $page_id;
-			if ( 'home' === $slug ) {
-				$home_id = $page_id;
-			}
 		}
 	}
 
-	// Set the static front page on first install or forced reset only, so a client's own Reading settings survive updates.
-	if ( $home_id > 0 && ( $force || ! $already_installed ) ) {
-		update_option( 'show_on_front', 'page' );
-		update_option( 'page_on_front', $home_id );
-	} elseif ( $home_id > 0 && 'page' === get_option( 'show_on_front' ) && ! get_option( 'page_on_front' ) ) {
-		update_option( 'page_on_front', $home_id );
-	}
+	// The site's permalink and Reading settings are owned by its administrator. In
+	// particular, installing a theme for the first time does not mean the site is new.
 
 	// Pass 2: Populate block content ONLY for newly created or empty pages (unless $force is true).
 	$pages = maatek_get_seeded_pages();
@@ -527,12 +586,19 @@ function maatek_seed_pages( $force = false ) {
 			if ( ! empty( $created_new[ $slug ] ) ) {
 				$update_args['post_status'] = 'publish';
 			}
-			wp_update_post( $update_args );
+			$result = wp_update_post( $update_args, true );
+			if ( is_wp_error( $result ) || ! $result ) {
+				$errors[] = sprintf( __( 'Could not update the %s page.', 'maatek' ), $page_data['title'] );
+				continue;
+			}
+			if ( $force ) {
+				delete_post_meta( $page_id, '_wp_page_template' );
+			}
 			update_post_meta( $page_id, '_maatek_seeded_version', MAATEK_THEME_VERSION );
 		}
 	}
 
-	// Ensure a saved wp_navigation menu exists without overwriting custom menu edits unless forced.
+	// A page-content reset must never overwrite the administrator's menu.
 	$nav_items = array(
 		'home'               => __( 'Home', 'maatek' ),
 		'control-automation' => __( 'Control & Automation', 'maatek' ),
@@ -544,31 +610,38 @@ function maatek_seed_pages( $force = false ) {
 	);
 	$nav_post  = get_page_by_path( 'maatek-primary-navigation', OBJECT, 'wp_navigation' );
 	if ( ! ( $nav_post instanceof WP_Post ) ) {
-		wp_insert_post(
+		$nav_result = wp_insert_post(
 			array(
 				'post_type'    => 'wp_navigation',
 				'post_title'   => __( 'Maatek Primary Navigation', 'maatek' ),
 				'post_name'    => 'maatek-primary-navigation',
 				'post_content' => wp_slash( maatek_navigation_links_markup( $nav_items ) ),
 				'post_status'  => 'publish',
-			)
+			),
+			true
 		);
-	} elseif ( $force || '' === trim( $nav_post->post_content ) ) {
-		wp_update_post(
-			array(
-				'ID'           => (int) $nav_post->ID,
-				'post_content' => wp_slash( maatek_navigation_links_markup( $nav_items ) ),
-				'post_status'  => 'publish',
-			)
-		);
+		if ( is_wp_error( $nav_result ) || ! $nav_result ) {
+			$errors[] = __( 'Could not create the primary navigation.', 'maatek' );
+		}
 	}
 
 	if ( $had_kses && function_exists( 'kses_init_filters' ) ) {
 		kses_init_filters();
 	}
 
+	if ( $errors ) {
+		delete_option( 'maatek_block_pages_version' );
+		update_option( 'maatek_seed_errors', array( 'messages' => $errors, 'reset' => (bool) $force ), false );
+		return false;
+	}
+
 	update_option( 'maatek_theme_installed', '1' );
 	update_option( 'maatek_block_pages_version', MAATEK_THEME_VERSION );
+	if ( '1' !== (string) get_option( 'maatek_theme_installed', '' ) || MAATEK_THEME_VERSION !== get_option( 'maatek_block_pages_version', '' ) ) {
+		update_option( 'maatek_seed_errors', array( 'messages' => array( __( 'Could not save the setup completion settings.', 'maatek' ) ), 'reset' => (bool) $force ), false );
+		return false;
+	}
+	delete_option( 'maatek_seed_errors' );
 	if ( did_action( 'init' ) ) {
 		flush_rewrite_rules( false );
 	} else {
@@ -580,6 +653,7 @@ function maatek_seed_pages( $force = false ) {
 			20
 		);
 	}
+	return true;
 }
 
 /**
@@ -602,10 +676,15 @@ function maatek_maybe_seed_on_init() {
 	if ( is_admin() && current_user_can( 'manage_options' ) ) {
 		if ( isset( $_GET['maatek_reseed'] ) && '1' === $_GET['maatek_reseed'] ) {
 			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'maatek_reseed_pages' ) ) {
-				maatek_seed_pages( true );
-				wp_safe_redirect( add_query_arg( 'maatek_reseeded', '1', admin_url( 'themes.php' ) ) );
+				$success = maatek_seed_pages( true );
+				wp_safe_redirect( add_query_arg( 'maatek_reseeded', $success ? '1' : '0', admin_url( 'themes.php' ) ) );
 				exit;
 			}
+		}
+		if ( isset( $_GET['maatek_retry_setup'], $_GET['_wpnonce'] ) && '1' === $_GET['maatek_retry_setup'] && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'maatek_retry_setup' ) ) {
+			maatek_seed_pages( false );
+			wp_safe_redirect( admin_url( 'themes.php' ) );
+			exit;
 		}
 
 		if ( isset( $_GET['maatek_toggle_lightbox'] ) ) {
@@ -618,7 +697,7 @@ function maatek_maybe_seed_on_init() {
 		}
 	}
 
-	if ( MAATEK_THEME_VERSION !== get_option( 'maatek_block_pages_version', '' ) ) {
+	if ( ! get_option( 'maatek_seed_errors', false ) && MAATEK_THEME_VERSION !== get_option( 'maatek_block_pages_version', '' ) ) {
 		maatek_seed_pages( false );
 	}
 }
@@ -675,6 +754,26 @@ function maatek_admin_theme_notice() {
 		echo '<div class="notice notice-success is-dismissible"><p><strong>Maatek Theme:</strong> All 7 pages have been reset to the default Figma block layouts.</p></div>';
 	}
 
+	$seed_errors = get_option( 'maatek_seed_errors', false );
+	if ( is_array( $seed_errors ) && ! empty( $seed_errors['messages'] ) && is_array( $seed_errors['messages'] ) ) {
+		echo '<div class="notice notice-error"><p><strong>Maatek setup was not completed.</strong> ' . esc_html( implode( ' ', $seed_errors['messages'] ) ) . '</p>';
+		if ( ! empty( $seed_errors['reset'] ) ) {
+			echo '<p>Some pages may have been reset. Check the pages and, if necessary, retry the page reset after resolving the database or plugin error.</p>';
+		} else {
+			$retry_url = wp_nonce_url( add_query_arg( 'maatek_retry_setup', '1', admin_url( 'themes.php' ) ), 'maatek_retry_setup' );
+			echo '<p>Check the database and plugin logs, then <a href="' . esc_url( $retry_url ) . '">retry setup</a>. Existing page content is preserved.</p>';
+		}
+		echo '</div>';
+	}
+	$unpublished = maatek_unpublished_destinations();
+	if ( $unpublished ) {
+		$titles = array();
+		foreach ( $unpublished as $slug => $page ) {
+			$titles[] = $page->post_title;
+		}
+		echo '<div class="notice notice-warning"><p><strong>Maatek:</strong> Links to these unpublished pages are hidden from visitors until they are published: ' . esc_html( implode( ', ', $titles ) ) . '. <a href="' . esc_url( admin_url( 'edit.php?post_type=page' ) ) . '">Review pages</a>.</p></div>';
+	}
+
 	if ( isset( $_GET['maatek_lightbox_updated'] ) ) {
 		$status_label = ( '1' === $_GET['maatek_lightbox_updated'] ) ? 'enabled' : 'disabled';
 		echo '<div class="notice notice-success is-dismissible"><p><strong>Maatek Theme:</strong> Project photo lightbox is now <strong>' . esc_html( $status_label ) . '</strong> across the site.</p></div>';
@@ -685,15 +784,17 @@ function maatek_admin_theme_notice() {
 	$lb_url     = wp_nonce_url( add_query_arg( 'maatek_toggle_lightbox', $lb_target, admin_url( 'themes.php' ) ), 'maatek_toggle_lightbox' );
 	$lb_btn_txt = $lb_enabled ? 'Lightbox: ON (Click to Turn Off)' : 'Lightbox: OFF (Click to Turn On)';
 
-	$reseed_url = wp_nonce_url( add_query_arg( 'maatek_reseed', '1', admin_url( 'themes.php' ) ), 'maatek_reseed_pages' );
-	$pages_url  = admin_url( 'edit.php?post_type=page' );
-	$editor_url = admin_url( 'site-editor.php' );
+	$reseed_url  = wp_nonce_url( add_query_arg( 'maatek_reseed', '1', admin_url( 'themes.php' ) ), 'maatek_reseed_pages' );
+	$pages_url   = admin_url( 'edit.php?post_type=page' );
+	$editor_url  = admin_url( 'site-editor.php' );
+	$reading_url = admin_url( 'options-reading.php' );
 
 	echo '<div class="notice notice-info" style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">';
-	echo '<div><strong>Maatek Block Theme Active:</strong> All 7 pages, Header, Footer, colours, and fonts are ready to edit visually.</div>';
+	echo '<div><strong>Maatek Block Theme Active:</strong> Manage pages, navigation and styles using the options below.</div>';
 	echo '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
 	echo '<a class="button button-primary" href="' . esc_url( $pages_url ) . '">Edit Pages</a>';
 	echo '<a class="button" href="' . esc_url( $editor_url ) . '">Open Site Editor (Header, Footer &amp; Styles)</a>';
+	echo '<a class="button" href="' . esc_url( $reading_url ) . '">Choose Homepage</a>';
 	echo '<a class="button" href="' . esc_url( $lb_url ) . '">' . esc_html( $lb_btn_txt ) . '</a>';
 	echo '<a class="button" href="' . esc_url( $reseed_url ) . '" onclick="return confirm(\'Reset all 7 Maatek pages back to their original Figma content?\');">Reset Default Page Content</a>';
 	echo '</div></div>';
@@ -715,9 +816,9 @@ function maatek_register_block_patterns() {
 		)
 	);
 
-	$assets  = untrailingslashit( get_template_directory_uri() ) . '/assets';
-	$contact = trailingslashit( home_url( '/contact' ) );
-	$home    = trailingslashit( home_url( '/' ) );
+	$assets       = untrailingslashit( get_template_directory_uri() ) . '/assets';
+	$contact      = maatek_get_page_url( 'contact' );
+	$contact_attr = esc_url( $contact );
 
 	// 1. Service Hero Pattern (Native Cover Block).
 	register_block_pattern(
@@ -742,7 +843,7 @@ function maatek_register_block_patterns() {
 		<!-- wp:buttons {"className":"mtk-btn-group"} -->
 		<div class="wp-block-buttons mtk-btn-group">
 			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
-			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact_attr}">Discuss your project <span class="mtk-arrow">→</span></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->

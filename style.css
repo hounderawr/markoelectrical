@@ -89,7 +89,22 @@ Text Domain: maatek
 
 html {
 	scroll-behavior: smooth;
+	/* Keep in-page links clear of the sticky navigation. */
+	scroll-padding-block-start: 101px;
 	-webkit-text-size-adjust: 100%;
+}
+
+/* Keep status updates available to screen readers without adding visual clutter. */
+.mtk-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }
 
 body {
@@ -509,8 +524,10 @@ button.mtk-btn:focus-visible,
 .wp-block-button.is-style-mtk-primary .wp-block-button__link:focus-visible,
 .wp-block-button.is-style-mtk-secondary .wp-block-button__link:focus-visible,
 .wp-block-button.is-style-mtk-hero-outline .wp-block-button__link:focus-visible {
-	outline: 2px solid var(--maatek-accent-bright);
-	outline-offset: 3px;
+	/* Two colours keep the focus indicator visible on both light and dark surfaces. */
+	outline: 2px solid #FFFFFF;
+	outline-offset: 2px;
+	box-shadow: 0 0 0 4px var(--maatek-blue) !important;
 }
 
 /* Primary Filled Button (#0063A4) — white label on blue → white label on darker blue */
@@ -572,7 +589,7 @@ button.mtk-btn-secondary--blue-border:focus-visible,
 .wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:focus-visible {
 	background-color: #E8F2FA;
 	border-color: var(--maatek-blue) !important;
-	color: var(--maatek-blue-hover);
+	color: var(--maatek-blue);
 }
 
 a.mtk-btn-hero-outline:focus-visible,
@@ -604,7 +621,7 @@ button.mtk-btn-hero-outline:focus-visible,
 	.wp-block-button.mtk-btn-secondary--blue-border .wp-block-button__link:hover {
 		background-color: #E8F2FA;
 		border-color: var(--maatek-blue) !important;
-		color: var(--maatek-blue-hover);
+		color: var(--maatek-blue);
 		box-shadow: 0 4px 12px rgba(0, 99, 164, 0.12);
 	}
 
@@ -865,6 +882,7 @@ figure.mtk-brand-block {
 /* Open mobile drawer — background/text colours editable via the Navigation block's "Submenu & overlay" colours */
 .mtk-nav .wp-block-navigation__responsive-container.is-menu-open {
 	padding: 78px 24px 24px;
+	overscroll-behavior: contain;
 }
 
 .mtk-nav .is-menu-open .wp-block-navigation__responsive-container-content {
@@ -890,6 +908,8 @@ figure.mtk-brand-block {
 	color: inherit;
 	font-size: 16px;
 	font-weight: 600;
+	white-space: normal;
+	overflow-wrap: anywhere;
 }
 
 .mtk-nav .is-menu-open .wp-block-navigation-item__content::after {
@@ -1173,8 +1193,9 @@ p.mtk-eyebrow-with-bar--short::before {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 56px;
-	padding: 0 18px;
+	min-height: 56px;
+	padding: 10px 18px;
+	gap: 12px;
 	background-color: var(--maatek-shortcut-bg);
 	border: 1px solid #D5E0E8;
 	border-radius: var(--mtk-radius-sm);
@@ -1546,8 +1567,16 @@ p.is-style-mtk-check-item::before {
 }
 
 .mtk-photo-card-open:focus-visible {
-	outline: 3px solid var(--maatek-accent-bright);
+	outline: 3px solid #FFFFFF;
 	outline-offset: -3px;
+	box-shadow: inset 0 0 0 6px var(--maatek-blue);
+}
+
+/* Keep linked images usable while providing a separate, generous viewer target. */
+.mtk-photo-card-open--linked {
+	inset: 9px 9px auto auto;
+	width: 44px;
+	height: 44px;
 }
 
 /* Lightbox Disabled State (Global Body Toggle or Per-Section/Per-Card Block Style) */
@@ -1667,11 +1696,6 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 	display: none !important;
 }
 
-section:has(.mtk-gallery-preview-grid),
-.wp-block-group:has(.mtk-gallery-preview-grid) {
-	display: none !important;
-}
-
 /* Lightbox Dialog — Refined Industrial Viewer */
 @keyframes mtk-lightbox-enter {
 	from {
@@ -1755,6 +1779,7 @@ dialog.mtk-lightbox::backdrop {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	flex-wrap: wrap;
 	gap: 16px;
 	padding: 12px 16px 12px 22px;
 	background-color: rgba(7, 15, 22, 0.94);
@@ -1764,6 +1789,8 @@ dialog.mtk-lightbox::backdrop {
 .mtk-lightbox-meta {
 	display: inline-flex;
 	align-items: center;
+	flex-wrap: wrap;
+	min-width: 0;
 	gap: 10px;
 	font-family: var(--maatek-font-body);
 	font-size: 12px;
@@ -1790,13 +1817,14 @@ dialog.mtk-lightbox::backdrop {
 .mtk-lightbox-controls {
 	display: inline-flex;
 	align-items: center;
+	flex-shrink: 0;
 	gap: 8px;
 }
 
 .mtk-lightbox-nav,
 .mtk-lightbox-close {
-	width: 36px;
-	height: 36px;
+	width: 44px;
+	height: 44px;
 	border-radius: var(--mtk-radius-md);
 	background-color: rgba(255, 255, 255, 0.07);
 	border: 1px solid rgba(163, 191, 209, 0.24);
@@ -1858,14 +1886,14 @@ dialog.mtk-lightbox::backdrop {
 	justify-content: center;
 }
 
-/* Image scales with the viewport and leaves room for the top bar + caption (~200px) */
+/* The viewer scrolls when space is short; never collapse the image at high zoom. */
 .mtk-lightbox-img {
 	display: block;
 	width: auto;
 	height: auto;
 	max-width: min(980px, calc(100vw - 80px));
-	max-height: min(68vh, calc(100vh - 220px));
-	max-height: min(68dvh, calc(100dvh - 220px));
+	max-height: 68vh;
+	max-height: 68dvh;
 	min-height: 0;
 	object-fit: contain;
 	border-radius: var(--mtk-radius-sm);
@@ -1954,6 +1982,7 @@ dialog.mtk-lightbox::backdrop {
 	border-radius: var(--mtk-radius-md) var(--mtk-radius-md) 0 0;
 	padding: 28px 28px 22px;
 	margin-bottom: 0 !important;
+	overflow-wrap: anywhere;
 }
 
 /* Hide "DIRECT CONTACT" overline inside .mtk-contact-card even on already-seeded pages */
@@ -2081,6 +2110,7 @@ dialog.mtk-lightbox::backdrop {
 	text-decoration: none !important;
 	transition: color var(--mtk-duration) var(--mtk-ease), transform var(--mtk-duration) var(--mtk-ease);
 	display: inline-block;
+	overflow-wrap: anywhere;
 }
 
 .mtk-footer-link:focus-visible,
@@ -2148,6 +2178,10 @@ dialog.mtk-lightbox::backdrop {
 }
 
 @media (max-width: 960px) {
+	html {
+		scroll-padding-block-start: 79px;
+	}
+
 	/* Compact mobile header */
 	.mtk-header-inner {
 		height: 78px;
@@ -2201,11 +2235,6 @@ dialog.mtk-lightbox::backdrop {
 		min-height: 0 !important;
 		max-height: none !important;
 		grid-template-rows: auto;
-	}
-
-	/* Keep image on top when stacked on tablet/mobile */
-	.mtk-service-row--reverse .mtk-service-media {
-		order: -1;
 	}
 
 	.mtk-service-media,
@@ -2348,6 +2377,13 @@ dialog.mtk-lightbox::backdrop {
 	.mtk-py-16 {
 		padding-top: 48px;
 		padding-bottom: 48px;
+	}
+}
+
+/* Keep the viewer scrollable when a short viewport or zoom leaves little vertical space. */
+@media (max-height: 400px) {
+	.mtk-lightbox-topbar {
+		position: static;
 	}
 }
 

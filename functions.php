@@ -228,10 +228,12 @@ function maatek_responsive_theme_images( $content, $block ) {
 	$assets_path = (string) wp_parse_url( $assets_url, PHP_URL_PATH );
 	$assets_host = strtolower( (string) wp_parse_url( $assets_url, PHP_URL_HOST ) );
 	$widths = array(
+		'home-hero-process-tanks.webp'            => 1806,
 		'9241893b534162b6.webp'                  => 1806,
 		'home-control-cabinet-enhanced.jpg'       => 1218,
 		'home-robot-maintenance-enhanced.jpg'     => 1448,
 		'home-fabrication-workshop-enhanced.webp' => 1774,
+		'factory-equipment-installation.webp'     => 1536,
 		'f00e6bf8ff0c2934.webp'                  => 1536,
 	);
 	$processor = new WP_HTML_Tag_Processor( $content );
@@ -246,7 +248,7 @@ function maatek_responsive_theme_images( $content, $block ) {
 			continue;
 		}
 		$name = substr( $path, strlen( $assets_path ) );
-		if ( 'core/image' === $block['blockName'] && ( isset( $widths[ $name ] ) || '55e5d9a70651bf11.webp' === $name ) && ! $processor->get_attribute( 'loading' ) ) {
+		if ( 'core/image' === $block['blockName'] && ( isset( $widths[ $name ] ) || in_array( $name, array( 'crane-equipment-handling.webp', '55e5d9a70651bf11.webp' ), true ) ) && ! $processor->get_attribute( 'loading' ) ) {
 			$processor->set_attribute( 'loading', 'lazy' );
 		}
 		if ( ! isset( $widths[ $name ] ) || $processor->get_attribute( 'srcset' ) ) {
@@ -266,6 +268,40 @@ function maatek_responsive_theme_images( $content, $block ) {
 	return $processor->get_updated_html();
 }
 add_filter( 'render_block', 'maatek_responsive_theme_images', 15, 2 );
+
+/**
+ * Use the larger process-tanks photograph as the home hero, including on pages already saved in the editor.
+ *
+ * @param string $content Rendered block HTML.
+ * @param array  $block   Parsed block.
+ * @return string
+ */
+function maatek_use_home_hero_image( $content, $block ) {
+	if ( is_admin() || ! is_string( $content ) || '' === $content || empty( $block['blockName'] ) || 'core/cover' !== $block['blockName'] ) {
+		return $content;
+	}
+
+	$class_name = isset( $block['attrs']['className'] ) ? (string) $block['attrs']['className'] : '';
+	if ( false === strpos( $class_name, 'mtk-hero-home' ) && false === strpos( $content, 'mtk-hero-home' ) ) {
+		return $content;
+	}
+
+	if ( ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return $content;
+	}
+
+	$src       = esc_url( untrailingslashit( get_template_directory_uri() ) . '/assets/home-hero-process-tanks-bigger.jpg' );
+	$processor = new WP_HTML_Tag_Processor( $content );
+	if ( $processor->next_tag( array( 'tag_name' => 'img', 'class_name' => 'wp-block-cover__image-background' ) ) ) {
+		$processor->set_attribute( 'src', $src );
+		$processor->remove_attribute( 'srcset' );
+		$processor->remove_attribute( 'sizes' );
+		return $processor->get_updated_html();
+	}
+
+	return $content;
+}
+add_filter( 'render_block', 'maatek_use_home_hero_image', 16, 2 );
 
 /**
  * Find the theme's destination pages which are not available to site visitors.
@@ -1001,10 +1037,10 @@ function maatek_apply_original_details_update() {
 				preg_match_all( $pattern, $content, $matches );
 				$old_caption = 'Site lifting arrangements and safe access are coordinated before equipment is moved into position.';
 				$candidates = array_values( array_filter( $matches[0], static function ( $card ) use ( $old_caption ) {
-					return 1 === substr_count( $card, '55e5d9a70651bf11.webp' ) && 2 === substr_count( $card, 'Crane and equipment handling' ) && 1 === substr_count( $card, $old_caption );
+					return 1 === ( substr_count( $card, 'crane-equipment-handling.webp' ) + substr_count( $card, '55e5d9a70651bf11.webp' ) ) && 2 === substr_count( $card, 'Crane and equipment handling' ) && 1 === substr_count( $card, $old_caption );
 				} ) );
 				if ( 1 === count( $candidates ) ) {
-					$updated_card = str_replace( array( '55e5d9a70651bf11.webp', 'Crane and equipment handling', $old_caption ), array( 'f00e6bf8ff0c2934.webp', 'Factory equipment installation', 'Industrial machinery installation and positioning within an operating manufacturing facility.' ), $candidates[0] );
+					$updated_card = str_replace( array( 'crane-equipment-handling.webp', '55e5d9a70651bf11.webp', 'Crane and equipment handling', $old_caption ), array( 'factory-equipment-installation.webp', 'factory-equipment-installation.webp', 'Factory equipment installation', 'Industrial machinery installation and positioning within an operating manufacturing facility.' ), $candidates[0] );
 					$content = str_replace( $candidates[0], $updated_card, $content );
 				} elseif ( false === strpos( $content, 'Factory equipment installation' ) ) {
 					$skipped[ $slug ] = true;
@@ -1181,8 +1217,8 @@ function maatek_register_block_patterns() {
 			'title'      => __( 'Maatek — Service Page Hero Banner', 'maatek' ),
 			'categories' => array( 'maatek' ),
 			'content'    => <<<HTML
-<!-- wp:cover {"url":"{$assets}/af7b40fe4ce443f7.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
-<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/af7b40fe4ce443f7.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+<!-- wp:cover {"url":"{$assets}/control-automation-service-hero.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/control-automation-service-hero.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
@@ -1238,12 +1274,12 @@ HTML,
 
 	// 3. 2-Column Photo Gallery Pattern.
 	$card_a = maatek_block_photo_card(
-		"{$assets}/82a4799828e824f7.webp",
+		"{$assets}/industrial-switchboard-circuit-breaker.webp",
 		'Industrial switchboard circuit breaker',
 		'Switchboard protection and isolation equipment forms part of a maintainable electrical control system.'
 	);
 	$card_b = maatek_block_photo_card(
-		"{$assets}/e8caa829e54e1e25.webp",
+		"{$assets}/scada-operator-interface.webp",
 		'SCADA operator interface',
 		'Process overview displays bring plant status, alarms and operating information together.'
 	);

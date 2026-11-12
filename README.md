@@ -23,3 +23,7 @@ wp search-replace 'https://old.example' 'https://new.example' --skip-columns=gui
 Review the reported tables and counts. Only after confirming the scope and backup, run the same command without `--dry-run`. Do not use a raw SQL replacement: it can damage serialized data. Some block attributes may contain JSON-escaped URLs (`https:\/\/old.example`); check for these separately with the same dry-run process and update only intended occurrences. A multisite installation or site with custom tables may need a different table scope and additional migration steps; see the [WP-CLI search-replace documentation](https://developer.wordpress.org/cli/commands/search-replace/).
 
 After the move, check the homepage, navigation, service links and project images on both desktop and mobile, including their block-editor previews. If page slugs changed, review links in the affected pages and menus rather than blindly replacing all occurrences of the old slug. If the theme directory changed, review references to the old theme asset path as well. A content reset is not a migration method: it discards edits.
+
+## Theme image filenames
+
+Theme patterns use descriptive image filenames. The older hash-named image files remain in `assets` as compatibility copies because existing WordPress pages may have their URLs saved in block content, including in the editor. Do not remove those copies until existing page content and other links have been migrated and verified. Responsive image sizes use the same base filename with `-480` and `-960` suffixes.

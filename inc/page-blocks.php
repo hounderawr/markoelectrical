@@ -263,7 +263,7 @@ function maatek_get_seeded_pages() {
 	$inst    = maatek_get_page_url( 'installations' );
 	$projects = maatek_get_page_url( 'projects' );
 	$home_gallery_card = maatek_block_photo_card(
-		"{$assets}/55e5d9a70651bf11.webp",
+		"{$assets}/crane-equipment-handling.webp",
 		'Crane and equipment handling',
 		'Site lifting arrangements and access for equipment positioning.',
 		'mtk-photo-card--preview'
@@ -273,8 +273,8 @@ function maatek_get_seeded_pages() {
 	 * 1. HOME PAGE (Figma Node 11:194)
 	 * ====================================================================== */
 	$home_content = <<<HTML
-<!-- wp:cover {"url":"{$assets}/9241893b534162b6.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":680,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-home","layout":{"type":"default"}} -->
-<section class="wp-block-cover mtk-hero-home" style="min-height:680px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/9241893b534162b6.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+<!-- wp:cover {"url":"{$assets}/home-hero-process-tanks-bigger.jpg","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":680,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-home","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-home" style="min-height:680px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/home-hero-process-tanks-bigger.jpg" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-eyebrow-text mtk-eyebrow-with-bar"} -->
@@ -480,7 +480,7 @@ function maatek_get_seeded_pages() {
 				<!-- wp:column {"className":"mtk-service-media"} -->
 				<div class="wp-block-column mtk-service-media">
 					<!-- wp:image {"sizeSlug":"full","linkDestination":"none"} -->
-					<figure class="wp-block-image size-full"><img src="{$assets}/f00e6bf8ff0c2934.webp" alt="Industrial plant equipment installation"/></figure>
+					<figure class="wp-block-image size-full"><img src="{$assets}/factory-equipment-installation.webp" alt="Industrial plant equipment installation"/></figure>
 					<!-- /wp:image -->
 				</div>
 				<!-- /wp:column -->
@@ -633,7 +633,7 @@ HTML;
 				'Alarm management, trends and operator diagnostics',
 				'Integration with PLCs, networks and plant equipment',
 			),
-			'img_url'       => "{$assets}/e8caa829e54e1e25.webp",
+			'img_url'       => "{$assets}/scada-operator-interface.webp",
 			'img_alt'       => 'Industrial SCADA operator interface showing process information and machine controls',
 			'img_caption'   => 'Operator interface and SCADA process visualisation',
 			'image_on_left' => true,
@@ -660,22 +660,22 @@ HTML;
 	);
 
 	$ctrl_photo_1 = maatek_block_photo_card(
-		"{$assets}/82a4799828e824f7.webp",
+		"{$assets}/industrial-switchboard-circuit-breaker.webp",
 		'Industrial switchboard circuit breaker',
 		'Switchboard protection and isolation equipment forms part of a maintainable electrical control system.'
 	);
 	$ctrl_photo_2 = maatek_block_photo_card(
-		"{$assets}/e8caa829e54e1e25.webp",
+		"{$assets}/scada-operator-interface.webp",
 		'SCADA operator interface',
 		'Process overview displays bring plant status, alarms and operating information together.'
 	);
 	$ctrl_photo_3 = maatek_block_photo_card(
-		"{$assets}/b70408ecf9552a48.webp",
+		"{$assets}/automated-canning-line.webp",
 		'Machine control interface',
 		'Operator controls provide clear machine status and practical access to operating functions.'
 	);
 	$ctrl_photo_4 = maatek_block_photo_card(
-		"{$assets}/70055cff8dc9b49a.webp",
+		"{$assets}/automation-panel-components.webp",
 		'Automation panel components',
 		'Industrial control panels integrate protection, power supplies and field control connections.'
 	);
@@ -683,8 +683,8 @@ HTML;
 	$ctrl_cta = maatek_block_service_enquiry_cta( $contact );
 
 	$ctrl_content = <<<HTML
-<!-- wp:cover {"url":"{$assets}/af7b40fe4ce443f7.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
-<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/af7b40fe4ce443f7.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+<!-- wp:cover {"url":"{$assets}/control-automation-service-hero.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/control-automation-service-hero.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
@@ -924,7 +924,7 @@ HTML;
 				'Checks on sensors, actuators and safety circuits',
 				'Maintenance aligned with planned production windows',
 			),
-			'img_url'       => "{$assets}/3d0b4b609ee8034b.webp",
+			'img_url'       => "{$assets}/conveyor-inspection-servicing.webp",
 			'img_alt'       => 'Guarding and overhead conveyor',
 			'image_on_left' => true,
 		)
@@ -943,7 +943,7 @@ HTML;
 				'Replacement and testing of failed components',
 				'Practical recovery steps to restore safe operation',
 			),
-			'img_url'       => "{$assets}/79f90e9ee5e35ee1.webp",
+			'img_url'       => "{$assets}/overhead-conveyor-services.webp",
 			'img_alt'       => 'Industrial plant services',
 			'image_on_left' => false,
 		)
@@ -969,29 +969,29 @@ HTML;
 	);
 
 	$maint_photo_1 = maatek_block_photo_card(
-		"{$assets}/3d0b4b609ee8034b.webp",
+		"{$assets}/conveyor-inspection-servicing.webp",
 		'Conveyor inspection and servicing',
 		'Conveyor guards, supports and overhead equipment require scheduled inspection for wear, damage and safe access.'
 	);
 	$maint_photo_2 = maatek_block_photo_card(
-		"{$assets}/2dab8baeb0eab608.webp",
+		"{$assets}/production-machinery-service-access.webp",
 		'Production machinery service access',
 		'Access to production equipment and connected services is considered during maintenance planning.'
 	);
 	$maint_photo_3 = maatek_block_photo_card(
-		"{$assets}/87df35ae4d458f2c.webp",
+		"{$assets}/machine-guarding-transfer-points.webp",
 		'Machine guarding and transfer points',
 		'Guarding and transfer interfaces are checked during planned shutdowns and fault investigations.'
 	);
 	$maint_photo_4 = maatek_block_photo_card(
-		"{$assets}/7fe2c5da26eeff88.webp",
+		"{$assets}/electrical-cabling-plant-services.webp",
 		'Electrical cabling and plant services',
 		'Cable routes, containment and field connections are inspected when tracing equipment faults or planning upgrades.'
 	);
 
 	$maint_content = <<<HTML
-<!-- wp:cover {"url":"{$assets}/0836812bfcbdcff3.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
-<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/0836812bfcbdcff3.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+<!-- wp:cover {"url":"{$assets}/maintenance-service-hero.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/maintenance-service-hero.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
@@ -1132,7 +1132,7 @@ HTML;
 				'Practical access for operation, cleaning and servicing',
 				'Fabrication coordinated with electrical and control fit-out',
 			),
-			'img_url'       => "{$assets}/7dafc6cd30405e3d.webp",
+			'img_url'       => "{$assets}/conveyor-transfer-assembly.webp",
 			'img_alt'       => 'Conveyor transfer line',
 			'image_on_left' => true,
 		)
@@ -1151,7 +1151,7 @@ HTML;
 				'Guarding, sensor brackets and drive mounting interfaces',
 				'Layout adjustments to suit existing line geometry',
 			),
-			'img_url'       => "{$assets}/c926c266cc45c31d.webp",
+			'img_url'       => "{$assets}/industrial-material-handling-conveyor.webp",
 			'img_alt'       => 'Industrial material handling and conveyor area',
 			'image_on_left' => false,
 		)
@@ -1170,41 +1170,41 @@ HTML;
 				'Integration of valves, instrumentation and field services',
 				'Clean routing for long-term inspection and maintenance',
 			),
-			'img_url'       => "{$assets}/57fb1be7e2ab0989.webp",
+			'img_url'       => "{$assets}/guarded-industrial-equipment.webp",
 			'img_alt'       => 'Industrial equipment interfaces',
 			'image_on_left' => true,
 		)
 	);
 
 	$fab_photo_1 = maatek_block_photo_card(
-		"{$assets}/7dafc6cd30405e3d.webp",
+		"{$assets}/conveyor-transfer-assembly.webp",
 		'Conveyor transfer assembly',
 		'Transfer sections and supporting frames are arranged to suit product flow and available plant space.'
 	);
 	$fab_photo_2 = maatek_block_photo_card(
-		"{$assets}/962ec8be994aec05.webp",
+		"{$assets}/process-valves-mechanical-interfaces.webp",
 		'Process valves and mechanical interfaces',
 		'Valves, fittings and equipment interfaces are considered when assembling process systems.'
 	);
 	$fab_photo_3 = maatek_block_photo_card(
-		"{$assets}/ba4e572aaed635a6.webp",
+		"{$assets}/stainless-process-pipework.webp",
 		'Stainless process pipework',
 		'Fabricated pipework connections require careful alignment, support and access for future servicing.'
 	);
 	$fab_photo_4 = maatek_block_photo_card(
-		"{$assets}/451ee99b28f4b398.webp",
+		"{$assets}/belt-conveyor-installation.webp",
 		'Belt conveyor installation',
 		'Conveyor frames, belt runs and transfer points must be aligned with adjacent production equipment.'
 	);
 	$fab_photo_5 = maatek_block_photo_card(
-		"{$assets}/b1e87f7b08cc9ffc.webp",
+		"{$assets}/conveyor-transfer-integration.webp",
 		'Conveyor transfer integration',
 		'Material-handling equipment is integrated with surrounding plant structures and access requirements.'
 	);
 
 	$fab_content = <<<HTML
-<!-- wp:cover {"url":"{$assets}/8c0777edd3ad9583.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
-<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/8c0777edd3ad9583.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+<!-- wp:cover {"url":"{$assets}/fabrication-service-hero.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/fabrication-service-hero.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
@@ -1346,7 +1346,7 @@ HTML;
 				'Positioning of machinery, vessels and conveyors',
 				'Alignment with existing structures and production lines',
 			),
-			'img_url'       => "{$assets}/dff0d1e1259af8a2.webp",
+			'img_url'       => "{$assets}/crane-assisted-machinery-placement.webp",
 			'img_alt'       => 'Crane-assisted handling',
 			'image_on_left' => true,
 		)
@@ -1365,7 +1365,7 @@ HTML;
 				'Field terminations, sensors and operator stations',
 				'Mechanical and electrical trade coordination on site',
 			),
-			'img_url'       => "{$assets}/f9abb29a488ca165.webp",
+			'img_url'       => "{$assets}/overhead-equipment-handling.webp",
 			'img_alt'       => 'Overhead material handling',
 			'image_on_left' => false,
 		)
@@ -1384,46 +1384,46 @@ HTML;
 				'Functional testing of sequences, interlocks and safety',
 				'Handover support and practical site documentation',
 			),
-			'img_url'       => "{$assets}/95ee88c5d4cb148b.webp",
+			'img_url'       => "{$assets}/conveyor-installation-handling.webp",
 			'img_alt'       => 'Conveyor lifting equipment',
 			'image_on_left' => true,
 		)
 	);
 
 	$inst_photo_1 = maatek_block_photo_card(
-		"{$assets}/f00e6bf8ff0c2934.webp",
+		"{$assets}/factory-equipment-installation.webp",
 		'Factory equipment installation',
 		'Industrial machinery installation and positioning within an operating manufacturing facility.'
 	);
 	$inst_photo_2 = maatek_block_photo_card(
-		"{$assets}/20d8589f5bff2485.webp",
+		"{$assets}/indoor-vessel-installation.webp",
 		'Indoor vessel installation',
 		'Positioning large process vessels within an existing factory, coordinating access, lifting and surrounding services.'
 	);
 	$inst_photo_3 = maatek_block_photo_card(
-		"{$assets}/dff0d1e1259af8a2.webp",
+		"{$assets}/crane-assisted-machinery-placement.webp",
 		'Crane-assisted machinery placement',
 		'Specialist lifting equipment used to safely position industrial machinery during plant installation.'
 	);
 	$inst_photo_4 = maatek_block_photo_card(
-		"{$assets}/f9abb29a488ca165.webp",
+		"{$assets}/overhead-equipment-handling.webp",
 		'Overhead equipment handling',
 		'Installation planning around overhead structures, access constraints and heavy plant movement.'
 	);
 	$inst_photo_5 = maatek_block_photo_card(
-		"{$assets}/95ee88c5d4cb148b.webp",
+		"{$assets}/conveyor-installation-handling.webp",
 		'Conveyor installation and handling',
 		'Lifting and alignment of conveyor equipment for integration into existing production lines.'
 	);
 	$inst_photo_6 = maatek_block_photo_card(
-		"{$assets}/d945aaa6185add20.webp",
+		"{$assets}/process-vessel-handling.webp",
 		'Process vessel handling',
 		'Outdoor movement and staging of process equipment before final installation and commissioning.'
 	);
 
 	$inst_content = <<<HTML
-<!-- wp:cover {"url":"{$assets}/55e5d9a70651bf11.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
-<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/55e5d9a70651bf11.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+<!-- wp:cover {"url":"{$assets}/crane-equipment-handling.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/crane-equipment-handling.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
@@ -1554,32 +1554,32 @@ HTML;
 	 * 6. PROJECTS PAGE (Figma Node 11:725)
 	 * ====================================================================== */
 	$proj_card_1 = maatek_block_photo_card(
-		"{$assets}/55e5d9a70651bf11.webp",
+		"{$assets}/crane-equipment-handling.webp",
 		'Crane and equipment handling',
 		'Site lifting arrangements and safe access are coordinated before equipment is moved into position.'
 	);
 	$proj_card_2 = maatek_block_photo_card(
-		"{$assets}/dff0d1e1259af8a2.webp",
+		"{$assets}/crane-assisted-machinery-placement.webp",
 		'Crane-assisted handling',
 		'Mobile lifting equipment supports the careful placement of machinery around existing structures.'
 	);
 	$proj_card_3 = maatek_block_photo_card(
-		"{$assets}/f9abb29a488ca165.webp",
+		"{$assets}/overhead-equipment-handling.webp",
 		'Overhead material handling',
 		'Lifting plans account for overhead services, structural clearances and access to installation points.'
 	);
 	$proj_card_4 = maatek_block_photo_card(
-		"{$assets}/95ee88c5d4cb148b.webp",
+		"{$assets}/conveyor-installation-handling.webp",
 		'Conveyor lifting equipment',
 		'Conveyor assemblies are positioned and aligned for integration with production equipment.'
 	);
 	$proj_card_5 = maatek_block_photo_card(
-		"{$assets}/d945aaa6185add20.webp",
+		"{$assets}/process-vessel-handling.webp",
 		'Vessel handling outdoors',
 		'Large process vessels are staged and moved with attention to lifting points and site access.'
 	);
 	$proj_card_6 = maatek_block_photo_card(
-		"{$assets}/20d8589f5bff2485.webp",
+		"{$assets}/indoor-vessel-installation.webp",
 		'Vessel handling inside a factory',
 		'Process vessels are manoeuvred into existing factory spaces where access and clearances are limited.'
 	);

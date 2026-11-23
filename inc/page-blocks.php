@@ -73,8 +73,6 @@ HTML;
  */
 function maatek_block_service_feature_row( array $args ) {
 	$id            = ! empty( $args['id'] ) ? esc_attr( $args['id'] ) : '';
-	$overline_raw  = isset( $args['overline'] ) ? (string) $args['overline'] : '';
-	$overline      = esc_html( $overline_raw );
 	$title         = esc_html( $args['title'] );
 	$img_url       = esc_url( $args['img_url'] );
 	$img_alt       = esc_attr( $args['img_alt'] );
@@ -138,19 +136,9 @@ HTML;
 HTML;
 	}
 
-	$overline_html = '';
-	if ( '' !== $overline && ! preg_match( '/^\d/', $overline_raw ) ) {
-		$overline_html = <<<HTML
-		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-		<p class="mtk-overline mtk-mb-2">{$overline}</p>
-		<!-- /wp:paragraph -->
-HTML;
-	}
-
 	$copy_col = <<<HTML
 	<!-- wp:column {"className":"mtk-service-body"} -->
 	<div class="wp-block-column mtk-service-body">
-{$overline_html}
 		<!-- wp:heading {"level":3,"className":"mtk-h3 mtk-text-deep"} -->
 		<h3 class="wp-block-heading mtk-h3 mtk-text-deep">{$title}</h3>
 		<!-- /wp:heading -->
@@ -259,7 +247,7 @@ function maatek_hazardous_control_section_markup() {
 	$row    = maatek_block_service_feature_row(
 		array(
 			'id'            => 'hazardous-area-work',
-			'overline'      => 'HAZARDOUS AREAS',
+			'overline'      => '',
 			'title'         => 'Hazardous location qualified',
 			'paragraphs'    => array(
 				'Maatek builds and wires switchboards and control panels for hazardous locations, connects Ex-rated motors and instruments, and maintains electrical equipment in those areas.',
@@ -444,9 +432,6 @@ function maatek_get_seeded_pages() {
 				<!-- /wp:column -->
 				<!-- wp:column {"className":"mtk-service-body"} -->
 				<div class="wp-block-column mtk-service-body">
-					<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-					<p class="mtk-overline mtk-mb-2">SERVICES</p>
-					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"mtk-h3 mtk-mb-3"} -->
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Control &amp; Automation</h3>
 					<!-- /wp:heading -->
@@ -465,9 +450,6 @@ function maatek_get_seeded_pages() {
 			<div class="wp-block-columns mtk-service-row mtk-service-row--reverse">
 				<!-- wp:column {"className":"mtk-service-body"} -->
 				<div class="wp-block-column mtk-service-body">
-					<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-					<p class="mtk-overline mtk-mb-2">SERVICES</p>
-					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"mtk-h3 mtk-mb-3"} -->
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Maintenance</h3>
 					<!-- /wp:heading -->
@@ -500,9 +482,6 @@ function maatek_get_seeded_pages() {
 				<!-- /wp:column -->
 				<!-- wp:column {"className":"mtk-service-body"} -->
 				<div class="wp-block-column mtk-service-body">
-					<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-					<p class="mtk-overline mtk-mb-2">SERVICES</p>
-					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"mtk-h3 mtk-mb-3"} -->
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Fabrication</h3>
 					<!-- /wp:heading -->
@@ -521,9 +500,6 @@ function maatek_get_seeded_pages() {
 			<div class="wp-block-columns mtk-service-row mtk-service-row--reverse">
 				<!-- wp:column {"className":"mtk-service-body"} -->
 				<div class="wp-block-column mtk-service-body">
-					<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-					<p class="mtk-overline mtk-mb-2">SERVICES</p>
-					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"mtk-h3 mtk-mb-3"} -->
 					<h3 class="wp-block-heading mtk-h3 mtk-mb-3">Installations</h3>
 					<!-- /wp:heading -->
@@ -1823,7 +1799,7 @@ HTML;
 	$haz_row_1 = maatek_block_service_feature_row(
 		array(
 			'id'            => 'switchboards-and-control-panels',
-			'overline'      => 'PANELS',
+			'overline'      => '',
 			'title'         => 'Switchboards and control panels',
 			'paragraphs'    => array(
 				'Industrial switchboards and control panels are built and wired for new installations and upgrades, including Class I, Zone 1 projects. Panels are assembled in the workshop, with power and control circuits, isolation barriers and testing completed before the board goes to site.',
@@ -1841,7 +1817,7 @@ HTML;
 	$haz_row_2 = maatek_block_service_feature_row(
 		array(
 			'id'            => 'field-wiring-and-motors',
-			'overline'      => 'SITE CONNECTIONS',
+			'overline'      => '',
 			'title'         => 'Field wiring and motor connections',
 			'paragraphs'    => array(
 				'On site, cabling is run and terminated, and Ex-rated motors, sensors and instruments are connected so field devices respond correctly to the control system. Existing circuits can be traced, repaired or upgraded during plant maintenance.',
@@ -1859,7 +1835,7 @@ HTML;
 	$haz_row_3 = maatek_block_service_feature_row(
 		array(
 			'id'            => 'confined-spaces-and-heights',
-			'overline'      => 'ACCESS',
+			'overline'      => '',
 			'title'         => 'Confined spaces and work at heights',
 			'paragraphs'    => array(
 				'Maintenance is carried out inside mixing tanks and process vessels, and on elevated plant and access platforms. Access, site permits and the work schedule are coordinated with the plant team.',

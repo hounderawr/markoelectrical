@@ -275,6 +275,12 @@ p {
 	letter-spacing: -0.01em;
 }
 
+/* Row eyebrows repeat the heading directly underneath them. */
+.mtk-service-body > .mtk-overline,
+.mtk-service-body > p.mtk-overline {
+	display: none !important;
+}
+
 .mtk-overline,
 .is-style-mtk-overline {
 	font-family: var(--maatek-font-body);

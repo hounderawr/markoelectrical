@@ -300,13 +300,6 @@ function maatek_get_seeded_pages() {
 	$fab     = maatek_get_page_url( 'fabrication' );
 	$inst    = maatek_get_page_url( 'installations' );
 	$haz     = maatek_get_page_url( 'hazardous-areas' );
-	$projects = maatek_get_page_url( 'projects' );
-	$home_gallery_card = maatek_block_photo_card(
-		"{$assets}/crane-equipment-handling-wonder-4.webp",
-		'Crane and equipment handling',
-		'Site lifting arrangements and access for equipment positioning.',
-		'mtk-photo-card--preview'
-	);
 
 	/* ======================================================================
 	 * 1. HOME PAGE (Figma Node 11:194)
@@ -522,46 +515,6 @@ function maatek_get_seeded_pages() {
 			<!-- /wp:columns -->
 		</div>
 		<!-- /wp:group -->
-	</div>
-	<!-- /wp:group -->
-</section>
-<!-- /wp:group -->
-
-<!-- wp:group {"tagName":"section","className":"mtk-bg-surface mtk-py-16","layout":{"type":"default"}} -->
-<section class="wp-block-group mtk-bg-surface mtk-py-16">
-	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
-	<div class="wp-block-group mtk-container">
-		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
-		<p class="mtk-overline mtk-mb-2">INSTALLATION GALLERY</p>
-		<!-- /wp:paragraph -->
-		<!-- wp:heading {"className":"mtk-h3 mtk-mb-2"} -->
-		<h2 class="wp-block-heading mtk-h3 mtk-mb-2">Equipment handling and site access</h2>
-		<!-- /wp:heading -->
-		<!-- wp:columns {"className":"mtk-gallery-preview-grid"} -->
-		<div class="wp-block-columns mtk-gallery-preview-grid">
-{$home_gallery_card}
-			<!-- wp:column -->
-			<div class="wp-block-column">
-				<!-- wp:heading {"level":3,"className":"mtk-h4 mtk-mb-3"} -->
-				<h3 class="wp-block-heading mtk-h4 mtk-mb-3">Industrial installation environments</h3>
-				<!-- /wp:heading -->
-				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-mb-3"} -->
-				<p class="mtk-body mtk-text-muted-dark mtk-mb-3">Explore equipment handling, lifting arrangements and machinery positioning in industrial environments.</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:paragraph {"className":"mtk-small mtk-text-muted mtk-mb-6"} -->
-				<p class="mtk-small mtk-text-muted mtk-mb-6">These images illustrate installation environments relevant to industrial projects.</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:buttons {"className":"mtk-btn-group"} -->
-				<div class="wp-block-buttons mtk-btn-group">
-					<!-- wp:button {"className":"mtk-btn mtk-btn-secondary"} -->
-					<div class="wp-block-button mtk-btn mtk-btn-secondary"><a class="wp-block-button__link wp-element-button" href="{$projects}">View installation gallery</a></div>
-					<!-- /wp:button -->
-				</div>
-				<!-- /wp:buttons -->
-			</div>
-			<!-- /wp:column -->
-		</div>
-		<!-- /wp:columns -->
 	</div>
 	<!-- /wp:group -->
 </section>

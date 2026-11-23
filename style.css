@@ -1777,13 +1777,10 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 	padding: 20px 24px 24px;
 }
 
-/* Home Installation Gallery Preview 2-Column Layout (Figma Node 70:859) */
+/* Saved homepages can still contain the removed installation-gallery preview. */
 .mtk-gallery-preview-grid,
-.wp-block-columns.mtk-gallery-preview-grid {
-	display: grid !important;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 32px !important;
-	align-items: center;
+.wp-block-group:has(.mtk-gallery-preview-grid) {
+	display: none !important;
 }
 
 /* Lightbox Dialog — Refined Industrial Viewer */
@@ -2288,8 +2285,6 @@ dialog.mtk-lightbox::backdrop {
 	.wp-block-columns.mtk-approach-grid,
 	.mtk-cta-split,
 	.wp-block-columns.mtk-cta-split,
-	.mtk-gallery-preview-grid,
-	.wp-block-columns.mtk-gallery-preview-grid,
 	.mtk-contact-grid,
 	.wp-block-columns.mtk-contact-grid {
 		grid-template-columns: 1fr;

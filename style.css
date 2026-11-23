@@ -4,7 +4,7 @@ Theme URI: https://maatekelectrical.com.au/
 Author: Daniel
 Author URI: http://dracz.com.au
 Description: Custom WordPress Block Theme for Maatek Electrical Services. Features a bespoke Tailwind-inspired utility and industrial design system (mtk-*), Adobe Typekit Handel Gothic D + Inter typography, full Gutenberg block editability, and subtle button/card micro-animations guided by the refined Figma design system.
-Version: 2.1
+Version: 2.2
 Requires at least: 6.4
 Tested up to: 6.7
 Requires PHP: 7.4
@@ -1215,7 +1215,7 @@ p.mtk-eyebrow-with-bar--short::before {
 .mtk-shortcut-grid,
 .wp-block-columns.mtk-shortcut-grid {
 	display: grid !important;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
 	gap: 24px !important;
 	margin-top: 28px !important;
 }
@@ -1573,12 +1573,21 @@ p.is-style-mtk-check-item::before {
 	margin-top: 24px !important;
 }
 
+.mtk-photo-grid-2 > .wp-block-column,
+.mtk-photo-grid-3 > .wp-block-column {
+	min-width: 0;
+	min-height: 0;
+	height: 100%;
+}
+
 .mtk-photo-card {
 	position: relative;
 	background-color: var(--maatek-section);
 	border: 1px solid var(--maatek-line-card);
 	display: flex;
 	flex-direction: column;
+	height: 100%;
+	min-height: 0;
 	margin: 0 !important;
 	cursor: zoom-in;
 	overflow: hidden;
@@ -1681,21 +1690,32 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 
 .mtk-photo-card-media {
 	position: relative;
-	height: 290px;
+	flex: 0 0 290px;
+	height: 290px !important;
+	min-height: 290px !important;
+	max-height: 290px !important;
 	overflow: hidden;
 	background-color: #E2EBF2;
 }
 
 .mtk-photo-grid-3 .mtk-photo-card-media {
-	height: 270px;
+	flex-basis: 270px;
+	height: 270px !important;
+	min-height: 270px !important;
+	max-height: 270px !important;
 }
 
 .mtk-photo-card--preview .mtk-photo-card-media {
-	height: 248px;
+	flex-basis: 248px;
+	height: 248px !important;
+	min-height: 248px !important;
+	max-height: 248px !important;
 }
 
 .mtk-photo-card-media figure,
 .mtk-photo-card-media .wp-block-image {
+	position: absolute !important;
+	inset: 0;
 	margin: 0 !important;
 	display: block !important;
 	width: 100% !important;
@@ -1703,9 +1723,13 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 }
 
 .mtk-photo-card-media img {
+	position: absolute !important;
+	inset: 0;
 	display: block !important;
 	width: 100% !important;
 	height: 100% !important;
+	max-width: none !important;
+	max-height: none !important;
 	object-fit: cover !important;
 	object-position: var(--maatek-focal, center center);
 	transition: transform 380ms var(--mtk-ease);
@@ -1743,6 +1767,7 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 }
 
 .mtk-photo-card-body {
+	flex: 1 1 auto;
 	padding: 20px 24px 24px;
 }
 
@@ -2394,7 +2419,10 @@ dialog.mtk-lightbox::backdrop {
 	.mtk-photo-card-media,
 	.mtk-photo-grid-3 .mtk-photo-card-media,
 	.mtk-photo-card--preview .mtk-photo-card-media {
+		flex-basis: 220px;
 		height: 220px !important;
+		min-height: 220px !important;
+		max-height: 220px !important;
 	}
 
 	.mtk-btn-group,

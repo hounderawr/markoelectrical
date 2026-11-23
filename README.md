@@ -26,4 +26,4 @@ After the move, check the homepage, navigation, service links and project images
 
 ## Theme image filenames
 
-Theme patterns use descriptive image filenames. The older hash-named image files remain in `assets` as compatibility copies because existing WordPress pages may have their URLs saved in block content, including in the editor. Do not remove those copies until existing page content and other links have been migrated and verified. Responsive image sizes use the same base filename with `-480` and `-960` suffixes.
+Theme patterns use descriptive image filenames. Pages already saved with an older hash-named or retired filename still render the current file: the theme rewrites those image addresses when the block is displayed. Responsive image sizes use the same base filename with `-480` and `-960` suffixes.

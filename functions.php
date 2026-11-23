@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MAATEK_THEME_VERSION', '2.1' );
+define( 'MAATEK_THEME_VERSION', '2.2' );
 
 require_once get_template_directory() . '/inc/page-blocks.php';
 
@@ -228,13 +228,12 @@ function maatek_responsive_theme_images( $content, $block ) {
 	$assets_path = (string) wp_parse_url( $assets_url, PHP_URL_PATH );
 	$assets_host = strtolower( (string) wp_parse_url( $assets_url, PHP_URL_HOST ) );
 	$widths = array(
-		'home-hero-process-tanks.webp'            => 1806,
-		'9241893b534162b6.webp'                  => 1806,
-		'home-control-cabinet-enhanced.jpg'       => 1218,
-		'home-robot-maintenance-enhanced.jpg'     => 1448,
-		'home-fabrication-workshop-enhanced.webp' => 1774,
-		'factory-equipment-installation.webp'     => 1536,
-		'f00e6bf8ff0c2934.webp'                  => 1536,
+		'home-control-cabinet-enhanced.jpg'                  => 1218,
+		'home-robot-maintenance-enhanced.jpg'                => 1448,
+		'home-fabrication-workshop-enhanced.webp'            => 1774,
+		'factory-equipment-installation.webp'                => 1536,
+		'crane-assisted-machinery-placement-wonder-4.webp'   => 1800,
+		'crane-equipment-handling-wonder-4.webp'             => 2000,
 	);
 	$processor = new WP_HTML_Tag_Processor( $content );
 	while ( $processor->next_tag( 'img' ) ) {
@@ -248,7 +247,7 @@ function maatek_responsive_theme_images( $content, $block ) {
 			continue;
 		}
 		$name = substr( $path, strlen( $assets_path ) );
-		if ( 'core/image' === $block['blockName'] && ( isset( $widths[ $name ] ) || in_array( $name, array( 'crane-equipment-handling.webp', '55e5d9a70651bf11.webp' ), true ) ) && ! $processor->get_attribute( 'loading' ) ) {
+		if ( 'core/image' === $block['blockName'] && isset( $widths[ $name ] ) && ! $processor->get_attribute( 'loading' ) ) {
 			$processor->set_attribute( 'loading', 'lazy' );
 		}
 		if ( ! isset( $widths[ $name ] ) || $processor->get_attribute( 'srcset' ) ) {
@@ -304,6 +303,164 @@ function maatek_use_home_hero_image( $content, $block ) {
 add_filter( 'render_block', 'maatek_use_home_hero_image', 16, 2 );
 
 /**
+ * Map retired theme image filenames to the files still shipped in assets.
+ * Saved pages keep their old URLs; rendering swaps in the current file.
+ *
+ * @return array<string, string>
+ */
+function maatek_retired_theme_images() {
+	return array(
+		'0836812bfcbdcff3.webp'                     => 'maintenance-service-hero.webp',
+		'20d8589f5bff2485.webp'                     => 'indoor-vessel-installation.webp',
+		'2dab8baeb0eab608.webp'                     => 'production-machinery-service-access.webp',
+		'3d0b4b609ee8034b.webp'                     => 'conveyor-inspection-servicing.webp',
+		'451ee99b28f4b398.webp'                     => 'belt-conveyor-installation.webp',
+		'55e5d9a70651bf11.webp'                     => 'crane-equipment-handling-wonder-4.webp',
+		'57fb1be7e2ab0989.webp'                     => 'guarded-industrial-equipment.webp',
+		'70055cff8dc9b49a.webp'                     => 'automation-panel-components.webp',
+		'79f90e9ee5e35ee1.webp'                     => 'overhead-conveyor-services.webp',
+		'7dafc6cd30405e3d.webp'                     => 'conveyor-transfer-assembly.webp',
+		'7fe2c5da26eeff88.webp'                     => 'electrical-cabling-plant-services.webp',
+		'82a4799828e824f7.webp'                     => 'industrial-switchboard-circuit-breaker.webp',
+		'87df35ae4d458f2c.webp'                     => 'machine-guarding-transfer-points.webp',
+		'8c0777edd3ad9583.webp'                     => 'fabrication-service-hero.webp',
+		'9241893b534162b6.webp'                     => 'home-hero-process-tanks-bigger.jpg',
+		'9241893b534162b6-480.webp'                 => 'home-hero-process-tanks-bigger.jpg',
+		'9241893b534162b6-960.webp'                 => 'home-hero-process-tanks-bigger.jpg',
+		'95ee88c5d4cb148b.webp'                     => 'conveyor-installation-handling.webp',
+		'962ec8be994aec05.webp'                     => 'process-valves-mechanical-interfaces.webp',
+		'af7b40fe4ce443f7.webp'                     => 'control-automation-service-hero.webp',
+		'b1e87f7b08cc9ffc.webp'                     => 'conveyor-transfer-integration.webp',
+		'b70408ecf9552a48.webp'                     => 'automated-canning-line.webp',
+		'ba4e572aaed635a6.webp'                     => 'stainless-process-pipework.webp',
+		'c926c266cc45c31d.webp'                     => 'industrial-material-handling-conveyor.webp',
+		'crane-assisted-machinery-placement.webp'   => 'crane-assisted-machinery-placement-wonder-4.webp',
+		'crane-equipment-handling.webp'             => 'crane-equipment-handling-wonder-4.webp',
+		'd945aaa6185add20.webp'                     => 'process-vessel-handling.webp',
+		'dff0d1e1259af8a2.webp'                     => 'crane-assisted-machinery-placement-wonder-4.webp',
+		'e8caa829e54e1e25.webp'                     => 'scada-operator-interface.webp',
+		'f00e6bf8ff0c2934.webp'                     => 'factory-equipment-installation.webp',
+		'f00e6bf8ff0c2934-480.webp'                 => 'factory-equipment-installation.webp',
+		'f00e6bf8ff0c2934-960.webp'                 => 'factory-equipment-installation.webp',
+		'f9abb29a488ca165.webp'                     => 'overhead-equipment-handling.webp',
+		'home-hero-process-tanks.webp'              => 'home-hero-process-tanks-bigger.jpg',
+		'home-hero-process-tanks-480.webp'          => 'home-hero-process-tanks-bigger.jpg',
+		'home-hero-process-tanks-960.webp'          => 'home-hero-process-tanks-bigger.jpg',
+	);
+}
+
+/**
+ * Swap retired image filenames before responsive sizes are added.
+ *
+ * @param string $content Rendered block HTML.
+ * @param array  $block   Parsed block.
+ * @return string
+ */
+function maatek_rewrite_retired_theme_images( $content, $block ) {
+	unset( $block );
+
+	if ( is_admin() || ! is_string( $content ) || '' === $content || ( false === strpos( $content, '.webp' ) && false === strpos( $content, '.jpg' ) ) ) {
+		return $content;
+	}
+
+	if ( ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return $content;
+	}
+
+	$map       = maatek_retired_theme_images();
+	$base      = untrailingslashit( get_template_directory_uri() ) . '/assets/';
+	$processor = new WP_HTML_Tag_Processor( $content );
+	$changed   = false;
+
+	while ( $processor->next_tag( 'img' ) ) {
+		$src = $processor->get_attribute( 'src' );
+		if ( ! is_string( $src ) || '' === $src ) {
+			continue;
+		}
+
+		$name = basename( (string) wp_parse_url( $src, PHP_URL_PATH ) );
+		if ( ! isset( $map[ $name ] ) ) {
+			continue;
+		}
+
+		$processor->set_attribute( 'src', esc_url( $base . $map[ $name ] ) );
+		$processor->remove_attribute( 'srcset' );
+		$processor->remove_attribute( 'sizes' );
+		$changed = true;
+	}
+
+	return $changed ? $processor->get_updated_html() : $content;
+}
+add_filter( 'render_block', 'maatek_rewrite_retired_theme_images', 14, 2 );
+
+/**
+ * Add a page link to a saved navigation menu without replacing the other items.
+ *
+ * @param WP_Post $nav       Navigation post.
+ * @param string  $slug      Page slug.
+ * @param string  $label     Menu label.
+ */
+function maatek_append_missing_nav_link( $nav, $slug, $label ) {
+	if ( ! ( $nav instanceof WP_Post ) || false !== strpos( $nav->post_content, $slug ) ) {
+		return;
+	}
+	$markup  = maatek_navigation_links_markup( array( $slug => $label ) );
+	$content = $nav->post_content;
+	$updated = preg_replace(
+		'/(<!--\s*wp:navigation-link\b[^>]*control-automation[^>]*\/-->)/',
+		'$1' . "\n" . $markup,
+		$content,
+		1
+	);
+	if ( ! is_string( $updated ) || $updated === $content ) {
+		$updated = trim( $content ) . "\n" . $markup;
+	}
+	wp_update_post(
+		array(
+			'ID'           => $nav->ID,
+			'post_content' => wp_slash( $updated ),
+		)
+	);
+}
+
+/**
+ * Show the hazardous-area section on a Control & Automation page that was saved before the section existed.
+ *
+ * @param string $content Rendered page HTML.
+ * @return string
+ */
+function maatek_insert_hazardous_on_control_page( $content ) {
+	if ( is_admin() || ! is_string( $content ) || '' === $content || ! is_singular( 'page' ) ) {
+		return $content;
+	}
+	$page = get_queried_object();
+	if ( ! ( $page instanceof WP_Post ) || 'control-automation' !== $page->post_name || false !== strpos( $content, 'id="hazardous-areas"' ) ) {
+		return $content;
+	}
+	if ( ! function_exists( 'maatek_hazardous_control_section_markup' ) ) {
+		return $content;
+	}
+	$section = do_blocks( maatek_hazardous_control_section_markup() );
+	if ( ! is_string( $section ) || '' === $section ) {
+		return $content;
+	}
+	if ( false === strpos( $content, '#hazardous-areas' ) && false !== strpos( $content, 'mtk-subnav-links' ) ) {
+		$content = preg_replace(
+			'/(<p\b[^>]*\bclass="[^"]*\bmtk-subnav-links\b[^"]*"[^>]*>)/',
+			'$1<a href="#hazardous-areas">Hazardous areas</a> <span class="mtk-subnav-sep">·</span> ',
+			$content,
+			1
+		);
+	}
+	$updated = preg_replace( '/(<section\b[^>]*\bid="photo-gallery")/', $section . '$1', $content, 1 );
+	if ( ! is_string( $updated ) || $updated === $content ) {
+		return $content . $section;
+	}
+	return $updated;
+}
+add_filter( 'the_content', 'maatek_insert_hazardous_on_control_page', 12 );
+
+/**
  * Find the theme's destination pages which are not available to site visitors.
  * Saved blocks remain unchanged; links become available when the page is published.
  *
@@ -315,7 +472,7 @@ function maatek_unpublished_destinations() {
 		return $pages;
 	}
 	$pages = array();
-	foreach ( array( 'control-automation', 'maintenance', 'fabrication', 'installations', 'projects', 'contact' ) as $slug ) {
+	foreach ( array( 'control-automation', 'hazardous-areas', 'maintenance', 'fabrication', 'installations', 'projects', 'contact' ) as $slug ) {
 		$page = get_page_by_path( $slug, OBJECT, 'page' );
 		if ( ! ( $page instanceof WP_Post ) ) {
 			$matches = get_posts( array( 'name' => $slug, 'post_type' => 'page', 'post_status' => array( 'draft', 'pending', 'private', 'future' ), 'posts_per_page' => 1 ) );
@@ -694,6 +851,7 @@ function maatek_seed_pages( $force = false ) {
 	$nav_items = array(
 		'home'               => __( 'Home', 'maatek' ),
 		'control-automation' => __( 'Control & Automation', 'maatek' ),
+		'hazardous-areas'    => __( 'Hazardous Areas', 'maatek' ),
 		'maintenance'        => __( 'Maintenance', 'maatek' ),
 		'fabrication'        => __( 'Fabrication', 'maatek' ),
 		'installations'      => __( 'Installations', 'maatek' ),
@@ -715,6 +873,12 @@ function maatek_seed_pages( $force = false ) {
 		if ( is_wp_error( $nav_result ) || ! $nav_result ) {
 			$errors[] = __( 'Could not create the primary navigation.', 'maatek' );
 		}
+	} else {
+		maatek_append_missing_nav_link( $nav_post, 'hazardous-areas', __( 'Hazardous Areas', 'maatek' ) );
+	}
+	$footer_nav = get_page_by_path( 'maatek-footer-navigation', OBJECT, 'wp_navigation' );
+	if ( $footer_nav instanceof WP_Post && ( ! ( $nav_post instanceof WP_Post ) || (int) $footer_nav->ID !== (int) $nav_post->ID ) ) {
+		maatek_append_missing_nav_link( $footer_nav, 'hazardous-areas', __( 'Hazardous Areas', 'maatek' ) );
 	}
 
 	if ( $had_kses && function_exists( 'kses_init_filters' ) ) {
@@ -1186,7 +1350,7 @@ function maatek_admin_theme_notice() {
 	echo '<a class="button" href="' . esc_url( $editor_url ) . '">Open Site Editor (Header, Footer &amp; Styles)</a>';
 	echo '<a class="button" href="' . esc_url( $reading_url ) . '">Choose Homepage</a>';
 	echo '<a class="button" href="' . esc_url( $lb_url ) . '">' . esc_html( $lb_btn_txt ) . '</a>';
-	echo '<a class="button" href="' . esc_url( $reseed_url ) . '" onclick="return confirm(\'Reset all 7 Maatek pages back to their original Figma content?\');">Reset Default Page Content</a>';
+	echo '<a class="button" href="' . esc_url( $reseed_url ) . '" onclick="return confirm(\'Reset all Maatek pages back to their original theme content?\');">Reset Default Page Content</a>';
 	echo '</div></div>';
 }
 add_action( 'admin_notices', 'maatek_admin_theme_notice' );

@@ -13,6 +13,7 @@
 $maatek_nav_items = array(
 	'home'               => __( 'Home', 'maatek' ),
 	'control-automation' => __( 'Control & Automation', 'maatek' ),
+	'hazardous-areas'    => __( 'Hazardous Areas', 'maatek' ),
 	'maintenance'        => __( 'Maintenance', 'maatek' ),
 	'fabrication'        => __( 'Fabrication', 'maatek' ),
 	'installations'      => __( 'Installations', 'maatek' ),

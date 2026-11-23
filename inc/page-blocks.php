@@ -249,7 +249,57 @@ function maatek_get_page_url( $slug ) {
 }
 
 /**
- * Return all 7 Maatek pages with their title, slug, and native Gutenberg block content.
+ * Control & Automation section that introduces hazardous-area work and links to its page.
+ *
+ * @return string Gutenberg block markup.
+ */
+function maatek_hazardous_control_section_markup() {
+	$assets = untrailingslashit( get_template_directory_uri() ) . '/assets';
+	$page   = maatek_get_page_url( 'hazardous-areas' );
+	$row    = maatek_block_service_feature_row(
+		array(
+			'id'            => 'hazardous-area-work',
+			'overline'      => 'HAZARDOUS AREAS',
+			'title'         => 'Hazardous location qualified',
+			'paragraphs'    => array(
+				'Maatek builds and wires switchboards and control panels for hazardous locations, connects Ex-rated motors and instruments, and maintains electrical equipment in those areas.',
+				'The team holds certifications for confined-space entry, electrical work in Ex hazardous areas, and working at heights.',
+			),
+			'bullets'       => array(
+				'Switchboards and control panels, including Class I, Zone 1 projects',
+				'Field wiring, Ex-rated motors, sensors and isolation barriers',
+				'Confined-space entry and work at heights',
+			),
+			'img_url'       => "{$assets}/automation-panel-components.webp",
+			'img_alt'       => 'Industrial control panel with protection devices, power supplies and field wiring',
+			'image_on_left' => true,
+		)
+	);
+
+	return <<<HTML
+<!-- wp:group {"tagName":"section","anchor":"hazardous-areas","className":"mtk-bg-section mtk-py-16","layout":{"type":"default"}} -->
+<section id="hazardous-areas" class="wp-block-group mtk-bg-section mtk-py-16">
+	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
+	<div class="wp-block-group mtk-container">
+		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
+		<p class="mtk-overline mtk-mb-2">HAZARDOUS AREAS</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:heading {"className":"mtk-h2 mtk-mb-8"} -->
+		<h2 class="wp-block-heading mtk-h2 mtk-mb-8">Electrical work for classified locations</h2>
+		<!-- /wp:heading -->
+{$row}
+		<!-- wp:paragraph {"className":"mtk-mt-6"} -->
+		<p class="mtk-mt-6"><a class="mtk-link-arrow" href="{$page}"><span>More about hazardous area work</span><span class="mtk-arrow">→</span></a></p>
+		<!-- /wp:paragraph -->
+	</div>
+	<!-- /wp:group -->
+</section>
+<!-- /wp:group -->
+HTML;
+}
+
+/**
+ * Return all Maatek pages with their title, slug, and native Gutenberg block content.
  *
  * @return array<string, array{title: string, content: string}>
  */
@@ -261,9 +311,10 @@ function maatek_get_seeded_pages() {
 	$maint   = maatek_get_page_url( 'maintenance' );
 	$fab     = maatek_get_page_url( 'fabrication' );
 	$inst    = maatek_get_page_url( 'installations' );
+	$haz     = maatek_get_page_url( 'hazardous-areas' );
 	$projects = maatek_get_page_url( 'projects' );
 	$home_gallery_card = maatek_block_photo_card(
-		"{$assets}/crane-equipment-handling.webp",
+		"{$assets}/crane-equipment-handling-wonder-4.webp",
 		'Crane and equipment handling',
 		'Site lifting arrangements and access for equipment positioning.',
 		'mtk-photo-card--preview'
@@ -347,6 +398,13 @@ function maatek_get_seeded_pages() {
 			<div class="wp-block-column mtk-shortcut-col">
 				<!-- wp:paragraph -->
 				<p><a class="mtk-shortcut" href="{$inst}"><span class="mtk-shortcut-copy"><span class="mtk-shortcut-title">Installations</span><span class="mtk-shortcut-desc">Plant relocation, factory installations and commissioning.</span></span><span class="mtk-arrow">→</span></a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:column -->
+			<!-- wp:column {"className":"mtk-shortcut-col"} -->
+			<div class="wp-block-column mtk-shortcut-col">
+				<!-- wp:paragraph -->
+				<p><a class="mtk-shortcut" href="{$haz}"><span class="mtk-shortcut-copy"><span class="mtk-shortcut-title">Hazardous Areas</span><span class="mtk-shortcut-desc">Ex-rated equipment, panel wiring and motor connections.</span></span><span class="mtk-arrow">→</span></a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:column -->
@@ -681,6 +739,7 @@ HTML;
 	);
 
 	$ctrl_cta = maatek_block_service_enquiry_cta( $contact );
+	$ctrl_haz = maatek_hazardous_control_section_markup();
 
 	$ctrl_content = <<<HTML
 <!-- wp:cover {"url":"{$assets}/control-automation-service-hero.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
@@ -716,7 +775,7 @@ HTML;
 		<p class="mtk-overline">EXPLORE THIS PAGE</p>
 		<!-- /wp:paragraph -->
 		<!-- wp:paragraph {"className":"mtk-subnav-links"} -->
-		<p class="mtk-subnav-links"><a href="#electrical-switch-board-manufacturing">Electrical Switch Board Manufacturing</a> <span class="mtk-subnav-sep">·</span> <a href="#plc-design-and-automation">PLC Design and Automation</a> <span class="mtk-subnav-sep">·</span> <a href="#scada-hmi-development">SCADA &amp; HMI</a> <span class="mtk-subnav-sep">·</span> <a href="#safety">Safety</a> <span class="mtk-subnav-sep">·</span> <a href="#photo-gallery">Project photographs</a></p>
+		<p class="mtk-subnav-links"><a href="#electrical-switch-board-manufacturing">Electrical Switch Board Manufacturing</a> <span class="mtk-subnav-sep">·</span> <a href="#plc-design-and-automation">PLC Design and Automation</a> <span class="mtk-subnav-sep">·</span> <a href="#scada-hmi-development">SCADA &amp; HMI</a> <span class="mtk-subnav-sep">·</span> <a href="#safety">Safety</a> <span class="mtk-subnav-sep">·</span> <a href="#hazardous-areas">Hazardous areas</a> <span class="mtk-subnav-sep">·</span> <a href="#photo-gallery">Project photographs</a></p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -860,8 +919,8 @@ HTML;
 						<h3 class="wp-block-heading mtk-h4 mtk-mb-2">Safety fencing</h3>
 						<!-- /wp:heading -->
 						<!-- wp:paragraph {"className":"mtk-small mtk-text-muted"} -->
-						<p class="mtk-small mtk-text-muted">Physical guarding to separate people from hazardous machinery.</p>
-						<!-- /wp:paragraph -->
+		<p class="mtk-small mtk-text-muted">Physical guarding to separate people from hazardous machinery.</p>
+		<!-- /wp:paragraph -->
 					</div>
 					<!-- /wp:group -->
 				</div>
@@ -874,6 +933,8 @@ HTML;
 	<!-- /wp:group -->
 </section>
 <!-- /wp:group -->
+
+{$ctrl_haz}
 
 <!-- wp:group {"tagName":"section","anchor":"photo-gallery","className":"mtk-bg-surface mtk-py-16","layout":{"type":"default"}} -->
 <section class="wp-block-group mtk-bg-surface mtk-py-16" id="photo-gallery">
@@ -1346,7 +1407,7 @@ HTML;
 				'Positioning of machinery, vessels and conveyors',
 				'Alignment with existing structures and production lines',
 			),
-			'img_url'       => "{$assets}/crane-assisted-machinery-placement.webp",
+			'img_url'       => "{$assets}/crane-assisted-machinery-placement-wonder-4.webp",
 			'img_alt'       => 'Crane-assisted handling',
 			'image_on_left' => true,
 		)
@@ -1401,7 +1462,7 @@ HTML;
 		'Positioning large process vessels within an existing factory, coordinating access, lifting and surrounding services.'
 	);
 	$inst_photo_3 = maatek_block_photo_card(
-		"{$assets}/crane-assisted-machinery-placement.webp",
+		"{$assets}/crane-assisted-machinery-placement-wonder-4.webp",
 		'Crane-assisted machinery placement',
 		'Specialist lifting equipment used to safely position industrial machinery during plant installation.'
 	);
@@ -1422,8 +1483,8 @@ HTML;
 	);
 
 	$inst_content = <<<HTML
-<!-- wp:cover {"url":"{$assets}/crane-equipment-handling.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
-<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/crane-equipment-handling.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+<!-- wp:cover {"url":"{$assets}/crane-equipment-handling-wonder-4.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/crane-equipment-handling-wonder-4.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
 	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
 	<div class="wp-block-group mtk-container">
 		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
@@ -1554,12 +1615,12 @@ HTML;
 	 * 6. PROJECTS PAGE (Figma Node 11:725)
 	 * ====================================================================== */
 	$proj_card_1 = maatek_block_photo_card(
-		"{$assets}/crane-equipment-handling.webp",
+		"{$assets}/crane-equipment-handling-wonder-4.webp",
 		'Crane and equipment handling',
 		'Site lifting arrangements and safe access are coordinated before equipment is moved into position.'
 	);
 	$proj_card_2 = maatek_block_photo_card(
-		"{$assets}/crane-assisted-machinery-placement.webp",
+		"{$assets}/crane-assisted-machinery-placement-wonder-4.webp",
 		'Crane-assisted handling',
 		'Mobile lifting equipment supports the careful placement of machinery around existing structures.'
 	);
@@ -1759,6 +1820,158 @@ HTML;
 <!-- /wp:group -->
 HTML;
 
+	$haz_row_1 = maatek_block_service_feature_row(
+		array(
+			'id'            => 'switchboards-and-control-panels',
+			'overline'      => 'PANELS',
+			'title'         => 'Switchboards and control panels',
+			'paragraphs'    => array(
+				'Industrial switchboards and control panels are built and wired for new installations and upgrades, including Class I, Zone 1 projects. Panels are assembled in the workshop, with power and control circuits, isolation barriers and testing completed before the board goes to site.',
+			),
+			'bullets'       => array(
+				'Workshop assembly of switchboards and control panels',
+				'Power and control wiring with clear identification',
+				'Isolation barriers, including Pepperl+Fuchs modules, and pre-delivery testing',
+			),
+			'img_url'       => "{$assets}/automation-panel-components.webp",
+			'img_alt'       => 'Industrial control panel with protection devices, power supplies and field wiring',
+			'image_on_left' => true,
+		)
+	);
+	$haz_row_2 = maatek_block_service_feature_row(
+		array(
+			'id'            => 'field-wiring-and-motors',
+			'overline'      => 'SITE CONNECTIONS',
+			'title'         => 'Field wiring and motor connections',
+			'paragraphs'    => array(
+				'On site, cabling is run and terminated, and Ex-rated motors, sensors and instruments are connected so field devices respond correctly to the control system. Existing circuits can be traced, repaired or upgraded during plant maintenance.',
+			),
+			'bullets'       => array(
+				'Cabling, glanding and terminations in classified areas',
+				'Ex-rated motors, sensors and instruments',
+				'Troubleshooting and equipment replacement during shutdowns',
+			),
+			'img_url'       => "{$assets}/electrical-cabling-plant-services.webp",
+			'img_alt'       => 'Industrial electrical cabling and plant services',
+			'image_on_left' => false,
+		)
+	);
+	$haz_row_3 = maatek_block_service_feature_row(
+		array(
+			'id'            => 'confined-spaces-and-heights',
+			'overline'      => 'ACCESS',
+			'title'         => 'Confined spaces and work at heights',
+			'paragraphs'    => array(
+				'Maintenance is carried out inside mixing tanks and process vessels, and on elevated plant and access platforms. Access, site permits and the work schedule are coordinated with the plant team.',
+			),
+			'bullets'       => array(
+				'Confined-space entry for tanks and process vessels',
+				'Work at heights on elevated plant and platforms',
+				'Permits and access planned with the site team',
+			),
+			'img_url'       => "{$assets}/indoor-vessel-installation.webp",
+			'img_alt'       => 'Large process vessel positioned inside a factory',
+			'image_on_left' => true,
+		)
+	);
+	$haz_cta = maatek_block_service_enquiry_cta( $contact );
+
+	$haz_content = <<<HTML
+<!-- wp:cover {"url":"{$assets}/small-control-switchboard-enhanced.webp","dimRatio":70,"overlayColor":"heading-dark","isUserOverlayColor":true,"minHeight":470,"minHeightUnit":"px","tagName":"section","className":"mtk-hero-service","layout":{"type":"default"}} -->
+<section class="wp-block-cover mtk-hero-service" style="min-height:470px"><span aria-hidden="true" class="wp-block-cover__background has-heading-dark-background-color has-background-dim-70 has-background-dim"></span><img class="wp-block-cover__image-background" alt="" src="{$assets}/small-control-switchboard-enhanced.webp" data-object-fit="cover"/><div class="wp-block-cover__inner-container">
+	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
+	<div class="wp-block-group mtk-container">
+		<!-- wp:paragraph {"className":"mtk-hero-kicker"} -->
+		<p class="mtk-hero-kicker">MAATEK ELECTRICAL / HAZARDOUS AREAS</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:heading {"level":1,"className":"mtk-hero-service-title mtk-max-w-760"} -->
+		<h1 class="wp-block-heading mtk-hero-service-title mtk-max-w-760">Hazardous location qualified</h1>
+		<!-- /wp:heading -->
+		<!-- wp:paragraph {"className":"mtk-hero-service-lead"} -->
+		<p class="mtk-hero-service-lead">Switchboards, control panels, Ex-rated equipment and site connections for plants where the area classification changes how the electrical work is done.</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:buttons {"className":"mtk-btn-group"} -->
+		<div class="wp-block-buttons mtk-btn-group">
+			<!-- wp:button {"className":"mtk-btn mtk-btn-primary"} -->
+			<div class="wp-block-button mtk-btn mtk-btn-primary"><a class="wp-block-button__link wp-element-button" href="{$contact}">Discuss your project <span class="mtk-arrow">→</span></a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
+	</div>
+	<!-- /wp:group -->
+</div></section>
+<!-- /wp:cover -->
+
+<!-- wp:group {"tagName":"nav","className":"mtk-subnav-bar","layout":{"type":"default"}} -->
+<nav class="wp-block-group mtk-subnav-bar">
+	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
+	<div class="wp-block-group mtk-container">
+		<!-- wp:paragraph {"className":"mtk-overline"} -->
+		<p class="mtk-overline">EXPLORE THIS PAGE</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:paragraph {"className":"mtk-subnav-links"} -->
+		<p class="mtk-subnav-links"><a href="#switchboards-and-control-panels">Switchboards and control panels</a> <span class="mtk-subnav-sep">·</span> <a href="#field-wiring-and-motors">Field wiring and motors</a> <span class="mtk-subnav-sep">·</span> <a href="#confined-spaces-and-heights">Confined spaces and heights</a></p>
+		<!-- /wp:paragraph -->
+	</div>
+	<!-- /wp:group -->
+</nav>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","className":"mtk-approach-section","layout":{"type":"default"}} -->
+<section class="wp-block-group mtk-approach-section">
+	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
+	<div class="wp-block-group mtk-container">
+		<!-- wp:columns {"className":"mtk-approach-grid"} -->
+		<div class="wp-block-columns mtk-approach-grid">
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
+				<p class="mtk-overline mtk-mb-2">THE MAATEK APPROACH</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"className":"mtk-h2"} -->
+				<h2 class="wp-block-heading mtk-h2">Built for the classification of the area.</h2>
+				<!-- /wp:heading -->
+			</div>
+			<!-- /wp:column -->
+			<!-- wp:column -->
+			<div class="wp-block-column">
+				<!-- wp:paragraph {"className":"mtk-body mtk-text-muted-dark mtk-pt-4"} -->
+				<p class="mtk-body mtk-text-muted-dark mtk-pt-4">Hazardous-area electrical work covers the panel in the workshop and the equipment on site. Maatek’s team is certified for confined-space entry, electrical work in Ex hazardous areas, and working at heights.</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:column -->
+		</div>
+		<!-- /wp:columns -->
+	</div>
+	<!-- /wp:group -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","className":"mtk-bg-section mtk-py-16","layout":{"type":"default"}} -->
+<section class="wp-block-group mtk-bg-section mtk-py-16">
+	<!-- wp:group {"className":"mtk-container","layout":{"type":"default"}} -->
+	<div class="wp-block-group mtk-container">
+		<!-- wp:paragraph {"className":"mtk-overline mtk-mb-2"} -->
+		<p class="mtk-overline mtk-mb-2">WHAT WE DELIVER</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:heading {"className":"mtk-h2 mtk-mb-8"} -->
+		<h2 class="wp-block-heading mtk-h2 mtk-mb-8">From the panel to the field device</h2>
+		<!-- /wp:heading -->
+		<!-- wp:group {"className":"mtk-service-stack","layout":{"type":"default"}} -->
+		<div class="wp-block-group mtk-service-stack">
+{$haz_row_1}
+{$haz_row_2}
+{$haz_row_3}
+		</div>
+		<!-- /wp:group -->
+	</div>
+	<!-- /wp:group -->
+</section>
+<!-- /wp:group -->
+
+{$haz_cta}
+HTML;
+
 	return array(
 		'home'               => array(
 			'title'   => 'Home',
@@ -1767,6 +1980,10 @@ HTML;
 		'control-automation' => array(
 			'title'   => 'Control & Automation',
 			'content' => $ctrl_content,
+		),
+		'hazardous-areas'    => array(
+			'title'   => 'Hazardous Areas',
+			'content' => $haz_content,
 		),
 		'maintenance'        => array(
 			'title'   => 'Maintenance',

@@ -1777,9 +1777,10 @@ body.mtk-lightbox-disabled .mtk-photo-card:hover .mtk-photo-card-media img,
 	padding: 20px 24px 24px;
 }
 
-/* Saved homepages can still contain the removed installation-gallery preview. */
+/* Saved homepages can still contain the removed installation-gallery preview.
+   Hide that section only. A broad group:has() also matches main.mtk-main. */
 .mtk-gallery-preview-grid,
-.wp-block-group:has(.mtk-gallery-preview-grid) {
+section.mtk-bg-surface:has(.mtk-gallery-preview-grid) {
 	display: none !important;
 }
 
